@@ -6,83 +6,22 @@
     android:orientation="vertical"
     >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-
-        <TextView
-            android:id="@+id/dialog_tip"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:background="@color/notice_top_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/exit_img"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-
+    <TextView
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:text="adsfad"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:background="@mipmap/tip"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-        <TextView
-            android:layout_centerHorizontal="true"
-            android:id="@+id/dialog_text"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageView
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/dialog_text"
-            android:id="@+id/dialog_img"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_centerInParent="true"
-            android:id="@+id/dialog_text_center"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_marginBottom="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/dialog_text_bottom"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="48sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <RelativeLayout
-            android:layout_marginBottom="80dp"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/bt_root"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
             <Button
                 android:background="@drawable/bg_blue_8"
                 android:id="@+id/bt_left"
@@ -97,7 +36,6 @@
                 android:text="确定"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </RelativeLayout>
 
     </RelativeLayout>
 

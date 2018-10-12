@@ -79,17 +79,17 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>{
     }
 
 
-    protected fun showProgressDialog(message: String?=getString(R.string.loading), listen: DialogInterface.OnDismissListener?=null, showExit:Boolean=true) {
+    protected fun showProgressDialog(message: String = getString(R.string.loading), listen: DialogInterface.OnDismissListener?=null) {
 
         if (mNoticeDialogBuilder == null)
             mNoticeDialogBuilder= NoticeDialog.Builder(this)
 
         if (mNoticeDialog == null)
 
-            mNoticeDialog=mNoticeDialogBuilder!!.create(getString(R.string.self_service),"",-1,showExit, message)
+            mNoticeDialog=mNoticeDialogBuilder!!.create(message)
 
         else
-            mNoticeDialogBuilder!!.initView(getString(R.string.self_service),"",-1,showExit, message)
+            mNoticeDialogBuilder!!.initView( message)
 
 
         if (listen !=null)

@@ -23,10 +23,13 @@ import android.icu.util.ULocale.getCountry
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.search.core.RouteNode.location
 import com.baidu.mapapi.model.LatLng
+import com.lwt.qmqiu.BuildConfig
 import com.lwt.qmqiu.im.IMUtils
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.utils.newIntent
 import com.lwt.qmqiu.widget.MapNoticeDialog
+import com.tencent.bugly.beta.Beta
+import com.tencent.bugly.crashreport.CrashReport
 
 
 class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNoticeDialogListen, MapLocationUtils.FindMeListen {
@@ -43,6 +46,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
 
         initView()
 
+        //需要初始化
+        Beta.init(applicationContext, BuildConfig.DEBUG)
     }
 
     private fun initView() {
@@ -196,11 +201,12 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
 
         }
 
-
         mapNoticeDialog.dismiss()
     }
 
     override fun locationInfo(location: BDLocation?) {
         locationOnMap(location!!)
     }
+
+
 }

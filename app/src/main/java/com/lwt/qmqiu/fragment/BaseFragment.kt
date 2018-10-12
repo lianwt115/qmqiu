@@ -140,17 +140,17 @@ abstract class BaseFragment : Fragment(),LifecycleProvider<FragmentEvent> {
         activity.window.attributes = lp
     }
 
-    protected fun showProgressDialog(message: String?=getString(R.string.loading), listen: DialogInterface.OnDismissListener?=null, showExit:Boolean=true) {
+    protected fun showProgressDialog(message: String=getString(R.string.loading), listen: DialogInterface.OnDismissListener?=null) {
 
         if (mNoticeDialogBuilder == null)
             mNoticeDialogBuilder= NoticeDialog.Builder(activity!!)
 
         if (mNoticeDialog == null)
 
-            mNoticeDialog=mNoticeDialogBuilder!!.create(getString(R.string.self_service),"",-1,showExit, message)
+            mNoticeDialog=mNoticeDialogBuilder!!.create(message)
 
         else
-            mNoticeDialogBuilder!!.initView(getString(R.string.self_service),"",-1,showExit, message)
+            mNoticeDialogBuilder!!.initView(message)
 
 
         if (listen !=null)
