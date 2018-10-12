@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_background"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="100dp"
+    android:background="@drawable/bg_gray_8">
+
+
+    <TextView
+        android:gravity="center"
+        android:text="是否进入经纬度(30.333333,30.333333)的房间"
+        android:layout_marginBottom="4dp"
+        android:id="@+id/location_point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <Button
+        android:id="@+id/join_no"
+        android:textSize="12sp"
+        android:layout_marginLeft="100dp"
+        android:layout_below="@id/location_point"
+        android:text="不了"
+        android:background="@drawable/bg_blue_8"
+        android:layout_width="60dp"
+        android:layout_height="40dp" />
+    <Button
+        android:id="@+id/join_yes"
+        android:layout_marginRight="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/location_point"
+        android:text="好的"
+        android:background="@drawable/bg_blue_8"
+        android:layout_width="60dp"
+        android:layout_height="40dp" />
+
+
+
+</RelativeLayout>
+

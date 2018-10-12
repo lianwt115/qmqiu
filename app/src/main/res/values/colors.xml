@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF4081</color>
+    <color name="colorPrimaryDark">#FF4081</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="tips_color">#FE5852</color>
+    <color name="top_bg">#4BB2C7</color>
+    <color name="top_bg_left">#5BC2D7</color>
+    <color name="top_bg_right">#F69F39</color>
+    <color name="bottom_bg">#A9D6F4</color>
+    <color name="notice_top_bg">#0DC6DC</color>
+    <color name="bt_bg1">#0DC6DC</color>
+    <color name="bt_bg2">#E77374</color>
+    <color name="bt_bg3">#23AF97</color>
+    <color name="bt_bg4">#F69F39</color>
+    <color name="bt_bg5">#7589C4</color>
+    <color name="bt_bg6">#EA7274</color>
+    <color name="bt_bg7">#5BC2D8</color>
+    <color name="bt_bg8">#21B295</color>
+    <color name="bt_bg9">#99ee99</color>
+    <color name="workbg2">#22666666</color>
+    <color name="transparent">#00000000</color>
+    <color name="work4info1">#21B295</color>
+    <color name="work4info2">#5BC2D8</color>
+    <color name="thirdinfobg">#70B1F5</color>
+    <color name="thirdinforootbg">#666666</color>
+    <color name="thirdinforootbg1">#DCDCDC</color>
+    <color name="thirdinforootbg2">#3492F2</color>
+    <color name="thirdinforootbg3">#EEEEEE</color>
+    <color name="backbg">#3492F2</color>
+    <color name="lastpage_bg">#33666666</color>
+    <color name="windows_bg">#f6f6f6</color>
+    <color name="column_bg">#099bfb</color>
+    <color name="column_bg1">#55dd00</color>
+    <color name="GRAY">#ff808080</color>
+
+
+</resources>
