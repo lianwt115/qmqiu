@@ -26,6 +26,8 @@ import com.baidu.mapapi.model.LatLng
 import com.lwt.qmqiu.BuildConfig
 import com.lwt.qmqiu.im.IMUtils
 import com.lwt.qmqiu.map.MapLocationUtils
+import com.lwt.qmqiu.service.LocalService
+import com.lwt.qmqiu.service.RomoteService
 import com.lwt.qmqiu.utils.newIntent
 import com.lwt.qmqiu.widget.MapNoticeDialog
 import com.tencent.bugly.beta.Beta
@@ -48,6 +50,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
 
         //需要初始化
         Beta.init(applicationContext, BuildConfig.DEBUG)
+
+        //startService(Intent(this, LocalService::class.java))
+        //startService(Intent(this, RomoteService::class.java))
     }
 
     private fun initView() {

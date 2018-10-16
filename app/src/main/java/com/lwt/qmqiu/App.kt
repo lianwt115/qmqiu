@@ -105,7 +105,7 @@ class App : Application() {
         /**
          * 设置升级检查周期为60s(默认检查周期为0s)，60s内SDK不重复向后台请求策略);
          */
-        Beta.upgradeCheckPeriod = 60 * 1000
+        Beta.upgradeCheckPeriod = 3*60 * 1000
 
         /**
          * 设置启动延时为1s（默认延时3s），APP启动1s后初始化SDK，避免影响APP启动速度;
