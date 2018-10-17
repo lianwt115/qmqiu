@@ -8,7 +8,7 @@ import com.lwt.qmqiu.network.RetrofitClient
 
 open class BaseModel(val context: Context) {
 
-    val API_VERSION = 2
+    val API_VERSION = 1
 
     val retrofitClient = RetrofitClient.getInstance(context)
     val apiService = retrofitClient.create(ApiService::class.java)

@@ -10,7 +10,7 @@ class ApiException(code:Int,message: String?) : RuntimeException(message) {
     }
 
     fun getResultCode(): Int? {
-        return resultCode
+        return resultCode!!
     }
 
 }

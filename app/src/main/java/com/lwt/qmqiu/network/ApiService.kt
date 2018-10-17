@@ -1,6 +1,8 @@
 package com.lwt.qmqiu.network
 
 
+import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.bean.HttpResult
 import com.lwt.qmqiu.network.ApiConst
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -11,10 +13,23 @@ import retrofit2.http.*
 interface ApiService {
     companion object{
         val BASE_URL_Api : String
-            get() = "http://192.168.10.118:3000/"
+            get() = "http://192.168.2.10:9898/api/"
         val BASE_URL : String
-            get() = "http://192.168.10.118:3000/"
+            get() = "http://192.168.2.10:9898/"
     }
+
+
+    @POST(ApiConst.USER_REGIST)
+    fun userRegist(@Query("name") name:String,@Query("password") password:String):Observable<HttpResult<BaseUser>>
+
+
+
+
+
+
+
+
+
 
    /* //查询社保卡地址：
      @GET(ApiConst.SEARCH_CARD_ADDRESS)

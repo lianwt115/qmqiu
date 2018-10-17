@@ -57,20 +57,20 @@ class NoticeDialog : Dialog {
             mBtLeft = mLayout!!.findViewById(R.id.bt_left) as Button
             mBtRight = mLayout!!.findViewById(R.id.bt_right) as Button
 
-            mBtLeft!!.setOnClickListener({
+            mBtLeft!!.setOnClickListener {
 
                 if (mListen !=null) {
                     mListen!!.btClick(true)
                 }
 
-            })
-            mBtRight!!.setOnClickListener({
+            }
+            mBtRight!!.setOnClickListener {
 
                 if (mListen !=null) {
                     mListen!!.btClick(false)
                 }
 
-            })
+            }
             initView(notice)
 
             return mLoginDialog as NoticeDialog

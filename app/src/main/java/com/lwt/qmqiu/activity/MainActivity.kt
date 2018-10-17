@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.activity
 
 import android.Manifest
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -24,17 +25,21 @@ import com.baidu.mapapi.map.*
 import com.baidu.mapapi.search.core.RouteNode.location
 import com.baidu.mapapi.model.LatLng
 import com.lwt.qmqiu.BuildConfig
+import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.im.IMUtils
 import com.lwt.qmqiu.map.MapLocationUtils
+import com.lwt.qmqiu.mvp.contract.UserLoginContract
+import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.service.LocalService
 import com.lwt.qmqiu.service.RomoteService
 import com.lwt.qmqiu.utils.newIntent
 import com.lwt.qmqiu.widget.MapNoticeDialog
 import com.tencent.bugly.beta.Beta
-import com.tencent.bugly.crashreport.CrashReport
+
 
 
 class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNoticeDialogListen, MapLocationUtils.FindMeListen {
+
 
 
     private lateinit var mBaiduMap:BaiduMap
@@ -53,11 +58,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
 
         //startService(Intent(this, LocalService::class.java))
         //startService(Intent(this, RomoteService::class.java))
+
+
     }
 
     private fun initView() {
 
         location_bt.setOnClickListener(this)
+        fab.setOnClickListener(this)
 
         mBaiduMap = bmapView.map
     }
@@ -69,7 +77,16 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
                 MapLocationUtils.getInstance().findMe(this)
 
             }
-            else -> {
+            R.id.fab  -> {
+                window.exitTransition = null
+                window.enterTransition = null
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val options = ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName())
+                    startActivity(Intent(this, RegisterActivity::class.java), options.toBundle())
+                } else {
+                    startActivity(Intent(this, RegisterActivity::class.java))
+                }
             }
         }
     }

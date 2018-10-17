@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.internal.cache.CacheInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -37,8 +38,8 @@ class RetrofitClient private constructor(context: Context, baseUrl:String){
                 .addNetworkInterceptor(
                         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 //.cache(cache)
-                .addInterceptor(CacheInterceptor(context))
-                .addNetworkInterceptor(CacheInterceptor(context))
+                //.addInterceptor(CacheInterceptor(context))
+                .addNetworkInterceptor(JsonpHandleInterceptor())
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .build()
