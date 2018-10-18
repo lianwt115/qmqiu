@@ -28,6 +28,8 @@ import com.tencent.bugly.beta.Beta.canShowUpgradeActs
 import com.tencent.bugly.beta.Beta.showInterruptedStrategy
 import com.tencent.bugly.beta.Beta.storageDir
 import com.lwt.qmqiu.R.mipmap.ic_launcher
+import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.utils.SPHelper
 import com.tencent.bugly.beta.Beta
 import com.tencent.bugly.beta.Beta.defaultBannerId
 import com.tencent.bugly.beta.Beta.smallIconId
@@ -46,6 +48,7 @@ class App : Application() {
 
 
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
+    private var mLocalUser:BaseUser?= null
 
     companion object {
         private var instance: App? = null
@@ -171,6 +174,21 @@ class App : Application() {
     private fun options(): SDKOptions? {
 
         return null
+    }
+
+    fun setLocalUser(baseUser: BaseUser){
+
+        SPHelper.getInstance().put("loginName",baseUser.name)
+        SPHelper.getInstance().put("loginPassword",baseUser.password)
+
+        this.mLocalUser = baseUser
+
+    }
+
+    fun getLocalUser():BaseUser?{
+
+        return this.mLocalUser
+
     }
 
 

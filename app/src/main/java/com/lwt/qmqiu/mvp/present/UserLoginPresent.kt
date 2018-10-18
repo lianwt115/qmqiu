@@ -26,6 +26,7 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
         mContext = context
     }
 
+
     override fun userRegist(name: String, password: String, bindToLifecycle: LifecycleTransformer<BaseUser>) {
         val observable : Observable<BaseUser>? = mContext?.let {
             mModel.userRegist(name,password) }
@@ -34,7 +35,33 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
         observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
 
                 {
-                    mView?.registSuccess(it)
+                    mView?.successRegistOrLogin(it,true)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message)
+
+            }else{
+                mView?.err(-1,it.message)
+            }
+
+        }
+
+        )
+    }
+
+    override fun userLogin(name: String, password: String, auto: Boolean, bindToLifecycle: LifecycleTransformer<BaseUser>) {
+        val observable : Observable<BaseUser>? = mContext?.let {
+            mModel.userLogin(name,password,auto) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.successRegistOrLogin(it,false)
                 }, {
 
             Logger.e(it.message)
@@ -51,88 +78,8 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
 
         )
 
-
     }
 
 
-
-   /* override fun searchCardAddress(cardname: String, cardid: String, cardtype: String, bindToLifecycle: LifecycleTransformer<UserInfo>) {
-
-        val observable : Observable<UserInfo>? = mContext?.let {
-            mModel.searchCardAddress(cardname,cardid,cardtype) }
-
-
-        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
-
-                {
-                    mView?.setSearchCardAddress(it)
-                }, {
-
-            Logger.e(it.message)
-            if (it is ApiException){
-
-                mView?.err(it.getResultCode().toString(),0,cardtype)
-
-            }else{
-                mView?.err("-1",0,cardtype)
-            }
-
-        }
-
-        )
-
-    }
-
-    override fun getPersonNumber(cardname: String, cardid: String, cardtype: String, bindToLifecycle: LifecycleTransformer<UserInfo>) {
-
-        val observable : Observable<UserInfo>? = mContext?.let {
-            mModel.getPersonNumber(cardname,cardid,cardtype) }
-
-
-        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
-
-                {
-                    mView?.setGetPersonNumber(it)
-                }, {
-
-            Logger.e(it.message)
-            if (it is ApiException){
-
-                mView?.err(it.getResultCode().toString(),1,cardtype)
-
-            }else{
-                mView?.err("-1",1,cardtype)
-            }
-
-        }
-
-        )
-
-    }
-
-    override fun getUpdata(version: Int, bindToLifecycle: LifecycleTransformer<ApkInfo>) {
-        val observable : Observable<ApkInfo>? = mContext?.let {
-            mModel.updata(version) }
-
-
-        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
-
-                {
-                    mView?.setUpdata(it)
-                }, {
-
-            Logger.e(it.message)
-            if (it is ApiException){
-
-                mView?.err(it.getResultCode().toString(),2,"")
-
-            }else{
-                mView?.err("-1",2,"")
-            }
-
-        }
-
-        )
-    }*/
 
 }

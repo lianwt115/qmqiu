@@ -14,23 +14,31 @@ import android.transition.TransitionInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateInterpolator
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.cv_add
-import com.lwt.qmqiu.R.id.fab
+import com.lwt.qmqiu.R.id.*
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.utils.UiUtils
+import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_register.*
+import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.View {
+class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.View, View.OnLongClickListener {
 
 
 
     private lateinit var present:UserLoginPresent
+
+    private  var autoFinish: Disposable?=null
+
+    private  var isLogin = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +49,9 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
         }
 
         fab.setOnClickListener(this)
+        fab.setOnLongClickListener(this)
         bt_go.setOnClickListener(this)
 
-
-        /*val explode = Explode()
-        explode.duration = 500
-        window.exitTransition = explode
-        window.enterTransition = explode*/
 
         et_username.addTextChangedListener(object :TextWatcher{
 
@@ -87,13 +91,36 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
     }
 
+    override fun onLongClick(v: View?): Boolean {
+        when (v?.id) {
+
+            R.id.fab -> {
+
+                animateRevealClose()
+
+                return true
+            }
+
+        }
+
+        return false
+    }
+
+
     override fun onClick(v: View?) {
 
         when (v?.id) {
 
             R.id.fab -> {
 
-               animateRevealClose()
+               isLogin = !isLogin
+
+               do_what.text = if (isLogin) getString(R.string.login) else getString(R.string.register)
+
+               password_repeat.visibility =if (isLogin) View.INVISIBLE else View.VISIBLE
+
+               fab.setImageResource(if (isLogin) R.drawable.regist else R.drawable.login)
+
             }
 
             R.id.bt_go -> {
@@ -120,7 +147,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                 }
 
-                if (et_password.text.toString().length <0 || et_repeatpassword.text.toString().length <0) {
+                if (et_password.text.toString().length <0 ) {
 
                     UiUtils.showToast("密码不能为空")
 
@@ -128,35 +155,62 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                 }
 
-                if (et_password.text.toString().length != et_repeatpassword.text.toString().length ) {
 
-                    UiUtils.showToast("两次密码不一致")
+                if (isLogin){
 
-                    return
+
+                    present.userLogin(et_username.text.toString(),et_password.text.toString(),false,bindToLifecycle())
+
+
+                }else{
+
+                    if (et_repeatpassword.text.toString().length <0) {
+
+                        UiUtils.showToast("密码不能为空")
+
+                        return
+
+                    }
+
+                    if (et_password.text.toString().length != et_repeatpassword.text.toString().length ) {
+
+                        UiUtils.showToast("两次密码不一致")
+
+                        return
+
+                    }
+
+                    present.userRegist(et_username.text.toString(),et_password.text.toString(),bindToLifecycle())
 
                 }
 
-                present.userRegist(et_username.text.toString(),et_password.text.toString(),bindToLifecycle())
-
                 bt_go.startAnimation()
 
-
             }
-
 
         }
 
     }
 
-    override fun registSuccess(baseUser: BaseUser) {
+    override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
 
         bt_go.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 
 
-        Logger.e("注册成功:$baseUser")
+        App.instanceApp().setLocalUser(baseUser)
 
-        UiUtils.showToast("注册成功")
+        Logger.e("${if (regist) "注册" else "登录"}成功:$baseUser")
+
+        UiUtils.showToast("${if (regist) "注册" else "登录"}成功")
+
+        autoFinish = Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+            animateRevealClose()
+        },{
+            Logger.e(it.message)
+        })
     }
+
 
     override fun err(code: Int, errMessage: String?) {
 
@@ -164,13 +218,16 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
         when (code) {
 
+            201 -> {
+                Logger.e("用户名不存在")
+            }
             202 -> {
                 Logger.e("用户名已存在,请重新注册")
             }
-
-            else -> {
-
+            203 -> {
+                Logger.e("用户名密码错误")
             }
+
         }
 
         UiUtils.showToast(errMessage!!)
@@ -210,7 +267,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
     }
 
     fun animateRevealShow() {
-        val mAnimator = ViewAnimationUtils.createCircularReveal(cv_add, cv_add.width / 2, 0, (fab.getWidth() / 2).toFloat(), cv_add.getHeight().toFloat())
+        val mAnimator = ViewAnimationUtils.createCircularReveal(cv_add, cv_add.width / 2, 0, (fab.width / 2).toFloat(), cv_add.height.toFloat())
         mAnimator.duration = 500
         mAnimator.interpolator = AccelerateInterpolator()
         mAnimator.addListener(object : AnimatorListenerAdapter() {
@@ -227,14 +284,14 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
     }
 
     fun animateRevealClose() {
-        val mAnimator = ViewAnimationUtils.createCircularReveal(cv_add, cv_add.width / 2, 0, cv_add.getHeight().toFloat(), (fab.getWidth() / 2).toFloat())
+        val mAnimator = ViewAnimationUtils.createCircularReveal(cv_add, cv_add.width / 2, 0, cv_add.height.toFloat(), (fab.width / 2).toFloat())
         mAnimator.duration = 500
         mAnimator.interpolator = AccelerateInterpolator()
         mAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 cv_add.visibility = View.INVISIBLE
                 super.onAnimationEnd(animation)
-                fab.setImageResource(R.drawable.plus)
+                fab.setImageResource(R.drawable.login)
                 super@RegisterActivity.onBackPressed()
             }
 
@@ -253,6 +310,11 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
     override fun onDestroy() {
         super.onDestroy()
         bt_go.dispose()
+
+        if (autoFinish!=null && !autoFinish!!.isDisposed) {
+
+            autoFinish?.dispose()
+        }
     }
 
 

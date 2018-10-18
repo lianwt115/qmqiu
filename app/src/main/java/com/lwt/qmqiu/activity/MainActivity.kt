@@ -3,6 +3,7 @@ package com.lwt.qmqiu.activity
 import android.Manifest
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -21,9 +22,11 @@ import java.util.concurrent.TimeUnit
 import com.baidu.location.LocationClientOption.LocationMode
 import com.baidu.location.LocationClientOption
 import android.icu.util.ULocale.getCountry
+import android.text.TextUtils
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.search.core.RouteNode.location
 import com.baidu.mapapi.model.LatLng
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.im.IMUtils
@@ -32,19 +35,19 @@ import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.service.LocalService
 import com.lwt.qmqiu.service.RomoteService
+import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.newIntent
 import com.lwt.qmqiu.widget.MapNoticeDialog
 import com.tencent.bugly.beta.Beta
 
 
 
-class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNoticeDialogListen, MapLocationUtils.FindMeListen {
-
-
+class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNoticeDialogListen, MapLocationUtils.FindMeListen, UserLoginContract.View {
 
     private lateinit var mBaiduMap:BaiduMap
     private lateinit var mMapNoticeDialog:MapNoticeDialog
-
+    private lateinit var present:UserLoginPresent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -59,7 +62,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
         //startService(Intent(this, LocalService::class.java))
         //startService(Intent(this, RomoteService::class.java))
 
+        present = UserLoginPresent(this,this)
 
+        autoLogin()
     }
 
     private fun initView() {
@@ -158,6 +163,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
         super.onResume()
         bmapView.onResume()
         MapLocationUtils.getInstance().findMe(this)
+
     }
 
     override fun onStop() {
@@ -228,6 +234,36 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
 
     override fun locationInfo(location: BDLocation?) {
         locationOnMap(location!!)
+    }
+
+
+    override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
+
+        Logger.e("自动登录成功")
+        App.instanceApp().setLocalUser(baseUser)
+
+    }
+
+    override fun err(code: Int, errMessage: String?) {
+
+        Logger.e("自动登录失败:code:$code ** errMessage:$errMessage")
+
+    }
+
+    private fun autoLogin() {
+        //是否已经登录
+
+        if (App.instanceApp().getLocalUser() == null) {
+
+            val name = SPHelper.getInstance().get("loginName","") as String
+            val password = SPHelper.getInstance().get("loginPassword","") as String
+
+            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password))
+
+                present.userLogin(name,password,true,bindToLifecycle())
+
+        }
+
     }
 
 

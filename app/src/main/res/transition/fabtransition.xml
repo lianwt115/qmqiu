@@ -7,7 +7,7 @@
     <changeBounds>
         <arcMotion
             android:maximumAngle="0"
-            android:minimumHorizontalAngle="90"
-            android:minimumVerticalAngle="60"/>
+            android:minimumHorizontalAngle="0"
+            android:minimumVerticalAngle="0"/>
     </changeBounds>
 </transitionSet>

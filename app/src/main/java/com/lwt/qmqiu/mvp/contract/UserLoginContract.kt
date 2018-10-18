@@ -13,14 +13,16 @@ interface UserLoginContract {
 
     interface View : BaseView<Presenter> {
 
-        fun registSuccess(baseUser: BaseUser)
+
+        fun successRegistOrLogin(baseUser: BaseUser,regist:Boolean)
+
         fun err(code:Int,errMessage:String?)
 
     }
     interface Presenter : BasePresent {
 
         fun userRegist(name:String,password:String,bindToLifecycle: LifecycleTransformer<BaseUser>)
-
+        fun userLogin(name:String,password:String,auto:Boolean,bindToLifecycle: LifecycleTransformer<BaseUser>)
 
     }
 }

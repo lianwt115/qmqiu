@@ -12,14 +12,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:windowBackground">@mipmap/login</item>-->
+       <!-- <item name="android:windowBackground">@mipmap/login</item>-->
     </style>
 
     <style name="AppTheme.Main" parent="AppTheme">
         <!--<item name="android:windowBackground">@drawable/splash</item>-->
-        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
     </style>
 
     <!--Activity动画-->

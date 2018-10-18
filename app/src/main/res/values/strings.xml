@@ -2,8 +2,8 @@
     <string name="app_name">青木球</string>
     <string name="agora_app_id">2cf18478d1024be48b309eafa2e9e3ba</string>
     <string name="login_success">login success</string>
-    <string name="login">LOGIN</string>
-    <string name="Username">用户名(6-12数字或字母,以字母开头)</string>
+    <string name="login">登录</string>
+    <string name="Username">用户名</string>
     <string name="Password">密码</string>
     <string name="forgot_your_password">忘记密码 ?</string>
     <string name="go">GO</string>
