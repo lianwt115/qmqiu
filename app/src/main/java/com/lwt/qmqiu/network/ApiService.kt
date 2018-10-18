@@ -23,7 +23,7 @@ interface ApiService {
     fun userRegist(@Query("name") name:String,@Query("password") password:String):Observable<HttpResult<BaseUser>>
 
     @POST(ApiConst.USER_Login)
-    fun userLogin(@Query("name") name:String,@Query("password") password:String,@Query("auto") auto:Boolean):Observable<HttpResult<BaseUser>>
+    fun userLogin(@Query("name") name:String,@Query("password") password:String,@Query("auto") auto:Boolean,@Query("loginWhere") loginWhere:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double):Observable<HttpResult<BaseUser>>
 
 
 

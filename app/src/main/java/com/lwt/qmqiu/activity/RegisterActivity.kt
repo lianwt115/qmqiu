@@ -159,7 +159,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
                 if (isLogin){
 
 
-                    present.userLogin(et_username.text.toString(),et_password.text.toString(),false,bindToLifecycle())
+                    present.userLogin(et_username.text.toString(),et_password.text.toString(),false,"测试",192.110,10.2,bindToLifecycle())
 
 
                 }else{

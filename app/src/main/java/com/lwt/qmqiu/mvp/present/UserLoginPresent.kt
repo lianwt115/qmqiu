@@ -53,9 +53,9 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
         )
     }
 
-    override fun userLogin(name: String, password: String, auto: Boolean, bindToLifecycle: LifecycleTransformer<BaseUser>) {
+    override fun userLogin(name: String, password: String, auto: Boolean, loginWhere: String, latitude: Double, longitude: Double, bindToLifecycle: LifecycleTransformer<BaseUser>) {
         val observable : Observable<BaseUser>? = mContext?.let {
-            mModel.userLogin(name,password,auto) }
+            mModel.userLogin(name,password,auto,loginWhere, latitude, longitude) }
 
 
         observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(

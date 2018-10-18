@@ -8,6 +8,6 @@ data class BaseUser(
         var password:String,
         var privateKey: String,
         var publicKey: String,
-        var age:Int,
-        var male:Boolean
+        var lastLoginTime:Long,
+        var creatTime:Long
 )

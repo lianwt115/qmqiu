@@ -22,7 +22,7 @@ interface UserLoginContract {
     interface Presenter : BasePresent {
 
         fun userRegist(name:String,password:String,bindToLifecycle: LifecycleTransformer<BaseUser>)
-        fun userLogin(name:String,password:String,auto:Boolean,bindToLifecycle: LifecycleTransformer<BaseUser>)
+        fun userLogin(name:String,password:String,auto:Boolean, loginWhere:String, latitude:Double, longitude:Double,bindToLifecycle: LifecycleTransformer<BaseUser>)
 
     }
 }

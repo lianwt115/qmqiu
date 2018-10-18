@@ -16,9 +16,9 @@ class UserLoginModel(context: Context) : BaseModel(context) {
         return apiService?.userRegist(name, password)?.map(HttpResultFunc())
 
     }
-    fun userLogin(name:String,password:String,auto:Boolean): Observable<BaseUser>?{
+    fun userLogin(name:String,password:String,auto:Boolean,loginWhere:String, latitude:Double, longitude:Double): Observable<BaseUser>?{
 
-        return apiService?.userLogin(name, password,auto)?.map(HttpResultFunc())
+        return apiService?.userLogin(name, password,auto,loginWhere, latitude, longitude)?.map(HttpResultFunc())
 
     }
 
