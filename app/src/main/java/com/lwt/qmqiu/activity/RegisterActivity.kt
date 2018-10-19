@@ -20,6 +20,7 @@ import com.lwt.qmqiu.R.id.*
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
+import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
@@ -159,7 +160,12 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
                 if (isLogin){
 
 
-                    present.userLogin(et_username.text.toString(),et_password.text.toString(),false,"测试",192.110,10.2,bindToLifecycle())
+                    var  location = App.instanceApp().getBDLocation()
+
+
+                    present.userLogin(et_username.text.toString(),et_password.text.toString(),false, location?.addrStr?: "火星", location?.latitude
+                            ?: 192.110,location?.longitude
+                            ?:10.2,bindToLifecycle())
 
 
                 }else{
@@ -193,6 +199,8 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
     }
 
     override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
+
+        QMWebsocket.getInstance().connect("ws://192.168.2.10:9898/api/websocket")
 
         bt_go.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 

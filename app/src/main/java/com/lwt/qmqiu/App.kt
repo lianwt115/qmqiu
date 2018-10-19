@@ -23,6 +23,7 @@ import com.tencent.bugly.Bugly
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.bugly.crashreport.CrashReport.UserStrategy
 import android.provider.UserDictionary.Words.APP_ID
+import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
 import com.tencent.bugly.beta.Beta.canShowUpgradeActs
 import com.tencent.bugly.beta.Beta.showInterruptedStrategy
@@ -49,6 +50,7 @@ class App : Application() {
 
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
     private var mLocalUser:BaseUser?= null
+    private var mBDLocation: BDLocation?= null
 
     companion object {
         private var instance: App? = null
@@ -188,6 +190,18 @@ class App : Application() {
     fun getLocalUser():BaseUser?{
 
         return this.mLocalUser
+
+    }
+    fun getBDLocation():BDLocation?{
+
+        return this.mBDLocation
+
+    }
+    fun setBDLocation(location:BDLocation?) {
+
+
+        this.mBDLocation = location
+
 
     }
 
