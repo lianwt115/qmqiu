@@ -2,13 +2,11 @@ package com.lwt.qmqiu.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.transition.Explode
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.view.View
@@ -16,7 +14,6 @@ import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateInterpolator
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.*
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
@@ -28,7 +25,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.concurrent.TimeUnit
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.View, View.OnLongClickListener {
@@ -200,7 +196,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
     override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
 
-        QMWebsocket.getInstance().connect("ws://192.168.2.10:9898/api/websocket")
+        QMWebsocket.getInstance().connect(baseUser)
 
         bt_go.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 

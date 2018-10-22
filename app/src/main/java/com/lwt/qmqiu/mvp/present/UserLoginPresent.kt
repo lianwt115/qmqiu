@@ -6,7 +6,6 @@ import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.model.UserLoginModel
 import com.lwt.qmqiu.network.ApiException
 import com.lwt.qmqiu.utils.applySchedulers
-import com.netease.nimlib.sdk.uinfo.model.UserInfo
 import com.orhanobut.logger.Logger
 import com.trello.rxlifecycle2.LifecycleTransformer
 import io.reactivex.Observable

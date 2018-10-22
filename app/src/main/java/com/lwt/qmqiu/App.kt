@@ -9,36 +9,14 @@ import com.baidu.mapapi.SDKInitializer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
-import android.os.Environment.getExternalStorageDirectory
 import android.support.multidex.MultiDex
-import android.text.TextUtils
-import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.SDKOptions
-import com.netease.nimlib.sdk.StatusBarNotificationConfig
-import java.io.IOException
-import com.netease.nimlib.sdk.auth.LoginInfo
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
-import com.netease.nimlib.sdk.util.NIMUtil
 import com.tencent.bugly.Bugly
-import com.tencent.bugly.crashreport.CrashReport
-import com.tencent.bugly.crashreport.CrashReport.UserStrategy
-import android.provider.UserDictionary.Words.APP_ID
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
-import com.tencent.bugly.beta.Beta.canShowUpgradeActs
-import com.tencent.bugly.beta.Beta.showInterruptedStrategy
-import com.tencent.bugly.beta.Beta.storageDir
-import com.lwt.qmqiu.R.mipmap.ic_launcher
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.utils.SPHelper
 import com.tencent.bugly.beta.Beta
-import com.tencent.bugly.beta.Beta.defaultBannerId
-import com.tencent.bugly.beta.Beta.smallIconId
-import com.tencent.bugly.beta.Beta.largeIconId
-import com.tencent.bugly.beta.Beta.initDelay
-import com.tencent.bugly.beta.Beta.upgradeCheckPeriod
-import com.tencent.bugly.beta.Beta.autoCheckUpgrade
-import com.tencent.bugly.beta.Beta.autoInit
+
 
 
 
@@ -79,14 +57,7 @@ class App : Application() {
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL)
 
-        // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
-        NIMClient.init(this, loginInfo(), options())
-
-        if (NIMUtil.isMainProcess(this)) {
-
-          initBuglyAndUP()
-
-        }
+        initBuglyAndUP()
 
     }
 
@@ -168,15 +139,7 @@ class App : Application() {
     }
 
 
-    // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
-    private fun loginInfo(): LoginInfo? {
-        return null
-    }
 
-    private fun options(): SDKOptions? {
-
-        return null
-    }
 
     fun setLocalUser(baseUser: BaseUser){
 

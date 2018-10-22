@@ -33,7 +33,7 @@
             android:padding="10dp"
             android:layout_margin="10dp"
             android:background="@drawable/bg_blue_noradius_rectangle_o"
-            android:hint="IM,输入(test0-test10)登录"
+            android:hint="输入要发送的消息"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
@@ -42,7 +42,7 @@
             android:id="@+id/im_bt"
             android:layout_margin="10dp"
             android:background="@drawable/bg_blue_8"
-            android:text="登录"
+            android:text="发送"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

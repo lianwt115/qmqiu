@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.bean.VideoSurface
-import com.netease.nimlib.sdk.msg.model.IMMessage
 import java.text.SimpleDateFormat
 
 
-class IMListAdapter(context: Context, list: List<IMMessage>, listen:IMClickListen?) : RecyclerView.Adapter<IMListAdapter.ListViewHolder>() {
+class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListen?) : RecyclerView.Adapter<IMListAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
-    var mTotalList: List<IMMessage>? = null
+    var mTotalList: List<QMMessage>? = null
     var inflater: LayoutInflater? = null
     var listen: IMClickListen? = null
     private lateinit var textTime:String
@@ -36,10 +36,10 @@ class IMListAdapter(context: Context, list: List<IMMessage>, listen:IMClickListe
 
         val obj=mTotalList?.get(position)
 
-        holder?.message_who?.text= obj?.fromAccount
+        holder?.message_who?.text= obj?.from
 
 
-        holder?.message_content?.text=obj?.content
+        holder?.message_content?.text=obj?.message
 
         val messageTime= timeData(obj?.time!!)
 

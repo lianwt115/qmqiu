@@ -81,9 +81,6 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
 
-    //网易im 基础
-    implementation 'com.netease.nimlib:basesdk:5.6.1'
-
     //65535问题
     implementation 'com.android.support:multidex:1.0.3'
 

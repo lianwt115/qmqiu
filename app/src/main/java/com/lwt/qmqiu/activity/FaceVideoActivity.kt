@@ -10,24 +10,21 @@ import android.util.Log
 import android.view.View
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.R.id.*
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.VideoListAdapter
-import com.lwt.qmqiu.bean.MyMessage
+import com.lwt.qmqiu.bean.QMMessage
 import com.orhanobut.logger.Logger
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.rtc.video.VideoCanvas
-
 import com.lwt.qmqiu.bean.VideoSurface
-import com.lwt.qmqiu.im.IMUtils
 import com.lwt.qmqiu.map.MapLocationUtils
+import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
-import com.netease.nimlib.sdk.msg.MessageBuilder
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
-import com.netease.nimlib.sdk.msg.model.IMMessage
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_facevideo.*
@@ -35,7 +32,7 @@ import java.util.concurrent.TimeUnit
 
 
 
-class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapLocationUtils.FindMeListen, View.OnClickListener, IMUtils.IMEventListen, IMListAdapter.IMClickListen {
+class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapLocationUtils.FindMeListen, View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen {
 
 
 
@@ -67,7 +64,7 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
 
         }
 
-        Logger.e("离开区域:${now != local}")
+       // Logger.e("离开区域:${now != local}")
 
     }
 
@@ -78,7 +75,7 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
     private lateinit var mIMListAdapter:IMListAdapter
     private lateinit var mDisposable: Disposable
     private  var mVideoSurfaceList = ArrayList<VideoSurface>()
-    private  var mIMMessageList = ArrayList<IMMessage>()
+    private  var mIMMessageList = ArrayList<QMMessage>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,6 +104,8 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
         })
 
         im_bt.setOnClickListener(this)
+
+        QMWebsocket.getInstance().setMessageListen(this)
     }
 
     private fun initRecycleView() {
@@ -296,7 +295,7 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
         if (!mDisposable.isDisposed) {
             mDisposable.dispose()
         }
-        IMUtils.getInstance().doLoginOut()
+
         MapLocationUtils.getInstance().exit()
         leaveChannel()
         RtcEngine.destroy()
@@ -341,84 +340,50 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
             R.id.im_bt -> {
 
 
-                when (im_bt.text.toString()) {
-
-                    "发送"-> {
-
                         if (im_et.text.isEmpty())
                             return
 
-                        val message = MyMessage()
+                        val message = QMMessage()
 
-                        message.content = im_et.text.toString()
+                        message.message = im_et.text.toString()
 
-                        mIMMessageList.add(message)
+                       /* mIMMessageList.add(message)
 
                         mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
 
-                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
-
-                        IMUtils.getInstance().sendTxtMessage(im_et.text.toString())
+                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)*/
 
                         im_et.setText("")
 
-                    }
-
-                    else -> {
-                        IMUtils.getInstance().doLogin(im_et.text.toString(),this)
-                    }
-                }
-
+                        QMWebsocket.getInstance().sengText(message)
 
 
             }
 
-            else -> {
 
-            }
         }
     }
 
 
-    override fun login(success: Boolean) {
-
-        if (success){
-
-            im_et.hint = "输入要发送的消息"
-
-            im_bt.text = "发送"
-
-            im_et.setText("")
-
-            UiUtils.showToast("IM登录成功")
-
-        }else{
-            UiUtils.showToast("IM登录失败,请重试")
-        }
+    override fun imClick(content: VideoSurface, position: Int) {
 
     }
 
-    override fun message(list: List<IMMessage>) {
+    override fun qmMessage(message: QMMessage) {
 
-        var message = list.lastOrNull()
-
-        if (message != null){
-
-            if (mIMMessageList.size>0 && message.isTheSame(mIMMessageList[0]))
-
-                return
-
+        runOnUiThread {
 
             mIMMessageList.add(message)
 
             mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
 
             recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+
+            Logger.e(message.toString())
         }
 
-    }
 
-    override fun imClick(content: VideoSurface, position: Int) {
+
 
     }
 

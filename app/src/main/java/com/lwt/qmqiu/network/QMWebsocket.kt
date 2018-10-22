@@ -1,9 +1,12 @@
 package com.lwt.qmqiu.network
 
+import android.util.Base64
+import android.util.Base64.encodeToString
 import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.lwt.qmqiu.App
+import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.RSAUtils
 import com.orhanobut.logger.Logger
 import okhttp3.*
 import okio.ByteString
@@ -11,7 +14,11 @@ import okio.ByteString
 class QMWebsocket {
 
 
+
     private  var webSocket: WebSocket? = null
+    private  var client: OkHttpClient? = null
+    private  var listen: QMMessageListen? = null
+    private  var url  = "ws://192.168.2.10:9898/api/websocket/"
 
     companion object {
         @Volatile
@@ -30,15 +37,18 @@ class QMWebsocket {
     }
 
 
-    fun connect(url: String){
+    fun connect(user: BaseUser){
+        //将姓名使用公钥加密
 
         var request =  Request.Builder()
-                //.url("ws://localhost:9898/api/websocket")
-                .url(url)
+
+                .url(url.plus(user.name))
                 .build()
         var client = OkHttpClient()
 
         client?.newWebSocket(request, listener)
+
+        
 
     }
 
@@ -48,13 +58,13 @@ class QMWebsocket {
             super.onOpen(webSocket, response)
 
             this@QMWebsocket.webSocket = webSocket
-            this@QMWebsocket.sengText(QMMessage("LWT","DSB",0,"我爱你"))
             Logger.e("onOpen:$response")
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             super.onFailure(webSocket, t, response)
             Logger.e("onFailure:${t.message}")
+
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
@@ -65,7 +75,14 @@ class QMWebsocket {
 
         override fun onMessage(webSocket: WebSocket, text: String) {
             super.onMessage(webSocket, text)
+
             Logger.e("onMessagetext:$text")
+
+            var gson = Gson()
+            var qmMessage = gson.fromJson<QMMessage>(text,QMMessage::class.java)
+
+            if (this@QMWebsocket.listen != null)
+                this@QMWebsocket.listen!!.qmMessage(qmMessage)
         }
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
@@ -83,16 +100,40 @@ class QMWebsocket {
 
     fun close(){
 
+        this.listen = null
         webSocket?.close(1000,"客户端关闭连接")
-
+        //client?.dispatcher()?.executorService()?.shutdown()
     }
 
     fun sengText(content:QMMessage){
+
+
+        content.from = App.instanceApp().getLocalUser()!!.name
+
+        //到时候为房间号
+        content.to = "public"
+        //消息类型
+        content.type = 0
+
         //将对象转为json
         var gson =Gson()
 
         webSocket?.send(gson.toJson(content))
 
     }
+
+
+    fun setMessageListen(listen:QMMessageListen){
+
+        this.listen = listen
+
+    }
+
+    interface QMMessageListen{
+
+        fun qmMessage(message:QMMessage)
+    }
+
+
 
 }

@@ -138,9 +138,10 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
 
 
     override fun onDestroy() {
+
         super.onDestroy()
         bmapView.onDestroy()
-        QMWebsocket.getInstance().close()
+
     }
 
     override fun onPause() {
@@ -231,7 +232,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNo
         Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
 
-        QMWebsocket.getInstance().connect("ws://192.168.2.10:9898/api/websocket")
+        QMWebsocket.getInstance().connect(baseUser)
 
     }
 
