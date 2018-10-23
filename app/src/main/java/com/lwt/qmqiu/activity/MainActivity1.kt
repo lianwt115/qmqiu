@@ -5,8 +5,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.R
@@ -14,18 +12,14 @@ import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_main.*
+
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
-import com.hotvideo.vcall.chat.ui.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
-import com.lwt.qmqiu.R.id.bmapView
 import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.fragment.FindFragment
-import com.lwt.qmqiu.fragment.MineFragment
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
@@ -33,26 +27,21 @@ import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.widget.MapNoticeDialog
 import com.tencent.bugly.beta.Beta
+import kotlinx.android.synthetic.main.activity_main1.*
 
 
+class MainActivity1 : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapNoticeDialogListen, MapLocationUtils.FindMeListen, UserLoginContract.View {
 
-class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View {
-
-    private var findFragment: FindFragment? = null
-    private var noteFragment: NoteFragment? = null
-    private var mineFragment: MineFragment? = null
+    private lateinit var mBaiduMap:BaiduMap
+    private lateinit var mMapNoticeDialog:MapNoticeDialog
     private lateinit var present:UserLoginPresent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main1)
 
         checkAndRequirePermissions()
 
         initView()
-
-        setRadioButton()
-
-        initFragment(savedInstanceState)
 
         //需要初始化
         Beta.init(applicationContext, BuildConfig.DEBUG)
@@ -68,109 +57,32 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     private fun initView() {
 
+        location_bt.setOnClickListener(this)
+        fab.setOnClickListener(this)
 
+        mBaiduMap = bmapView.map
     }
-
-    private fun setRadioButton() {
-        rb_find.isChecked = true
-        rb_find.setTextColor(resources.getColor(R.color.colorAccent))
-        find_parente.setOnClickListener(this)
-        note_parente.setOnClickListener(this)
-        mine_parent.setOnClickListener(this)
-    }
-
-    private fun initFragment(savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) {
-            //异常情况
-            val mFragments: List<Fragment> = supportFragmentManager.fragments
-            for (item in mFragments) {
-                if (item is FindFragment) {
-                    findFragment = item
-                }else if (item is NoteFragment){
-                    noteFragment=item
-                }else if (item is MineFragment){
-                    mineFragment=item
-                }
-
-            }
-        } else {
-            findFragment = FindFragment()
-            noteFragment = NoteFragment()
-            mineFragment = MineFragment()
-
-            val fragmentTrans = supportFragmentManager.beginTransaction()
-
-            fragmentTrans.add(R.id.fl_content, findFragment!!)
-            fragmentTrans.add(R.id.fl_content, noteFragment!!)
-            fragmentTrans.add(R.id.fl_content, mineFragment!!)
-
-            fragmentTrans.commit()
-        }
-
-
-        supportFragmentManager.beginTransaction().show(findFragment!!)
-                .hide(noteFragment!!)
-                .hide(mineFragment!!)
-                .commit()
-
-    }
-
-
-
     override fun onClick(v: View?) {
 
-        clearState()
-
         when (v?.id) {
-            R.id.find_parente -> {
+            R.id.location_bt -> {
 
-                rb_find.isChecked = true
-                rb_find.setTextColor(resources.getColor(R.color.colorAccent))
-
-                supportFragmentManager.beginTransaction().show(findFragment!!)
-                        .hide(noteFragment!!)
-                        .hide(mineFragment!!)
-                        .commit()
+                MapLocationUtils.getInstance().findMe(this)
 
             }
+            R.id.fab  -> {
+                window.exitTransition = null
+                window.enterTransition = null
 
-            R.id.note_parente -> {
-
-
-                rb_note.isChecked = true
-                rb_note.setTextColor(resources.getColor(R.color.colorAccent))
-
-                supportFragmentManager.beginTransaction().show(noteFragment!!)
-                        .hide(findFragment!!)
-                        .hide(mineFragment!!)
-                        .commit()
-            }
-
-            R.id.mine_parent -> {
-
-
-                rb_mine.isChecked = true
-                rb_mine.setTextColor(resources.getColor(R.color.colorAccent))
-                supportFragmentManager.beginTransaction().show(mineFragment!!)
-                        .hide(findFragment!!)
-                        .hide(noteFragment!!)
-                        .commit()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val options = ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName())
+                    startActivity(Intent(this, RegisterActivity::class.java), options.toBundle())
+                } else {
+                    startActivity(Intent(this, RegisterActivity::class.java))
+                }
             }
         }
-
-
     }
-
-    private fun clearState() {
-        rb_mine.isChecked=false
-        rb_note.isChecked=false
-        rb_find.isChecked=false
-        rb_note.setTextColor(resources.getColor(R.color.main_bottom_text))
-        rb_mine.setTextColor(resources.getColor(R.color.main_bottom_text))
-        rb_find.setTextColor(resources.getColor(R.color.main_bottom_text))
-    }
-
-
 
     //权限检查
     fun checkAndRequirePermissions(){
@@ -214,18 +126,18 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     override fun onDestroy() {
 
         super.onDestroy()
-
+        bmapView.onDestroy()
 
     }
 
     override fun onPause() {
         super.onPause()
-
+        bmapView.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-
+        bmapView.onResume()
 
     }
 
@@ -234,8 +146,69 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         MapLocationUtils.getInstance().exit()
     }
 
-    override fun locationInfo(location: BDLocation?) {
+    //将定位瞄在地图上
+    fun locationOnMap(location: BDLocation){
+        // 开启定位图层
+        mBaiduMap.isMyLocationEnabled = true
 
+        // 构造定位数据
+        val locData = MyLocationData.Builder()
+                .accuracy(location.radius)
+                // 此处设置开发者获取到的方向信息，顺时针0-360
+                .direction(100f).latitude(location.latitude)
+                .longitude(location.longitude).build()
+
+        // 设置定位数据
+        mBaiduMap.setMyLocationData(locData)
+
+        // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+        val mCurrentMarker = BitmapDescriptorFactory
+                .fromResource(R.mipmap.logo)
+
+        val config = MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, null, 0xAAFFFF88.toInt(), 0xAA00FF00.toInt())
+        mBaiduMap.setMyLocationConfiguration(config)
+
+
+        // 当不需要定位图层时关闭定位图层
+        //mBaiduMap.isMyLocationEnabled = false
+
+        moveToLocation(location)
+    }
+
+    //移动中心点到当前位置
+    fun moveToLocation(location: BDLocation){
+
+        val ll =  LatLng(location.latitude, location.longitude)
+        val builder =  MapStatus.Builder()
+        builder.target(ll).zoom(18.0f)
+        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()))
+
+
+        val build =MapNoticeDialog.Builder(this,location)
+
+        mMapNoticeDialog = build.create(this)
+
+        mMapNoticeDialog.show()
+
+    }
+
+    override fun clickState(status: Boolean, location: BDLocation, mapNoticeDialog: MapNoticeDialog) {
+
+        if (status){
+
+            val intent = Intent(this, IMActivity::class.java)
+
+            intent.putExtra("location",location)
+
+            startActivity(intent)
+
+        }
+
+        mapNoticeDialog.dismiss()
+    }
+
+    override fun locationInfo(location: BDLocation?) {
+        locationOnMap(location!!)
         autoLogin(location!!)
     }
 

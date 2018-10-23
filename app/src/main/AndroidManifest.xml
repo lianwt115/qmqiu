@@ -96,6 +96,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.IMActivity" />
+        <activity android:name=".activity.MainActivity1" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

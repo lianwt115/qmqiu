@@ -1,39 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true" />
-
-    <ImageView
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="100dp"
-        android:src="@mipmap/location"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/location_bt"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </FrameLayout>
+    <RadioGroup
+        android:id="@+id/rg_root"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="normal"
-        android:src="@drawable/login"
-        android:transitionName="loginFab"
-        />
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/find_parente"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <RadioButton
+                android:clickable="false"
+                android:drawablePadding="4dp"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:id="@+id/rb_find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:textColor="@color/gray_"
+                android:drawableTop="@drawable/find_bg_selected"
+                android:gravity="center"
+                android:text="@string/bottom_one"
+                />
+            <ImageView
+                android:id="@+id/red_find"
+                android:visibility="gone"
+                android:layout_toRightOf="@id/rb_find"
+                android:src="@drawable/bubble_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/note_parente"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <RadioButton
+                android:clickable="false"
+                android:drawablePadding="4dp"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:id="@+id/rb_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:textColor="@color/gray_"
+                android:drawableTop="@drawable/note_bg_selected"
+                android:gravity="center"
+                android:text="@string/bottom_two"/>
+            <ImageView
+                android:id="@+id/red_message"
+                android:visibility="gone"
+                android:layout_toRightOf="@id/rb_note"
+                android:src="@drawable/bubble_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mine_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <RadioButton
+                android:clickable="false"
+                android:drawablePadding="4dp"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:id="@+id/rb_mine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_"
+                android:button="@null"
+                android:drawableTop="@drawable/mine_bg_selected"
+                android:gravity="center"
+                android:text="@string/bottom_three"/>
+            <ImageView
+                android:id="@+id/red_mine"
+                android:visibility="gone"
+                android:layout_toRightOf="@id/rb_mine"
+                android:src="@drawable/bubble_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+    </RadioGroup>
+
+</LinearLayout>

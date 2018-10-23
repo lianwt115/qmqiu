@@ -12,8 +12,13 @@
     <string name="register">注册</string>
     <string name="loading">请稍等</string>
     <string name="net_error">网络异常</string>
-
-
+    <string name="bottom_one">发现</string>
+    <string name="bottom_two">帖子</string>
+    <string name="bottom_three">我</string>
+    <string name="list1_name">Hot</string>
+    <string name="list2_name">Active</string>
+    <string name="list3_name">New</string>
+    <string name="list4_name">Free</string>
 
 
 

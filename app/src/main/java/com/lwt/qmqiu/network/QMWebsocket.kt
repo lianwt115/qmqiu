@@ -48,7 +48,7 @@ class QMWebsocket {
 
         client?.newWebSocket(request, listener)
 
-        
+
 
     }
 
@@ -107,6 +107,8 @@ class QMWebsocket {
 
     fun sengText(content:QMMessage){
 
+        if (webSocket == null)
+            return
 
         content.from = App.instanceApp().getLocalUser()!!.name
 

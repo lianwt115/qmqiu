@@ -20,13 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#######***********网易云信**********
--dontwarn com.netease.**
--keep class com.netease.** {*;}
-#如果你使用全文检索插件，需要加入
--dontwarn org.apache.lucene.**
--keep class org.apache.lucene.** {*;}
-#######***********网易云信**********
 
 #######***********声网**********
 -keep class io.agora.**{*;}
@@ -96,3 +89,79 @@
 -keep class android.support.**{*;}
 #######***********bugly up**********
 
+#不混淆资源类
+ -keep class **.R$* {*;}
+ -keep class **.R{*;}
+ -keepclassmembers class **.R$* {
+     public static <fields>;
+ }
+ -dontwarn **.R$*
+
+ #保持 Serializable 不被混淆并且enum 类也不被混淆
+ -keepclassmembers class * implements java.io.Serializable {
+     static final long serialVersionUID;
+     private static final java.io.ObjectStreamField[] serialPersistentFields;
+     !static !transient <fields>;
+     !private <fields>;
+     !private <methods>;
+     private void writeObject(java.io.ObjectOutputStream);
+     private void readObject(java.io.ObjectInputStream);
+     java.lang.Object writeReplace();
+     java.lang.Object readResolve();
+ }
+
+ -keepclasseswithmembernames class * {
+         native <methods>;
+     }
+
+ -keep public class * extends android.view.View {
+         public <init>(android.content.Context);
+         public <init>(android.content.Context, android.util.AttributeSet);
+         public <init>(android.content.Context, android.util.AttributeSet, int);
+         public void set*(...);
+     }
+
+ #保持自定义控件类不被混淆
+ -keepclasseswithmembers class * {
+     public <init>(android.content.Context, android.util.AttributeSet);
+ }
+
+ #保持自定义控件类不被混淆
+ -keepclassmembers class * extends android.app.Activity {
+    public void *(android.view.View);
+ }
+
+ #保持 Parcelable 不被混淆
+ -keep class * implements android.os.Parcelable {
+   public static final android.os.Parcelable$Creator *;
+ }
+
+ #保持 Serializable 不被混淆
+ -keepnames class * implements java.io.Serializable
+
+
+ # Gson
+ -keep class com.google.gson.stream.** { *; }
+ -keepattributes EnclosingMethod
+ -keep class org.xz_sale.entity.**{*;}
+
+ #package android.support.design.widget; tab底下的横线长短利用反射缩短的,不能被混淆
+  -keep class android.support.design.widget.TabLayout {*;}
+
+ # RxJava RxAndroid
+ -dontwarn sun.misc.**
+ -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+     long producerIndex;
+     long consumerIndex;
+ }
+ -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+     rx.internal.util.atomic.LinkedQueueNode producerNode;
+ }
+ -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+     rx.internal.util.atomic.LinkedQueueNode consumerNode;
+ }
+
+ #banner
+ -keep class com.youth.banner.** {
+     *;
+  }

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit
 
 
 
-class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapLocationUtils.FindMeListen, View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen {
+class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapLocationUtils.FindMeListen {
 
 
 
@@ -103,9 +103,7 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
             Logger.e("持续定位失败")
         })
 
-        im_bt.setOnClickListener(this)
 
-        QMWebsocket.getInstance().setMessageListen(this)
     }
 
     private fun initRecycleView() {
@@ -132,29 +130,7 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
             }
         })
 
-        val linearLayoutManager = object :LinearLayoutManager(this){
-            override fun canScrollVertically(): Boolean {
-                return true
-            }
 
-            override fun canScrollHorizontally(): Boolean {
-                return false
-            }
-        }
-        recycleview_im.layoutManager=linearLayoutManager
-
-        mIMListAdapter= IMListAdapter(this,mIMMessageList,this)
-
-        recycleview_im.adapter = mIMListAdapter
-
-        recycleview_im.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                outRect.top = 0
-                outRect.bottom = 0
-                outRect.left = 0
-                outRect.right =0
-            }
-        })
     }
 
 
@@ -331,60 +307,6 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
         }
 
         return null
-    }
-
-    override fun onClick(v: View?) {
-
-        when (v?.id) {
-
-            R.id.im_bt -> {
-
-
-                        if (im_et.text.isEmpty())
-                            return
-
-                        val message = QMMessage()
-
-                        message.message = im_et.text.toString()
-
-                       /* mIMMessageList.add(message)
-
-                        mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
-
-                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)*/
-
-                        im_et.setText("")
-
-                        QMWebsocket.getInstance().sengText(message)
-
-
-            }
-
-
-        }
-    }
-
-
-    override fun imClick(content: VideoSurface, position: Int) {
-
-    }
-
-    override fun qmMessage(message: QMMessage) {
-
-        runOnUiThread {
-
-            mIMMessageList.add(message)
-
-            mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
-
-            recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
-
-            Logger.e(message.toString())
-        }
-
-
-
-
     }
 
 

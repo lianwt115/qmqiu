@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="BarView">
+        <!--左边图片-->
+        <attr name="imgleft_barview" format="reference" />
+
+        <attr name = "textcenter_barview" format = "string" />
+        <!--右边图片-->
+        <attr name="imgright_barview" format="reference" />
+
+    </declare-styleable>
+
+
+
+</resources>

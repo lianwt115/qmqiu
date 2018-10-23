@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mine_rootview"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+
+        android:layout_centerInParent="true"
+        android:paddingLeft="16dp"
+        android:gravity="center"
+        android:textColor="#494157"
+        android:textSize="20sp"
+        android:id="@+id/message_title"
+        android:text="我的"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
+
+
+</RelativeLayout>
