@@ -37,7 +37,7 @@ class MapLocationUtils private constructor() {
 
     }
 
-    fun  findMe(findMeListen: FindMeListen){
+    fun  findMe(findMeListen: FindMeListen?){
 
         this.mFindMeListen = findMeListen
 

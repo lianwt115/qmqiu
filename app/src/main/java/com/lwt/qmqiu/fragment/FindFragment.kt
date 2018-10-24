@@ -13,18 +13,16 @@ import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_find.*
 
 
-/**
- * Created by Administrator on 2018\1\5 0005.
- */
+
 class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
 
     val app= App.instanceApp()
     var mTabs = listOf<String>(app.getString(R.string.list1_name), app.getString(R.string.list2_name),
-            app.getString(R.string.list3_name),app.getString(R.string.list4_name)).toMutableList()
+            app.getString(R.string.list3_name)).toMutableList()
 
     lateinit var mFragments: ArrayList<Fragment>
 
-    val STRATEGY = arrayOf(2,1,3,4)//接口路徑路由
+    val STRATEGY = arrayOf(1,2,3)//接口路徑路由
 
     var index=STRATEGY[0]
 
@@ -36,34 +34,31 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
 
     override fun initView() {
 
-        var recommendFragment: ListFragment = ListFragment()
-        var recommendBundle = Bundle()
-        recommendBundle.putInt("type", STRATEGY[0])
-        recommendFragment.arguments = recommendBundle
+        var nearFragment: ListFragment = ListFragment()
+        var nearBundle = Bundle()
+        nearBundle.putInt("type",STRATEGY[0])
+        nearFragment.arguments = nearBundle
 
 
-        var activeFragment: ListFragment = ListFragment()
-        var activeBundle = Bundle()
-        activeBundle.putInt("type", STRATEGY[1])
-        activeFragment.arguments = activeBundle
+        var publicFragment: ListFragment = ListFragment()
+        var publicBundle = Bundle()
+        publicBundle.putInt("type", STRATEGY[1])
+        publicFragment.arguments = publicBundle
 
 
-        var adorableFragment: ListFragment = ListFragment()
-        var adorableBundle = Bundle()
-        adorableBundle.putInt("type", STRATEGY[2])
-        adorableFragment.arguments = adorableBundle
+        var myFragment: ListFragment = ListFragment()
+        var myBundle = Bundle()
+        myBundle.putInt("type",STRATEGY[2])
+        myFragment.arguments = myBundle
 
-        var freeFragment: ListFragment = ListFragment()
-        var freeBundle = Bundle()
-        freeBundle.putInt("type", STRATEGY[3])
-        freeFragment.arguments = freeBundle
+
 
 
         mFragments = ArrayList()
-        mFragments.add(recommendFragment as Fragment)
-        mFragments.add(activeFragment as Fragment)
-        mFragments.add(adorableFragment as Fragment)
-        mFragments.add(freeFragment as Fragment)
+        mFragments.add(nearFragment as Fragment)
+        mFragments.add(publicFragment as Fragment)
+        mFragments.add(myFragment as Fragment)
+
 
 
         vp_content.adapter = ChatAdatpter(fragmentManager!!, mFragments, mTabs)
@@ -84,36 +79,6 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
 
-        var lable= "recommend"
-
-        when (tab!!.text.toString()) {
-
-            mTabs[0]-> {
-                lable= "recommend"
-                index=STRATEGY[0]
-
-            }
-
-            mTabs[1] -> {
-                lable= "active"
-                index=STRATEGY[1]
-
-            }
-
-            mTabs[2] -> {
-                lable= "new"
-                index=STRATEGY[2]
-
-            }
-
-            mTabs[3] -> {
-                lable= "free"
-                index=STRATEGY[3]
-
-            }
-        }
-
-        Logger.e("chat_tab:$lable")
 
     }
 }

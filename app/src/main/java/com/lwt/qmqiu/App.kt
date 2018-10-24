@@ -128,7 +128,7 @@ class App : Application() {
 
     private fun initLog() {
         val formatStrategy = PrettyFormatStrategy.newBuilder()
-                .tag("qmqiu")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .tag("qmqiulog")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
                 .build()
         Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
             override fun isLoggable(priority: Int, tag: String?): Boolean {

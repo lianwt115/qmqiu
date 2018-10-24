@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import com.baidu.location.BDLocation
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.VideoListAdapter
 import com.lwt.qmqiu.bean.QMMessage
@@ -30,41 +32,13 @@ import java.util.concurrent.TimeUnit
 
 
 
-class IMActivity : BaseActivity(),MapLocationUtils.FindMeListen, View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener {
+class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener {
 
 
 
     private var leaveTime = 0
 
-    override fun locationInfo(location: BDLocation?) {
 
-        val now1 = location!!.longitude*1000
-        val now2 = location.latitude*1000
-        val now = now1.toString().split(".")[0].plus(now2.toString().split(".")[0])
-
-        val local1 = mBDLocation!!.longitude*1000
-        val local2 = mBDLocation.latitude*1000
-        val local = local1.toString().split(".")[0].plus(local2.toString().split(".")[0])
-
-        if(now != local){
-            if (leaveTime <3)
-                leaveTime++
-
-            UiUtils.showToast("第$leaveTime,三次后将自动退出")
-
-            if (leaveTime == 3){
-                Observable.timer(2,TimeUnit.SECONDS).applySchedulers().subscribe({
-                    finish()
-                },{
-                    Logger.e("退出异常")
-                })
-            }
-
-        }
-
-       // Logger.e("离开区域:${now != local}")
-
-    }
 
 
     private lateinit var mRtcEngine:RtcEngine
@@ -89,7 +63,31 @@ class IMActivity : BaseActivity(),MapLocationUtils.FindMeListen, View.OnClickLis
 
         mDisposable = Observable.interval(2,TimeUnit.SECONDS).applySchedulers().subscribe({
 
-            MapLocationUtils.getInstance().findMe(this)
+            var location = App.instanceApp().getBDLocation()
+
+            val now1 = location!!.longitude*1000
+            val now2 = location.latitude*1000
+            val now = now1.toString().split(".")[0].plus(now2.toString().split(".")[0])
+
+            val local1 = mBDLocation!!.longitude*1000
+            val local2 = mBDLocation.latitude*1000
+            val local = local1.toString().split(".")[0].plus(local2.toString().split(".")[0])
+
+            if(now != local){
+                if (leaveTime <3)
+                    leaveTime++
+
+                UiUtils.showToast("第$leaveTime,三次后将自动退出")
+
+                if (leaveTime == 3){
+                    Observable.timer(2,TimeUnit.SECONDS).applySchedulers().subscribe({
+                        finish()
+                    },{
+                        Logger.e("退出异常")
+                    })
+                }
+
+            }
 
         },{
 

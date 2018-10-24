@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.R
@@ -17,12 +16,9 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
-import com.baidu.mapapi.map.*
-import com.baidu.mapapi.model.LatLng
-import com.hotvideo.vcall.chat.ui.fragment.NoteFragment
+import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
-import com.lwt.qmqiu.R.id.bmapView
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.fragment.FindFragment
 import com.lwt.qmqiu.fragment.MineFragment
@@ -31,9 +27,8 @@ import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.SPHelper
-import com.lwt.qmqiu.widget.MapNoticeDialog
 import com.tencent.bugly.beta.Beta
-
+import io.reactivex.disposables.Disposable
 
 
 class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View {
@@ -42,6 +37,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     private var noteFragment: NoteFragment? = null
     private var mineFragment: MineFragment? = null
     private lateinit var present:UserLoginPresent
+    private  var loginClick = false
+    private lateinit var mDisposable: Disposable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,6 +64,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     }
 
     private fun initView() {
+
 
 
     }
@@ -156,6 +154,19 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
                         .hide(noteFragment!!)
                         .commit()
             }
+
+            R.id.fab  -> {
+                loginClick = true
+                window.exitTransition = null
+                window.enterTransition = null
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val options = ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName())
+                    startActivity(Intent(this, RegisterActivity::class.java), options.toBundle())
+                } else {
+                    startActivity(Intent(this, RegisterActivity::class.java))
+                }
+            }
         }
 
 
@@ -226,11 +237,36 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     override fun onResume() {
         super.onResume()
 
+        if (checkUserInfo()) {
+            fab.hide()
+            rg_root.visibility = View.VISIBLE
+        }else{
+            fab.setOnClickListener(this)
+        }
+
+        if (loginClick){
+            loginClick = false
+            rb_find.isChecked = true
+            rb_find.setTextColor(resources.getColor(R.color.colorAccent))
+        }
+
+        mDisposable = Observable.interval(5,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+
+                MapLocationUtils.getInstance().findMe(null)
+
+        },{
+
+            Logger.e("持续定位失败")
+        })
 
     }
 
     override fun onStop() {
         super.onStop()
+        if (!mDisposable.isDisposed) {
+            mDisposable.dispose()
+        }
         MapLocationUtils.getInstance().exit()
     }
 
@@ -258,16 +294,23 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     private fun autoLogin(location: BDLocation) {
         //是否已经登录
 
-        if (App.instanceApp().getLocalUser() == null) {
+        if (App.instanceApp().getLocalUser() == null && checkUserInfo()) {
 
             val name = SPHelper.getInstance().get("loginName","") as String
             val password = SPHelper.getInstance().get("loginPassword","") as String
 
-            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password))
-
-                present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+            present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
 
         }
+
+    }
+
+    private fun checkUserInfo():Boolean {
+
+        val name = SPHelper.getInstance().get("loginName","") as String
+        val password = SPHelper.getInstance().get("loginPassword","") as String
+
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)
 
     }
 

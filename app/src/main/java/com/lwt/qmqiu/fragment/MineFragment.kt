@@ -4,9 +4,7 @@ import com.lwt.qmqiu.R
 import com.lwt.qmqiu.fragment.BaseFragment
 
 
-/**
- * Created by Administrator on 2018\1\5 0005.
- */
+
 class MineFragment : BaseFragment(){
 
 
