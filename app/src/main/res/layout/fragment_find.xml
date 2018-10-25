@@ -17,8 +17,8 @@
             android:layout_height="56dp"
             app:tabBackground="@color/white"
             app:tabTextColor="@color/main_bottom_text"
-            app:tabSelectedTextColor="@color/main_bottom_text_select"
-            app:tabIndicatorColor="@color/main_bottom_text_select">
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabIndicatorColor="@color/colorAccent">
         </android.support.design.widget.TabLayout>
 
     </LinearLayout>

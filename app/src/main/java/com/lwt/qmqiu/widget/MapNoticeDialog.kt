@@ -48,7 +48,7 @@ class MapNoticeDialog : Dialog {
             val inflater = mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-            mMapNoticeDialog = MapNoticeDialog(mContext, R.style.OrderDialog)
+            mMapNoticeDialog = MapNoticeDialog(mContext, R.style.MyDialog)
             mMapNoticeDialog!!.setCanceledOnTouchOutside(true)
             layout = inflater.inflate(R.layout.dialog_ordernotice, null)
             mMapNoticeDialog!!.addContentView(layout!!, ViewGroup.LayoutParams(

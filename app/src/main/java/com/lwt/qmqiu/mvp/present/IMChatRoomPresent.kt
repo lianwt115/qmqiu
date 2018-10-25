@@ -44,16 +44,41 @@ class IMChatRoomPresent(context: Context, view: IMChatRoomContract.View) : IMCha
 
             if (it is ApiException){
 
-                mView?.err(it.getResultCode()!!,it.message)
+                mView?.err(it.getResultCode()!!,it.message,1)
 
             }else{
-                mView?.err(-1,it.message)
+                mView?.err(-1,it.message,1)
             }
 
         }
 
         )
 
+    }
+    override fun creatIMChatRoom(name: String, latitude: Double, longitude: Double, type: Int, roomName: String, bindToLifecycle: LifecycleTransformer<IMChatRoom>) {
+        val observable : Observable<IMChatRoom>? = mContext?.let {
+            mModel.creatIMChatRoom(name,latitude,longitude,type,roomName) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.creatIMChatRoomSuccess(it)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,2)
+
+            }else{
+                mView?.err(-1,it.message,2)
+            }
+
+        }
+
+        )
     }
 
 }

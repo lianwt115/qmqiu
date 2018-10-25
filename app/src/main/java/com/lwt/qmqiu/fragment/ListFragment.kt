@@ -1,14 +1,18 @@
 package com.lwt.qmqiu.fragment
 
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Rect
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.R.color.bg_tv_money
 import com.lwt.qmqiu.adapter.IMChatRoomListAdapter
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.VideoSurface
@@ -17,18 +21,23 @@ import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
 import com.lwt.qmqiu.mvp.present.IMChatRoomPresent
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
+import com.lwt.qmqiu.utils.applySchedulers
+import com.lwt.qmqiu.widget.NoticeDialog
+import com.orhanobut.logger.Logger
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_list.*
+import java.util.concurrent.TimeUnit
 
 
 
-class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMChatRoomContract.View, IMChatRoomListAdapter.RoomClickListen {
+class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMChatRoomContract.View, IMChatRoomListAdapter.RoomClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
 
 
 
@@ -86,9 +95,9 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
         var foot= BallPulseFooter(context!!).setSpinnerStyle(SpinnerStyle.Scale)
 
-        head.setColorSchemeColors(-0x59ce01, -0x7c4d10, -0x59ce01, -0x7c4d10,-0x59ce01, -0x7c4d10)
+        head.setColorSchemeColors(resources.getColor(R.color.colorAccent), resources.getColor(R.color.bg_tv_money), resources.getColor(R.color.colorAccent),resources.getColor(R.color.bg_tv_money),resources.getColor(R.color.colorAccent), resources.getColor(R.color.bg_tv_money))
 
-        foot.setAnimatingColor(-0x59ce01)
+        foot.setAnimatingColor(resources.getColor(R.color.colorAccent))
 
         smartrefreshlayout.refreshHeader=head
 
@@ -97,7 +106,11 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
         getData(null)
         smartrefreshlayout.autoRefresh()
 
+        room_fab.setOnClickListener(this)
 
+
+        if (mStrategy == 3)
+            room_fab.hide()
     }
 
     override fun onLoadmore(refreshlayout: RefreshLayout?) {
@@ -145,9 +158,20 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
     }
 
-    override fun err(code: Int, errMessage: String?) {
+    override fun err(code: Int, errMessage: String?, type: Int) {
 
-        smartrefreshlayout.finishRefresh()
+        when (type) {
+
+            //获取房间失败
+            1 -> {
+                smartrefreshlayout.finishRefresh()
+            }
+            //创建房间失败
+            2 -> {
+                showProgressDialogSuccess(false)
+            }
+        }
+
         UiUtils.showToast(errMessage!!)
     }
 
@@ -160,6 +184,54 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+    }
+
+    /**
+     * 创建成功后是直接进入还是刷新
+     */
+    override fun creatIMChatRoomSuccess(room: IMChatRoom) {
+
+        getData(null)
+        smartrefreshlayout.autoRefresh()
+
+        showProgressDialogSuccess(true)
+
+        Logger.e(room.toString())
+    }
+
+    override fun onClick(v: View?) {
+
+        when (v?.id) {
+
+            R.id.room_fab -> {
+
+                showProgressDialog("创建聊天室",true,3,this)
+
+            }
+
+        }
+    }
+
+    override fun btClick( etContent: String): Boolean {
+
+        var user = App.instanceApp().getLocalUser()
+        var location = App.instanceApp().getBDLocation()
+
+        if (user != null){
+
+            mPresenter.creatIMChatRoom(user.name,location?.latitude ?: 0.000000, location?.longitude
+                    ?: 0.000000, mStrategy,etContent,bindToLifecycle())
+
+            return  true
+
+        }else{
+
+            UiUtils.showToast("请先登录")
+
+        }
+
+        return  false
 
     }
 }

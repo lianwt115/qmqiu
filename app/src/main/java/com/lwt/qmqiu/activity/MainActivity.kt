@@ -3,6 +3,7 @@ package com.lwt.qmqiu.activity
 import android.Manifest
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,6 +17,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
@@ -27,11 +29,14 @@ import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.widget.NoticeDialog
 import com.tencent.bugly.beta.Beta
 import io.reactivex.disposables.Disposable
 
 
+
 class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View {
+
 
     private var findFragment: FindFragment? = null
     private var noteFragment: NoteFragment? = null
@@ -161,7 +166,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
                 window.enterTransition = null
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val options = ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName())
+                    val options = ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.transitionName)
                     startActivity(Intent(this, RegisterActivity::class.java), options.toBundle())
                 } else {
                     startActivity(Intent(this, RegisterActivity::class.java))

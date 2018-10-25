@@ -140,23 +140,30 @@ abstract class BaseFragment : Fragment(),LifecycleProvider<FragmentEvent> {
         activity.window.attributes = lp
     }
 
-    protected fun showProgressDialog(message: String=getString(R.string.loading), listen: DialogInterface.OnDismissListener?=null) {
+    protected fun showProgressDialog(message: String = getString(R.string.loading),cancle:Boolean = true,type:Int = 1, listen: NoticeDialog.Builder.BtClickListen? = null) {
 
         if (mNoticeDialogBuilder == null)
-            mNoticeDialogBuilder= NoticeDialog.Builder(activity!!)
+            mNoticeDialogBuilder= NoticeDialog.Builder(activity!!,cancle)
 
         if (mNoticeDialog == null)
 
             mNoticeDialog=mNoticeDialogBuilder!!.create(message)
 
         else
-            mNoticeDialogBuilder!!.initView(message)
+            mNoticeDialogBuilder!!.initView( message,cancle)
 
 
         if (listen !=null)
-            mNoticeDialog!!.setOnDismissListener(listen)
+            mNoticeDialogBuilder!!.setListen(listen,type)
 
         mNoticeDialog!!.show()
+    }
+
+    protected fun showProgressDialogSuccess(boolean: Boolean){
+
+        if (!mDestroy && mNoticeDialog != null && mNoticeDialogBuilder != null) {
+            mNoticeDialogBuilder!!.btFinish(boolean)
+        }
     }
 
     protected fun dismissProgressDialog() {

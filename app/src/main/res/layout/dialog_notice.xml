@@ -1,43 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    >
+    android:background="@drawable/bg_acc_8">
 
     <TextView
+        android:lines="1"
+        android:ellipsize="end"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_marginTop="10dp"
-        android:text="adsfad"
+        android:layout_margin="10dp"
+        android:text="ads发ad"
         android:layout_gravity="center_horizontal"
         android:id="@+id/dialog_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
+
+    <View
+        android:id="@+id/line"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="1px"></View>
 
-            <Button
-                android:background="@drawable/bg_blue_8"
-                android:id="@+id/bt_left"
-                android:text="取消"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <Button
-                android:background="@drawable/bg_blue_8"
-                android:layout_marginLeft="40dp"
-                android:layout_toRightOf="@id/bt_left"
-                android:id="@+id/bt_right"
-                android:text="确定"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+    <EditText
 
-    </RelativeLayout>
+
+        android:textColorHint="@color/province_line_border"
+        android:layout_marginTop="6dp"
+        android:theme="@style/MyEditText"
+        android:id="@+id/room_name"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:hint="聊天室名称"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:layout_marginBottom="20dp"
+        android:text="@string/next"
+        android:layout_marginTop="20dp"
+        android:id="@+id/bt_go"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bt_shape_2"
+        app:spinning_bar_width="4dp"
+        app:spinning_bar_color="@color/colorAccent"
+        app:spinning_bar_padding="6dp" >
+
+    </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+
 
 
 </LinearLayout>

@@ -14,13 +14,15 @@ interface IMChatRoomContract {
 
 
         fun setIMChatRoom(roomList:List<IMChatRoom>)
+        fun creatIMChatRoomSuccess(room:IMChatRoom)
 
-        fun err(code:Int,errMessage:String?)
+        fun err(code:Int,errMessage:String?,type:Int)
 
     }
     interface Presenter : BasePresent {
 
         fun getIMChatRoom(name:String, latitude:Double, longitude:Double,type:Int,bindToLifecycle: LifecycleTransformer<List<IMChatRoom>>)
+        fun creatIMChatRoom(name:String, latitude:Double, longitude:Double,type:Int,roomName:String,bindToLifecycle: LifecycleTransformer<IMChatRoom>)
 
     }
 }

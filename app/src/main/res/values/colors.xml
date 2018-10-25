@@ -8,13 +8,13 @@
     <color name="tips_color">#FE5852</color>
     <color name="top_bg">#4BB2C7</color>
     <color name="top_bg_left">#5BC2D7</color>
-    <color name="top_bg_right">#F69F39</color>
+    <color name="top_bg_right">#F69145</color>
     <color name="bottom_bg">#A9D6F4</color>
     <color name="notice_top_bg">#0DC6DC</color>
     <color name="bt_bg1">#0DC6DC</color>
     <color name="bt_bg2">#E77374</color>
     <color name="bt_bg3">#23AF97</color>
-    <color name="bt_bg4">#F69F39</color>
+    <color name="bt_bg4">#F69888</color>
     <color name="bt_bg5">#7589C4</color>
     <color name="bt_bg6">#EA7274</color>
     <color name="bt_bg7">#5BC2D8</color>
@@ -71,60 +71,25 @@
     <color name="bg_tv_money">#d632ff</color>
     <color name="s_open">#48c7fc</color>
 
-    <color name="rata_anchor_woman_bg">#f5f5f5</color>
-
     <color name="main_color">#ff2e68</color>
 
     <color name="bg_start_color">#d632ff</color>
     <color name="bg_center_color">#ff5647</color>
     <color name="bg_end_color">#ff9d29</color>
 
-    <color name="bg_mask">#51000000</color>
-    <color name="bg_qq">#47bafe</color>
-    <color name="bg_weixin">#14d966</color>
-    <color name="bg_phone">#d632ff</color>
-    <color name="bg_pay">#14d966</color>
-    <color name="bg_whatsapp">#075e54</color>
-    <color name="bg_login">#e8e8e8</color>
-    <color name="bg_filter">#4c000000</color>
-    <color name="bg_recharge">#ffffff</color>
-
-    <color name="bg_chat_video">#cccccc</color>
-    <color name="bg_delete">#e0e0e0</color>
-    <color name="bg_add_friend">#f0f0f0</color>
-    <color name="bg_time_limit2">#0c000000</color>
-    <color name="bg_recharge_price">#33e29f</color>
-
-    <color name="rg_other_options">#ff8429</color>
-
-    <color name="my_income_text">#FF49E879</color>
-
-    <color name="recruit_anchorwoman_image_bg">#d632ff</color>
-    <color name="recruit_anchorwoman_pop_text">#deffffff</color>
-
-    <color name="pop_rate_content_color">#757575</color>
-
-    <color name="bg_smile_exchange_diamond">#48c7fc</color>
-    <color name="my_income_text_color">#29b6ff</color>
-    <color name="my_income_explain_stroke">#e7e7e7</color>
-    <color name="my_income_text_color_hint">#14d966</color>
-    <color name="invite_code_des">#b3ffffff</color>
-    <color name="switch_camera_bg">#3d000000</color>
-
     <color name="bg_hobby_1">#a729ff</color>
     <color name="bg_hobby_2">#535ef1</color>
     <color name="bg_facebook">#3b589c</color>
 
-    <!--2.8add-->
-    <color name="anchor_name_color">#2D2638</color>
-    <color name="anchor_list_back">#F8F9FA</color>
+    <color name="name_color">#2D2638</color>
+    <color name="list_back">#F8F9FA</color>
     <color name="main_bottom_text_select">#7C4DFF</color>
     <color name="main_bottom_text">#cdcdcd</color>
     <color name="bg_line1">#15000000</color>
-    <color name="anchor_message">#A631FF</color>
-    <color name="anchor_video">#7C4DFF</color>
+    <color name="message">#A631FF</color>
+    <color name="video">#7C4DFF</color>
     <color name="regist_text">#7C4DFF</color>
-    <color name="anchor_coin_info">#FFB0B1C5</color>
-
+    <color name="room_list_back">#F8F9FA</color>
+    <color name="content_color">#757575</color>
 
 </resources>

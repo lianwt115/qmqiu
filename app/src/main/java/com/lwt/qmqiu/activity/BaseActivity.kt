@@ -79,24 +79,32 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>{
     }
 
 
-    protected fun showProgressDialog(message: String = getString(R.string.loading), listen: DialogInterface.OnDismissListener?=null) {
+    protected fun showProgressDialog(message: String = getString(R.string.loading),cancle:Boolean = false,type:Int = 1, listen: NoticeDialog.Builder.BtClickListen?=null) {
 
         if (mNoticeDialogBuilder == null)
-            mNoticeDialogBuilder= NoticeDialog.Builder(this)
+            mNoticeDialogBuilder= NoticeDialog.Builder(this,cancle)
 
         if (mNoticeDialog == null)
 
             mNoticeDialog=mNoticeDialogBuilder!!.create(message)
 
         else
-            mNoticeDialogBuilder!!.initView( message)
+            mNoticeDialogBuilder!!.initView( message,cancle)
 
 
-        if (listen !=null)
-            mNoticeDialog!!.setOnDismissListener(listen)
+
+        mNoticeDialogBuilder!!.setListen(listen,type)
 
         mNoticeDialog!!.show()
     }
+
+    protected fun showProgressDialogSuccess(boolean: Boolean){
+
+        if (!mDestroy && mNoticeDialog != null && mNoticeDialogBuilder != null) {
+            mNoticeDialogBuilder!!.btFinish(boolean)
+        }
+    }
+
 
     protected fun dismissProgressDialog() {
         if (!mDestroy && mNoticeDialog != null) {

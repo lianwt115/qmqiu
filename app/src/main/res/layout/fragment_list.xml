@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/anchor_list_back"
+    android:background="@color/room_list_back"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -46,6 +46,18 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
+    <android.support.design.widget.FloatingActionButton
 
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/room_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        android:src="@drawable/plus"
+        android:transitionName="roomFab"
+        />
 
 </RelativeLayout>
