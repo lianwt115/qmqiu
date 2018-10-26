@@ -2,104 +2,85 @@ package com.lwt.qmqiu.activity
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.SystemClock
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
+import android.text.TextUtils
+import android.util.Base64
 import android.view.View
-import com.baidu.location.BDLocation
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.VideoListAdapter
+import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.QMMessage
 import com.orhanobut.logger.Logger
-import io.agora.rtc.Constants
-import io.agora.rtc.IRtcEngineEventHandler
-import io.agora.rtc.RtcEngine
 import com.lwt.qmqiu.bean.VideoSurface
 import com.lwt.qmqiu.map.MapLocationUtils
+import com.lwt.qmqiu.mvp.contract.RoomMessageContract
+import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
+import com.lwt.qmqiu.utils.RSAUtils
+import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
-import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.BarView
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_im.*
-import java.util.concurrent.TimeUnit
+
+
+class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View {
 
 
 
-class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener {
-
-
-
-    private var leaveTime = 0
-
-
-
-
-    private lateinit var mRtcEngine:RtcEngine
-    private lateinit var mBDLocation:BDLocation
+    private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mVideoListAdapter:VideoListAdapter
     private lateinit var mIMListAdapter:IMListAdapter
-    private lateinit var mDisposable: Disposable
+    private lateinit var mWebSocket: QMWebsocket
     private  var mVideoSurfaceList = ArrayList<VideoSurface>()
     private  var mIMMessageList = ArrayList<QMMessage>()
-
+    private lateinit var present: RoomMessagePresent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_im)
 
-        mBDLocation=intent.getParcelableExtra<BDLocation>("location")
-
-        Logger.e("纬度:${mBDLocation.latitude}**经度:${mBDLocation.longitude}")
+        //房间信息
+        mIMChatRoom=intent.getParcelableExtra<IMChatRoom>("imChatRoom")
 
         initRecycleView()
 
-        mDisposable = Observable.interval(2,TimeUnit.SECONDS).applySchedulers().subscribe({
-
-            var location = App.instanceApp().getBDLocation()
-
-            val now1 = location!!.longitude*1000
-            val now2 = location.latitude*1000
-            val now = now1.toString().split(".")[0].plus(now2.toString().split(".")[0])
-
-            val local1 = mBDLocation!!.longitude*1000
-            val local2 = mBDLocation.latitude*1000
-            val local = local1.toString().split(".")[0].plus(local2.toString().split(".")[0])
-
-            if(now != local){
-                if (leaveTime <3)
-                    leaveTime++
-
-                UiUtils.showToast("第$leaveTime,三次后将自动退出")
-
-                if (leaveTime == 3){
-                    Observable.timer(2,TimeUnit.SECONDS).applySchedulers().subscribe({
-                        finish()
-                    },{
-                        Logger.e("退出异常")
-                    })
-                }
-
-            }
-
-        },{
-
-            Logger.e("持续定位失败")
-        })
-
         im_bt.setOnClickListener(this)
 
-        //地址(当前人数,连接时websocket返回)
-        im_barview.changeTitle(mBDLocation.city.plus(mBDLocation.district).plus(mBDLocation.street))
         im_barview.setBarOnClickListener(this)
-        QMWebsocket.getInstance().setMessageListen(this)
+        //连接聊天室ws
+        im_barview.changeTitle(mIMChatRoom.roomName.plus("(${mIMChatRoom.currentCount})"))
+
+        mWebSocket = QMWebsocket()
+
+        mWebSocket.connect(mIMChatRoom.roomNumber,this)
+
+        present = RoomMessagePresent(this,this)
+
+        getRoomMessage()
+    }
+
+    private fun getRoomMessage() {
+
+        var user = App.instanceApp().getLocalUser()
+
+        if (user != null){
+
+
+            present.getRoomMessage(user.name,mIMChatRoom.roomNumber,bindToLifecycle())
+
+
+        }else{
+
+            val name = SPHelper.getInstance().get("loginName","") as String
+
+            if (!TextUtils.isEmpty(name))
+                present.getRoomMessage(name,mIMChatRoom.roomNumber,bindToLifecycle())
+        }
+
     }
 
     private fun initRecycleView() {
@@ -135,10 +116,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!mDisposable.isDisposed) {
-            mDisposable.dispose()
-        }
-
+        mWebSocket.close()
         MapLocationUtils.getInstance().exit()
 
     }
@@ -175,7 +153,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         im_et.setText("")
 
-                        QMWebsocket.getInstance().sengText(message)
+                        mWebSocket.sengText(message,mIMChatRoom.roomNumber)
 
 
             }
@@ -193,11 +171,15 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         runOnUiThread {
 
+            im_barview.changeTitle(mIMChatRoom.roomName.plus("(${message.currentCount})"))
+
             mIMMessageList.add(message)
 
             mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
+            //如果自己发的则活动不是则不管
+            if (message.from == App.instanceApp().getLocalUser()?.name?:"xxx")
 
-            recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+                recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
 
             Logger.e(message.toString())
         }
@@ -217,6 +199,33 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 UiUtils.showToast("点击更多")
             }
         }
+    }
+
+    //请求来的是加密的密文需解密
+    override fun setRoomMessage(messageList: List<QMMessage>) {
+
+        var user =App.instanceApp().getLocalUser()
+        if (user != null){
+
+            for (qmMessage in messageList) {
+
+                qmMessage.message = String(RSAUtils.decryptData(Base64.decode(qmMessage.message,0),RSAUtils.loadPrivateKey(user.privateKey))!!)
+            }
+        }else{
+
+            UiUtils.showToast(getString(R.string.see_clear))
+        }
+
+        mIMMessageList.addAll(messageList)
+
+        mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
+
+        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+
+
+    }
+
+    override fun err(code: Int, errMessage: String?, type: Int) {
     }
 
 

@@ -17,11 +17,13 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
+import android.view.KeyEvent
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
 import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.fragment.FindFragment
 import com.lwt.qmqiu.fragment.MineFragment
 import com.lwt.qmqiu.map.MapLocationUtils
@@ -29,21 +31,29 @@ import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.widget.NoticeDialog
 import com.tencent.bugly.beta.Beta
 import io.reactivex.disposables.Disposable
 
 
 
-class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View {
+class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View, QMWebsocket.QMMessageListen {
 
+    //可以用于全局通知类
+    override fun qmMessage(message: QMMessage) {
 
+        Logger.e("通知:$message")
+    }
+
+    private var mExitTime: Long = 0
     private var findFragment: FindFragment? = null
     private var noteFragment: NoteFragment? = null
     private var mineFragment: MineFragment? = null
     private lateinit var present:UserLoginPresent
     private  var loginClick = false
     private lateinit var mDisposable: Disposable
+    private lateinit var mWebSocket: QMWebsocket
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -66,6 +76,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         MapLocationUtils.getInstance().findMe(this)
 
+        mWebSocket = QMWebsocket()
+
+        mWebSocket.connect("notification",this)
     }
 
     private fun initView() {
@@ -229,10 +242,26 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     override fun onDestroy() {
 
+        mWebSocket.close()
+
         super.onDestroy()
 
-
     }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (System.currentTimeMillis().minus(mExitTime) <= 3000 ) {
+                finish()
+            } else {
+                mExitTime = System.currentTimeMillis()
+
+                UiUtils.showToast(getString(R.string.exit_notice))
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -265,6 +294,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
             Logger.e("持续定位失败")
         })
 
+
     }
 
     override fun onStop() {
@@ -273,6 +303,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
             mDisposable.dispose()
         }
         MapLocationUtils.getInstance().exit()
+
     }
 
     override fun locationInfo(location: BDLocation?) {
@@ -285,8 +316,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
-
-        QMWebsocket.getInstance().connect(baseUser)
 
     }
 

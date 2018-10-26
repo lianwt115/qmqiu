@@ -196,10 +196,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
     override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
 
-        QMWebsocket.getInstance().connect(baseUser)
-
         bt_go.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
-
 
         App.instanceApp().setLocalUser(baseUser)
 

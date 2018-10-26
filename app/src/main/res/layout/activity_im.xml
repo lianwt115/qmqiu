@@ -15,7 +15,7 @@
     </com.lwt.qmqiu.widget.BarView>
 
     <android.support.v7.widget.RecyclerView
-
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:id="@+id/recycleview_im"
         android:layout_width="match_parent"

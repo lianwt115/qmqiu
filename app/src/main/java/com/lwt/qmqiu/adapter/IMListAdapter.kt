@@ -21,6 +21,9 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     var inflater: LayoutInflater? = null
     var listen: IMClickListen? = null
     private lateinit var textTime:String
+    private val formatter = SimpleDateFormat("yyyy-MM-dd*HH:mm:ss")
+    private val formatter2 = SimpleDateFormat("HH:mm:ss")
+    private val formatter3 = SimpleDateFormat("yyyy-MM-dd EEEE HH:mm:ss")
 
     init {
         this.context = context
@@ -45,6 +48,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         holder?.message_time?.text = messageTime
 
+        //同一分钟就小时
         if (this.textTime.split(":")[1] == messageTime.split(":")[1])
             holder?.message_time?.visibility =View.GONE
 
@@ -78,9 +82,23 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
     private fun timeData(currentTime :Long):String{
 
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var today =formatter.format(System.currentTimeMillis())
 
-        return formatter.format(currentTime)
+
+        var messageTime =formatter.format(currentTime)
+
+
+        //是否是今天
+        if (today.split("*")[0] == messageTime.split("*")[0]){
+
+
+            return formatter2.format(currentTime)
+
+        }else{
+
+            return formatter3.format(currentTime)
+        }
+
 
     }
 

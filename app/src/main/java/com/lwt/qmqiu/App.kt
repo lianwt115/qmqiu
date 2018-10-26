@@ -10,6 +10,7 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import android.support.multidex.MultiDex
+import android.text.TextUtils
 import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
@@ -167,6 +168,7 @@ class App : Application() {
 
 
     }
+
 
 
 

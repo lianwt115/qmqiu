@@ -1,12 +1,8 @@
 package com.lwt.qmqiu.network
 
-import android.util.Base64
-import android.util.Base64.encodeToString
 import com.google.gson.Gson
 import com.lwt.qmqiu.App
-import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.utils.RSAUtils
 import com.orhanobut.logger.Logger
 import okhttp3.*
 import okio.ByteString
@@ -20,36 +16,21 @@ class QMWebsocket {
     private  var listen: QMMessageListen? = null
     private  var url  = "ws://192.168.2.10:9898/api/websocket/"
 
-    companion object {
-        @Volatile
-        private var mInstance: QMWebsocket? = null
 
-        fun getInstance(): QMWebsocket {
-            if (mInstance == null) {
-                synchronized(QMWebsocket::class.java) {
-                    if (mInstance == null) {
-                        mInstance = QMWebsocket()
-                    }
-                }
-            }
-            return mInstance!!
-        }
-    }
-
-
-    fun connect(user: BaseUser){
+    fun connect(wsUrl: String,listen:QMMessageListen): QMWebsocket {
         //将姓名使用公钥加密
 
         var request =  Request.Builder()
 
-                .url(url.plus(user.name))
+                .url(url.plus(wsUrl))
                 .build()
         var client = OkHttpClient()
 
         client?.newWebSocket(request, listener)
 
+        this.listen = listen
 
-
+        return this
     }
 
     private var listener = object : WebSocketListener(){
@@ -105,15 +86,15 @@ class QMWebsocket {
         //client?.dispatcher()?.executorService()?.shutdown()
     }
 
-    fun sengText(content:QMMessage){
+    fun sengText(content: QMMessage, roomNumber: String){
 
         if (webSocket == null)
             return
 
-        content.from = App.instanceApp().getLocalUser()!!.name
+        content.from = App.instanceApp().getLocalUser()?.name?:"xxx"
 
         //到时候为房间号
-        content.to = "public"
+        content.to = roomNumber
         //消息类型
         content.type = 0
 

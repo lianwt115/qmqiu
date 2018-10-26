@@ -139,6 +139,7 @@ class MainActivity1 : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapN
         super.onResume()
         bmapView.onResume()
 
+
     }
 
     override fun onStop() {
@@ -218,7 +219,7 @@ class MainActivity1 : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapN
         Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
 
-        QMWebsocket.getInstance().connect(baseUser)
+
 
     }
 

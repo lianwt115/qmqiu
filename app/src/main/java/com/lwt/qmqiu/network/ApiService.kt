@@ -4,6 +4,7 @@ package com.lwt.qmqiu.network
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.HttpResult
 import com.lwt.qmqiu.bean.IMChatRoom
+import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.network.ApiConst
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -32,6 +33,10 @@ interface ApiService {
 
     @POST(ApiConst.IMChat_RoomCreat)
     fun creatIMChatRoom(@Query("name") name:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("type") type:Int,@Query("roomname") loginWhere:String ):Observable<HttpResult<IMChatRoom>>
+
+
+    @GET(ApiConst.IMChat_RoomMessageGet)
+    fun getRoomMessage(@Query("name") name:String,@Query("roomNumber") roomNumber:String):Observable<HttpResult<List<QMMessage>>>
 
 
 

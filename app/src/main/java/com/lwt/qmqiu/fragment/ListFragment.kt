@@ -1,5 +1,6 @@
 package com.lwt.qmqiu.fragment
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
@@ -7,18 +8,21 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
+import android.util.Base64
 import android.view.View
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.R.color.bg_tv_money
+import com.lwt.qmqiu.activity.IMActivity
 import com.lwt.qmqiu.adapter.IMChatRoomListAdapter
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.VideoSurface
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
 import com.lwt.qmqiu.mvp.present.IMChatRoomPresent
+import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
@@ -126,6 +130,11 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        getData(null)
+    }
+
     private fun getData(refreshlayout: RefreshLayout?) {
 
         val name = SPHelper.getInstance().get("loginName","") as String
@@ -149,6 +158,17 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
     }
 
     override fun setIMChatRoom(roomList: List<IMChatRoom>) {
+
+        var user =App.instanceApp().getLocalUser()
+        if (user != null){
+
+            for (room in roomList) {
+
+                room.lastContent = String(RSAUtils.decryptData(Base64.decode(room.lastContent,0), RSAUtils.loadPrivateKey(user.privateKey))!!)
+            }
+        }else{
+            UiUtils.showToast(getString(R.string.see_clear))
+        }
 
         mList.clear()
         mList.addAll(roomList)
@@ -175,9 +195,14 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
         UiUtils.showToast(errMessage!!)
     }
 
-    override fun roomClick(content: IMChatRoom, position: Int) {
+    //点击进入房间
+    override fun roomClick(imChatRoom: IMChatRoom, position: Int) {
 
-        UiUtils.showToast(content.creatName.plus(position))
+        val intent = Intent(activity, IMActivity::class.java)
+
+        intent.putExtra("imChatRoom",imChatRoom)
+
+        startActivity(intent)
     }
 
 

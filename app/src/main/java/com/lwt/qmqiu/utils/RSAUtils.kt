@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.utils
 
 
+
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.security.*
@@ -14,6 +15,7 @@ import javax.crypto.Cipher
 class RSAUtils {
 
     companion object {
+
 
         private  val  RSA = "RSA"
 
@@ -52,7 +54,7 @@ class RSAUtils {
 
             try
             {
-                var cipher = Cipher.getInstance(RSA)
+                var cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
                 // 编码前设定编码方式及密钥
                 cipher.init(Cipher.ENCRYPT_MODE, publicKey)
 
@@ -103,7 +105,7 @@ class RSAUtils {
 
             try
             {
-                var cipher = Cipher.getInstance(RSA)
+                var cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
                 cipher.init(Cipher.DECRYPT_MODE, privateKey)
 
                 var rsaPrivateKey =  privateKey as RSAPrivateKey
@@ -185,11 +187,6 @@ class RSAUtils {
         fun loadPublicKey(publicKeyStr:String):PublicKey{
             try
             {
-
-
-
-
-
                 var buffer = Base64.decode(publicKeyStr,0)
                 var keyFactory = KeyFactory.getInstance(RSA)
                 var keySpec =  X509EncodedKeySpec(buffer)

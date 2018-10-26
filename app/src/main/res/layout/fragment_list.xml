@@ -6,35 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-   <RelativeLayout
-
-        android:visibility="gone"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/root_nodata"
-        >
-
-        <ImageView
-            android:layout_marginTop="140dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/icvideo_nodata"
-            android:id="@+id/iv_nodata"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-       <TextView
-           android:id="@+id/tv_nodata"
-           android:layout_marginTop="10dp"
-           android:layout_centerHorizontal="true"
-           android:layout_below="@id/iv_nodata"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content" />
-
-    </RelativeLayout
->
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
-
         android:id="@+id/smartrefreshlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
