@@ -22,6 +22,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
+import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.fragment.FindFragment
@@ -253,7 +254,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     override fun onDestroy() {
 
         mWebSocket.close()
-
+        autoLogin(false)
         super.onDestroy()
 
     }
@@ -318,7 +319,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     override fun locationInfo(location: BDLocation?) {
 
-        autoLogin(location!!)
+        autoLogin(true)
+
     }
 
 
@@ -335,17 +337,38 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     }
 
-    private fun autoLogin(location: BDLocation) {
+    private fun autoLogin(login:Boolean) {
         //是否已经登录
 
-        if (App.instanceApp().getLocalUser() == null && checkUserInfo()) {
+        if (!checkUserInfo())
+            return
 
-            val name = SPHelper.getInstance().get("loginName","") as String
-            val password = SPHelper.getInstance().get("loginPassword","") as String
 
-            present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
 
+        val name = SPHelper.getInstance().get("loginName","") as String
+        val password = SPHelper.getInstance().get("loginPassword","") as String
+
+        val location = App.instanceApp().getBDLocation()!!
+
+
+        when (login) {
+            //登录
+            true -> {
+                if (App.instanceApp().getLocalUser() == null)
+
+                    present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+
+            }
+            //登出
+            false -> {
+
+                if (App.instanceApp().getLocalUser() != null)
+
+                    present.userLoginOut(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+
+            }
         }
+
 
     }
 

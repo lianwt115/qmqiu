@@ -9,7 +9,9 @@ data class BaseUser(
         var privateKey: String,
         var publicKey: String,
         var lastLoginTime:Long,
+        var lastLoginOutTime:Long,
         var creatTime:Long,
+        var status: Boolean?=true,
         var imgPath:String? ="***",
         var colorIndex:Int? = 10
 

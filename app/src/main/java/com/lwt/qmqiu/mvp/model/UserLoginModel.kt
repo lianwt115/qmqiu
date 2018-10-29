@@ -20,6 +20,11 @@ class UserLoginModel(context: Context) : BaseModel(context) {
         return apiService?.userLogin(name, password,auto,loginWhere, latitude, longitude)?.map(HttpResultFunc())
 
     }
+    fun userLoginOut(name:String,password:String,auto:Boolean,loginWhere:String, latitude:Double, longitude:Double): Observable<Boolean>?{
+
+        return apiService?.userLoginOut(name, password,auto,loginWhere, latitude, longitude)?.map(HttpResultFunc())
+
+    }
 
 
 }

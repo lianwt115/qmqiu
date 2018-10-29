@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class IMChatRoom(var _id:String?=null,
-                      var currentCount:Int = 0,
+                      var currentCount:Int = 1,
                       var roomName:String="",
                       var roomNumber:String="",
                       var roomType:Int= 0,

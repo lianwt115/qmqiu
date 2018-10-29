@@ -14,7 +14,6 @@ import io.reactivex.Observable
 class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLoginContract.Presenter{
 
 
-
     var mContext : Context? = null
     var mView : UserLoginContract.View? = null
     val mModel : UserLoginModel by lazy {
@@ -77,6 +76,32 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
 
         )
 
+    }
+
+    override fun userLoginOut(name: String, password: String, auto: Boolean, loginWhere: String, latitude: Double, longitude: Double, bindToLifecycle: LifecycleTransformer<Boolean>) {
+        val observable : Observable<Boolean>? = mContext?.let {
+            mModel.userLoginOut(name,password,auto,loginWhere, latitude, longitude) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    Logger.e("自动登出:$it")
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message)
+
+            }else{
+                mView?.err(-1,it.message)
+            }
+
+        }
+
+        )
     }
 
 
