@@ -163,7 +163,21 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     }
 
 
-    override fun imClick(content: VideoSurface, position: Int) {
+    override fun imClick(content: QMMessage, type: Int) {
+
+        when (type) {
+
+            IMListAdapter.WHOCLICK-> {
+
+                UiUtils.showToast("头像点击")
+
+            }
+
+            IMListAdapter.CONTENTCLICK -> {
+                UiUtils.showToast("内容点击")
+            }
+        }
+
 
     }
 
@@ -220,7 +234,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
 
-        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+        if (mIMMessageList.size > 0)
+
+            recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
 
 
     }

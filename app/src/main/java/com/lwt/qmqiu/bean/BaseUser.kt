@@ -9,5 +9,8 @@ data class BaseUser(
         var privateKey: String,
         var publicKey: String,
         var lastLoginTime:Long,
-        var creatTime:Long
+        var creatTime:Long,
+        var imgPath:String? ="***",
+        var colorIndex:Int? = 10
+
 )

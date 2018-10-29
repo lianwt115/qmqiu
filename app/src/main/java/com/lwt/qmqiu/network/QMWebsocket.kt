@@ -96,6 +96,10 @@ class QMWebsocket {
 
         content.from = App.instanceApp().getLocalUser()?.name?:"xxx"
 
+        content.colorIndex = App.instanceApp().getLocalUser()?.colorIndex?:0
+
+        content.imgPath = App.instanceApp().getLocalUser()?.imgPath?:"qmqiuimg/nddzx.jpg"
+
         //到时候为房间号
         content.to = roomNumber
         //消息类型

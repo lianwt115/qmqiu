@@ -1,15 +1,17 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.os.SystemClock
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.joooonho.SelectableRoundedImageView
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.bean.VideoSurface
+import com.lwt.qmqiu.network.ApiService
 import java.text.SimpleDateFormat
 
 
@@ -20,10 +22,17 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     var mTotalList: List<QMMessage>? = null
     var inflater: LayoutInflater? = null
     var listen: IMClickListen? = null
-    private lateinit var textTime:String
+    private  var textTime:String="-1:-1:-1"
+
     private val formatter = SimpleDateFormat("yyyy-MM-dd*HH:mm:ss")
     private val formatter2 = SimpleDateFormat("HH:mm:ss")
     private val formatter3 = SimpleDateFormat("yyyy-MM-dd EEEE HH:mm:ss")
+
+    companion object {
+
+          var WHOCLICK   =  0
+          var CONTENTCLICK = 1
+    }
 
     init {
         this.context = context
@@ -31,31 +40,140 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         this.listen = listen
         this.inflater = LayoutInflater.from(context)
 
-        this.textTime = "-1:-1:-1"
-
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
         val obj=mTotalList?.get(position)
 
-        holder?.message_who?.text= obj?.from
+
+        Glide.with(context!!).load(ApiService.BASE_URL_Api.plus(obj?.imgPath)).into(holder.message_who)
 
 
-        holder?.message_content?.text=obj?.message
+        contentBg(obj!!.colorIndex,holder.message_content)
+
+        holder.message_content.text=obj?.message
 
         val messageTime= timeData(obj?.time!!)
 
-        holder?.message_time?.text = messageTime
+        holder.message_time.text = messageTime
 
         //同一分钟就小时
         if (this.textTime.split(":")[1] == messageTime.split(":")[1])
-            holder?.message_time?.visibility =View.GONE
+            holder.message_time.visibility =View.GONE
 
         this.textTime = messageTime
 
+        holder.message_who.setOnClickListener {
+            if (listen!=null)
+                listen?.imClick(obj,WHOCLICK)
+        }
+
+        holder.message_content.setOnClickListener {
+            if (listen!=null)
+                listen?.imClick(obj,CONTENTCLICK)
+        }
+
 
     }
+
+    private fun contentBg(from: Int, text: TextView) {
+
+        var bg = context?.getDrawable(R.drawable.bg_20dp_1)
+
+        try {
+
+            when(from%24) {
+
+                1 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_1)
+                }
+                2 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_2)
+                }
+                3 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_3)
+                }
+                4 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_4)
+                }
+                5 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_5)
+                }
+                6 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_6)
+                }
+                7 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_7)
+                }
+                8 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_8)
+                }
+                9 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_9)
+                }
+                10 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_10)
+                }
+                11 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_11)
+                }
+                12 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_12)
+                }
+                13-> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_13)
+                }
+                14 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_14)
+                }
+                15 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_15)
+                }
+                16 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_16)
+                }
+                17 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_17)
+                }
+                18 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_18)
+                }
+                19 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_19)
+                }
+                20 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_20)
+                }
+                21 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_21)
+                }
+                22 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_22)
+                }
+                23 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_23)
+                }
+                0 -> {
+                    bg =  context?.getDrawable(R.drawable.bg_20dp_24)
+                }
+
+            }
+
+            text.background = bg
+
+        }catch (e:Exception){
+
+            text.background = bg
+
+        }
+
+
+    }
+
+
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         var itemView=inflater?.inflate(R.layout.item_immessage, parent, false)
@@ -70,14 +188,14 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
     class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
 
-        var message_who: TextView = itemView?.findViewById(R.id.message_who) as TextView
+        var message_who: SelectableRoundedImageView = itemView?.findViewById(R.id.message_who) as SelectableRoundedImageView
         var message_content: TextView = itemView?.findViewById(R.id.message_content) as TextView
         var message_time: TextView = itemView?.findViewById(R.id.message_time) as TextView
 
     }
 
     interface IMClickListen{
-        fun imClick(content:VideoSurface, position: Int)
+        fun imClick(content:QMMessage, type: Int)
     }
 
     private fun timeData(currentTime :Long):String{
