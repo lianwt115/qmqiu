@@ -45,6 +45,8 @@ class QMWebsocket {
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             super.onFailure(webSocket, t, response)
             Logger.e("onFailure:${t.message}")
+            if (this@QMWebsocket.listen != null)
+                this@QMWebsocket.listen!!.errorWS(1,"连接失败")
 
         }
 
@@ -74,7 +76,8 @@ class QMWebsocket {
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosed(webSocket, code, reason)
             Logger.e("onClosed:$reason")
-
+            if (this@QMWebsocket.listen != null)
+                this@QMWebsocket.listen!!.errorWS(0,"连接已关闭")
         }
     }
 
@@ -115,6 +118,7 @@ class QMWebsocket {
     interface QMMessageListen{
 
         fun qmMessage(message:QMMessage)
+        fun errorWS(type:Int,message:String)
     }
 
 

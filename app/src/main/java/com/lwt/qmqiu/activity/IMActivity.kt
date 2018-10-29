@@ -225,7 +225,16 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     }
 
+    //请求记录
     override fun err(code: Int, errMessage: String?, type: Int) {
+
+        UiUtils.showToast(errMessage!!)
+
+    }
+
+    override fun errorWS(type: Int, message: String) {
+
+        showProgressDialog(message)
     }
 
 

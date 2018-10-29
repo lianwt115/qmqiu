@@ -40,6 +40,16 @@ import io.reactivex.disposables.Disposable
 
 class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View, QMWebsocket.QMMessageListen {
 
+
+    override fun errorWS(type: Int, message: String) {
+
+        runOnUiThread {
+
+            showProgressDialog(message,true)
+
+        }
+    }
+
     //可以用于全局通知类
     override fun qmMessage(message: QMMessage) {
 
