@@ -27,7 +27,6 @@
 
     <EditText
 
-
         android:textColorHint="@color/province_line_border"
         android:layout_marginTop="6dp"
         android:theme="@style/MyEditText"

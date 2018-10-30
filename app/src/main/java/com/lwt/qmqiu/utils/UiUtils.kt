@@ -14,63 +14,23 @@ class UiUtils {
 
     companion object {
 
-        private var mToast:Toast? = null
+        private var mToast:Toast = Toast.makeText(App.instanceApp(),"",Toast.LENGTH_SHORT)
 
         fun showToast(str: String,isShort:Boolean = true ){
 
-            val instance = App.instanceApp()
 
             var short=if (isShort)Toast.LENGTH_SHORT else Toast.LENGTH_LONG
 
-            if (instance != null) {
+            mToast.setText(str)
 
-                if (mToast ==null){
+            mToast.duration = short
 
-                    mToast= Toast.makeText(instance,str,short)
-                }else{
-                    mToast!!.setText(str)
-                }
+            mToast.setGravity(Gravity.CENTER,0,0)
 
-                mToast?.setGravity(Gravity.CENTER,0,0)
-
-                mToast?.show()
-            }
+            mToast.show()
 
         }
 
-        //生物识别使用
-        fun bitmapToBase64(bitmap: Bitmap?): String? {
-
-            var result: String? = null
-            var baos: ByteArrayOutputStream? = null
-            try {
-                if (bitmap != null) {
-                    baos = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-
-                    baos.flush()
-                    baos.close()
-
-                    val bitmapBytes = baos.toByteArray()
-
-                    result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } finally {
-                try {
-                    if (baos != null) {
-                        baos.flush()
-                        baos.close()
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-
-            }
-
-            return result
-        }
 
     }
 

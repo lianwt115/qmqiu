@@ -51,7 +51,7 @@ class MainActivity1 : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapN
 
         present = UserLoginPresent(this,this)
 
-        MapLocationUtils.getInstance().findMe(this)
+        MapLocationUtils.getInstance().findMe()
 
     }
 
@@ -67,7 +67,7 @@ class MainActivity1 : BaseActivity(), View.OnClickListener, MapNoticeDialog.MapN
         when (v?.id) {
             R.id.location_bt -> {
 
-                MapLocationUtils.getInstance().findMe(this)
+                MapLocationUtils.getInstance().findMe()
 
             }
             R.id.fab  -> {

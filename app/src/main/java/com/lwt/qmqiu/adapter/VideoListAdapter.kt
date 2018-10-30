@@ -32,26 +32,26 @@ class VideoListAdapter(context: Context, list: ArrayList<VideoSurface>, listen:T
 
         val obj=mTotalList?.get(position)
 
-        holder?.uid_tv?.text= if (obj!!.uid == 0) "自己" else obj!!.uid.toString()
+        holder.uid_tv.text= if (obj!!.uid == 0) "自己" else obj.uid.toString()
 
 
 
-        if (holder?.video_contain.childCount == 0) {
+        if (holder.video_contain.childCount == 0) {
 
-            val parent = obj!!.surface.parent
+            val parent = obj.surface.parent
             if (parent != null) {
-                (parent as FrameLayout).removeView(obj!!.surface)
+                (parent as FrameLayout).removeView(obj.surface)
             }
 
-            holder?.video_contain.addView(obj!!.surface, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            holder.video_contain.addView(obj.surface, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         }
 
 
         if (listen !=null)
 
-            holder?.uid_tv?.setOnClickListener {
+            holder.uid_tv.setOnClickListener {
 
-                listen?.textClick(obj!!,position)
+                listen?.textClick(obj,position)
 
             }
 
@@ -70,8 +70,8 @@ class VideoListAdapter(context: Context, list: ArrayList<VideoSurface>, listen:T
 
     class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
 
-        var uid_tv: TextView = itemView?.findViewById(R.id.uid_tv) as TextView
-        var video_contain: FrameLayout = itemView?.findViewById(R.id.video_contain) as FrameLayout
+        var uid_tv: TextView = itemView.findViewById(R.id.uid_tv) as TextView
+        var video_contain: FrameLayout = itemView.findViewById(R.id.video_contain) as FrameLayout
 
     }
 

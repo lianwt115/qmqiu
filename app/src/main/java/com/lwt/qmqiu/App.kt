@@ -156,6 +156,11 @@ class App : Application() {
         return this.mLocalUser
 
     }
+    fun isLogin():Boolean{
+
+        return this.mLocalUser != null
+
+    }
     fun getBDLocation():BDLocation?{
 
         return this.mBDLocation

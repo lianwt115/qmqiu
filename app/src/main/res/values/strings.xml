@@ -20,6 +20,9 @@
     <string name="list3_name">我的</string>
     <string name="exit_notice">再按一次退出</string>
     <string name="see_clear">看不清?,刷新试试</string>
+    <string name="active_user">活跃群组用户</string>
+    <string name="handle_err">操作失败</string>
+    <string name="handle_success">操作成功</string>
 
 
 

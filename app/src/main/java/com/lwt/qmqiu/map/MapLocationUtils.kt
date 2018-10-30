@@ -37,21 +37,24 @@ class MapLocationUtils private constructor() {
 
     }
 
-    fun  findMe(findMeListen: FindMeListen?){
-
-        this.mFindMeListen = findMeListen
+    fun  findMe(){
 
         if (mLocationClient == null)
             initLocation()
-
 
         mLocationClient!!.start()
 
     }
 
+    fun setListen(findMeListen: FindMeListen?){
+
+        this.mFindMeListen = findMeListen
+
+    }
+
     fun exit(){
 
-        mFindMeListen = null
+        mLocationClient!!.stop()
 
     }
 
@@ -85,7 +88,7 @@ class MapLocationUtils private constructor() {
         //BD09：百度墨卡托坐标；
         //海外地区定位，无需设置坐标类型，统一返回WGS84类型坐标
 
-        option.setScanSpan(0)
+        option.setScanSpan(3*1000)
         //可选，设置发起定位请求的间隔，int类型，单位ms
         //如果设置为0，则代表单次定位，即仅定位一次，默认为0
         //如果设置非0，需设置1000ms以上才有效
@@ -128,13 +131,13 @@ class MapLocationUtils private constructor() {
 
             App.instanceApp().setBDLocation(location)
 
-            val latitude = location?.latitude    //获取纬度信息
+           /* val latitude = location?.latitude    //获取纬度信息
             val longitude = location?.longitude    //获取经度信息
             val radius = location?.radius    //获取定位精度，默认值为0.0f
 
             val coorType = location?.coorType
             //获取经纬度坐标类型，以LocationClientOption中设置过的坐标类型为准
-            /* 返回值	返回值说明
+            *//* 返回值	返回值说明
                      61	GPS定位结果，GPS定位成功
                      62	无法获取有效定位依据，定位失败，请检查运营商网络或者WiFi网络是否正常开启，尝试重新请求定位
                      63	网络异常，没有成功向服务器发起请求，请确认当前测试手机网络是否通畅，尝试重新请求定位
@@ -143,7 +146,7 @@ class MapLocationUtils private constructor() {
                      161	网络定位结果，网络定位成功
                      162	请求串密文解析失败，一般是由于客户端SO文件加载失败造成，请严格参照开发指南或demo开发，放入对应SO文件
                      167	服务端定位失败，请您检查是否禁用获取位置信息权限，尝试重新请求定位
-                     505	AK不存在或者非法，请按照说明文档重新申请AK*/
+                     505	AK不存在或者非法，请按照说明文档重新申请AK*//*
             val errorCode = location?.locType
             //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
 
@@ -158,20 +161,20 @@ class MapLocationUtils private constructor() {
             val district = location?.district    //获取区县
             val street = location?.street    //获取街道信息
 
-           /* Logger.e("详细地址:$addr" +
+           *//* Logger.e("详细地址:$addr" +
                     "**国家:$country" +
                     "**省份:$province" +
                     "**城市:$city" +
                     "**区县:$district" +
                     "**街道:$street"
-            )*/
+            )*//*
             val locationDescribe = location?.locationDescribe    //获取位置描述信息
-            //Logger.e("周边描述信息:$locationDescribe")
+            //Logger.e("周边描述信息:$locationDescribe")*/
 
             if (mFindMeListen != null)
                 mFindMeListen?.locationInfo(location)
 
-            mLocationClient!!.stop()
+
 
         }
 

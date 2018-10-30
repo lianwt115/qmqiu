@@ -3,32 +3,41 @@ package com.lwt.qmqiu.network
 import com.google.gson.Gson
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import okhttp3.*
 import okio.ByteString
+import java.util.concurrent.TimeUnit
 
 class QMWebsocket {
 
 
 
     private  var webSocket: WebSocket? = null
-    private  var client: OkHttpClient? = null
+    private  var client: OkHttpClient = OkHttpClient()
+    private  var request: Request?=null
     private  var listen: QMMessageListen? = null
+    private  var connectStatus  = false
     private  var url  = "ws://192.168.2.10:9898/api/websocket/"
+    private  var connectUrl  = ""
+    private  var connectcount  = 0
 
 
     fun connect(wsUrl: String,listen:QMMessageListen): QMWebsocket {
         //将姓名使用公钥加密
 
-        var request =  Request.Builder()
+        this.request =  Request.Builder()
 
                 .url(url.plus(wsUrl))
                 .build()
-        var client = OkHttpClient()
 
-        client?.newWebSocket(request, listener)
+        client.newWebSocket(request, listener)
 
         this.listen = listen
+
+        this.connectUrl = wsUrl
 
         return this
     }
@@ -39,14 +48,26 @@ class QMWebsocket {
             super.onOpen(webSocket, response)
 
             this@QMWebsocket.webSocket = webSocket
+
+            this@QMWebsocket.connectStatus = true
+
+            if (this@QMWebsocket.listen != null)
+                this@QMWebsocket.listen!!.errorWS(2,"连接成功")
+
             Logger.e("onOpen:$response")
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             super.onFailure(webSocket, t, response)
             Logger.e("onFailure:${t.message}")
+            this@QMWebsocket.connectStatus = false
+
             if (this@QMWebsocket.listen != null)
                 this@QMWebsocket.listen!!.errorWS(1,"连接失败")
+
+
+            if (connectcount<10)
+                tryConnect()
 
         }
 
@@ -81,12 +102,32 @@ class QMWebsocket {
         }
     }
 
+    private fun tryConnect() {
+
+        Observable.timer(3,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+            Logger.e("重连次数:$connectcount")
+
+            client.newWebSocket(this.request!!, this@QMWebsocket.listener)
+
+            connectcount++
+
+        },{
+            Logger.e("重连异常")
+        })
+
+
+
+    }
+
 
     fun close(){
 
         this.listen = null
+
         webSocket?.close(1000,"客户端关闭连接")
-        //client?.dispatcher()?.executorService()?.shutdown()
+
+       // client.dispatcher()?.executorService()?.shutdown()
     }
 
     fun sengText(content: QMMessage, roomNumber: String){

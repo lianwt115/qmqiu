@@ -94,9 +94,10 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
         joinChannel()
 
 
+        //持续定位已修改
         mDisposable = Observable.interval(2,TimeUnit.SECONDS).applySchedulers().subscribe({
 
-            MapLocationUtils.getInstance().findMe(this)
+            MapLocationUtils.getInstance().findMe()
 
         },{
 

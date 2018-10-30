@@ -9,6 +9,13 @@
         <attr name = "textcenter_barview" format = "string" />
         <!--右边图片-->
         <attr name="imgright_barview" format="reference" />
+        <attr name="show_more" format="boolean" />
+
+    </declare-styleable>
+
+    <declare-styleable name="ShowListView">
+
+        <attr name="show_line" format="boolean" />
 
     </declare-styleable>
 

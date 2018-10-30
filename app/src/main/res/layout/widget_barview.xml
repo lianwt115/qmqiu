@@ -27,6 +27,7 @@
         android:layout_height="28dp" />
 
     <ImageButton
+        android:visibility="invisible"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:scaleType="center"
         android:layout_alignParentRight="true"

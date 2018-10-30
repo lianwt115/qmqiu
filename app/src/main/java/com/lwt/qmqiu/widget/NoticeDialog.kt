@@ -69,7 +69,6 @@ class NoticeDialog : Dialog {
             mBtNext = mLayout!!.findViewById(R.id.bt_go) as CircularProgressButton
             mLine = mLayout!!.findViewById(R.id.line) as View
 
-
             mBtNext!!.setOnClickListener {
 
                 if (mType == 3  && TextUtils.isEmpty(mRoomName!!.text.toString())){
@@ -121,6 +120,7 @@ class NoticeDialog : Dialog {
 
                     mLine!!.visibility = View.VISIBLE
                     mRoomName!!.visibility =  View.GONE
+
                 }
                 //标题 按钮 和et
                 3 -> {
@@ -129,7 +129,9 @@ class NoticeDialog : Dialog {
                     mLine!!.visibility = View.VISIBLE
 
                     mRoomName!!.visibility =  View.VISIBLE
+
                 }
+
             }
 
 

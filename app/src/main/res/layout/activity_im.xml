@@ -8,6 +8,7 @@
     tools:context=".activity.MainActivity">
 
     <com.lwt.qmqiu.widget.BarView
+        app:show_more="true"
         android:id="@+id/im_barview"
         android:layout_width="match_parent"
         android:layout_height="40dp">

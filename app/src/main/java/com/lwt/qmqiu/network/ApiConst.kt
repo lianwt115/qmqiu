@@ -14,5 +14,9 @@ class ApiConst {
         const val IMChat_RoomMessageGet = "message/getmessage"
 
 
+        const val IMChat_RoomActiveUser = "enterlog/getactiveuser"
+        const val IMChat_RoomExitAndDelete = "enterlog/exitanddelete"
+
+
     }
 }

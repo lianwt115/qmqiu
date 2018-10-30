@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white"
+    android:id="@+id/showlist_root"
+    >
+
+    <TextView
+        android:text="群聊名称"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black"
+        android:id="@+id/title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+    <TextView
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:text="群聊名称"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:textColor="@color/main_bottom_text"
+        android:id="@+id/content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+
+    <View
+        android:id="@+id/showlist_line"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+
+</RelativeLayout>

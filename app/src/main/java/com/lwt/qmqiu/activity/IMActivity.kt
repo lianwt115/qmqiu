@@ -1,5 +1,6 @@
 package com.lwt.qmqiu.activity
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -34,9 +35,13 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     private lateinit var mVideoListAdapter:VideoListAdapter
     private lateinit var mIMListAdapter:IMListAdapter
     private lateinit var mWebSocket: QMWebsocket
-    private  var mVideoSurfaceList = ArrayList<VideoSurface>()
     private  var mIMMessageList = ArrayList<QMMessage>()
     private lateinit var present: RoomMessagePresent
+
+    companion object {
+
+        const val EXITFORRESULT = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -210,10 +215,36 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             }
 
             false -> {
-                UiUtils.showToast("点击更多")
+
+                val intent = Intent(this, RoomInfoActivity::class.java)
+
+                intent.putExtra("imChatRoom",mIMChatRoom)
+
+                startActivityForResult(intent,EXITFORRESULT)
             }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        when (requestCode) {
+
+            EXITFORRESULT -> {
+
+               val boolean =  data?.getBooleanExtra("exitanddelete",false)
+
+                if (boolean == true)
+                    finish()
+            }
+
+        }
+
+    }
+
+
+
+
+
 
     //请求来的是加密的密文需解密
     override fun setRoomMessage(messageList: List<QMMessage>) {
@@ -250,7 +281,23 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     override fun errorWS(type: Int, message: String) {
 
-        showProgressDialog(message)
+        runOnUiThread {
+
+            when (type) {
+
+                0,1 -> {
+                    showProgressDialog(message,true)
+                }
+
+                2 -> {
+
+                    dismissProgressDialog()
+                }
+            }
+
+
+
+        }
     }
 
 

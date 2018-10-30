@@ -40,19 +40,19 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
         val obj=mTotalList?.get(position)
 
-        checkRoom(holder?.room_first,obj?.roomName?.substring(0,1))
+        checkRoom(holder.room_first,obj?.roomName?.substring(0,1))
 
-        holder?.room_name.text = obj?.roomName
+        holder.room_name.text = obj?.roomName
 
-        holder?.room_lastcontent.text = obj?.lastContent
+        holder.room_lastcontent.text = obj?.lastContent
 
-        holder?.room_time.text = timeData(obj?.lastContentTime!!)
+        holder.room_time.text = timeData(obj?.lastContentTime!!)
 
-        holder?.notice.visibility = if (obj?.status) View.INVISIBLE else View.VISIBLE
+        holder.notice.visibility = if (obj.status) View.INVISIBLE else View.VISIBLE
 
-        roomFirstBg(obj?.roomNumber,holder!!.room_first)
+        roomFirstBg(obj.roomNumber,holder.room_first)
 
-        holder?.root_contain.setOnClickListener {
+        holder.root_contain.setOnClickListener {
             if (listen!= null)
                 listen!!.roomClick(obj,position)
         }
@@ -189,15 +189,15 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
     class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
 
-        var room_first: TextView = itemView?.findViewById(R.id.room_first) as TextView
-        var room_name: TextView = itemView?.findViewById(R.id.room_name) as TextView
-        var room_lastcontent: TextView = itemView?.findViewById(R.id.room_lastcontent) as TextView
-        var room_time: TextView = itemView?.findViewById(R.id.room_time) as TextView
-        var notice: ImageView = itemView?.findViewById(R.id.notice) as ImageView
+        var room_first: TextView = itemView.findViewById(R.id.room_first) as TextView
+        var room_name: TextView = itemView.findViewById(R.id.room_name) as TextView
+        var room_lastcontent: TextView = itemView.findViewById(R.id.room_lastcontent) as TextView
+        var room_time: TextView = itemView.findViewById(R.id.room_time) as TextView
+        var notice: ImageView = itemView.findViewById(R.id.notice) as ImageView
 
 
 
-        var root_contain: RelativeLayout = itemView?.findViewById(R.id.root_contain) as RelativeLayout
+        var root_contain: RelativeLayout = itemView.findViewById(R.id.root_contain) as RelativeLayout
 
     }
 

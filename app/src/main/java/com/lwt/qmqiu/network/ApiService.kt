@@ -40,6 +40,12 @@ interface ApiService {
     @GET(ApiConst.IMChat_RoomMessageGet)
     fun getRoomMessage(@Query("name") name:String,@Query("roomNumber") roomNumber:String):Observable<HttpResult<List<QMMessage>>>
 
+    @GET(ApiConst.IMChat_RoomActiveUser)
+    fun getRoomActiveUser(@Query("name") name:String,@Query("roomNumber") roomNumber:String):Observable<HttpResult<List<BaseUser>>>
+
+    @GET(ApiConst.IMChat_RoomExitAndDelete)
+    fun getRoomExitAndDelete(@Query("name") name:String,@Query("roomNumber") roomNumber:String):Observable<HttpResult<Boolean>>
+
 
 
 

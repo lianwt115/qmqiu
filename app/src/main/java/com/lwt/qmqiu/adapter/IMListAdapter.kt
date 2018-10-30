@@ -52,9 +52,9 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         contentBg(obj!!.colorIndex,holder.message_content)
 
-        holder.message_content.text=obj?.message
+        holder.message_content.text=obj.message
 
-        val messageTime= timeData(obj?.time!!)
+        val messageTime= timeData(obj.time)
 
         holder.message_time.text = messageTime
 

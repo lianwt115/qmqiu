@@ -46,7 +46,19 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         runOnUiThread {
 
-            showProgressDialog(message,true)
+            when (type) {
+
+                0,1 -> {
+                    showProgressDialog(message,true)
+                }
+
+                2 -> {
+
+                    dismissProgressDialog()
+                }
+            }
+
+
 
         }
     }
@@ -85,7 +97,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         present = UserLoginPresent(this,this)
 
-        MapLocationUtils.getInstance().findMe(this)
+        MapLocationUtils.getInstance().setListen(this)
+
+        MapLocationUtils.getInstance().findMe()
 
         mWebSocket = QMWebsocket()
 
@@ -253,8 +267,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     override fun onDestroy() {
 
-        mWebSocket.close()
-        autoLogin(false)
+
         super.onDestroy()
 
     }
@@ -262,6 +275,10 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             if (System.currentTimeMillis().minus(mExitTime) <= 3000 ) {
+
+                mWebSocket.close()
+                autoLogin(false)
+
                 finish()
             } else {
                 mExitTime = System.currentTimeMillis()
@@ -295,16 +312,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
             rb_find.setTextColor(resources.getColor(R.color.colorAccent))
         }
 
-        mDisposable = Observable.interval(5,TimeUnit.SECONDS).applySchedulers().subscribe({
-
-
-                MapLocationUtils.getInstance().findMe(null)
-
-        },{
-
-            Logger.e("持续定位失败")
-        })
-
+        MapLocationUtils.getInstance().findMe()
 
     }
 
@@ -313,19 +321,24 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         if (!mDisposable.isDisposed) {
             mDisposable.dispose()
         }
+
         MapLocationUtils.getInstance().exit()
 
     }
 
+
+
     override fun locationInfo(location: BDLocation?) {
 
-        autoLogin(true)
+        if (!App.instanceApp().isLogin())
+            autoLogin(true)
 
     }
 
 
     override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
 
+        MapLocationUtils.getInstance().setListen(null)
         Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
 
@@ -342,8 +355,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         if (!checkUserInfo())
             return
-
-
 
         val name = SPHelper.getInstance().get("loginName","") as String
         val password = SPHelper.getInstance().get("loginPassword","") as String

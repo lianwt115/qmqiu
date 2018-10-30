@@ -26,6 +26,7 @@ import com.lwt.qmqiu.R
     private var mDrawableRight: Drawable? = null
 
     private var mTitle: String? = null
+    private var mShowMore  = false
 
     private var mTextViewContentLeft: TextView? = null
     private var mImagViewLeft: ImageButton? = null
@@ -66,6 +67,8 @@ import com.lwt.qmqiu.R
         if (mTitle != null)
             mTextViewContentLeft?.text = mTitle
 
+        mImagViewRight?.visibility = if (mShowMore) View.VISIBLE else View.GONE
+
 
         mImagViewLeft?.setOnClickListener(this)
         mImagViewRight?.setOnClickListener(this)
@@ -84,7 +87,7 @@ import com.lwt.qmqiu.R
         mTitle = ta.getString(R.styleable.BarView_textcenter_barview)
         mDrawableLeft = ta.getDrawable(R.styleable.BarView_imgleft_barview)
         mDrawableRight = ta.getDrawable(R.styleable.BarView_imgright_barview)
-
+        mShowMore = ta.getBoolean(R.styleable.BarView_show_more,false)
         ta.recycle()
 
     }
