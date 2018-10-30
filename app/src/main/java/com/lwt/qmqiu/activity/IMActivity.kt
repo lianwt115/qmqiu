@@ -32,7 +32,6 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
 
     private lateinit var mIMChatRoom:IMChatRoom
-    private lateinit var mVideoListAdapter:VideoListAdapter
     private lateinit var mIMListAdapter:IMListAdapter
     private lateinit var mWebSocket: QMWebsocket
     private  var mIMMessageList = ArrayList<QMMessage>()
@@ -174,7 +173,11 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             IMListAdapter.WHOCLICK-> {
 
-                UiUtils.showToast("头像点击")
+                val intent = Intent(this, UserInfoActivity::class.java)
+
+                intent.putExtra("name",content.from)
+
+                startActivity(intent)
 
             }
 

@@ -121,6 +121,12 @@ import com.lwt.qmqiu.R
         mTextViewContentLeft?.text = content
     }
 
+    fun showMore(show:Boolean){
+
+        mImagViewRight?.visibility = if (show) View.VISIBLE else View.GONE
+
+    }
+
 
     interface BarOnClickListener {
 

@@ -99,6 +99,7 @@
         <activity android:name=".activity.IMActivity" />
         <activity android:name=".activity.MainActivity1" />
         <activity android:name=".activity.RoomInfoActivity" />
+        <activity android:name=".activity.UserInfoActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

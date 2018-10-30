@@ -26,9 +26,12 @@ interface ApiService {
 
     @POST(ApiConst.USER_Login)
     fun userLogin(@Query("name") name:String,@Query("password") password:String,@Query("auto") auto:Boolean,@Query("loginWhere") loginWhere:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double):Observable<HttpResult<BaseUser>>
+
     @POST(ApiConst.USER_LoginOut)
     fun userLoginOut(@Query("name") name:String,@Query("password") password:String,@Query("auto") auto:Boolean,@Query("loginWhere") loginWhere:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double):Observable<HttpResult<Boolean>>
 
+    @GET(ApiConst.USER_Find)
+    fun userFind(@Query("name") name:String):Observable<HttpResult<BaseUser>>
 
     @GET(ApiConst.IMChat_RoomGet)
     fun getIMChatRoom(@Query("name") name:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("type") type:Int):Observable<HttpResult<List<IMChatRoom>>>

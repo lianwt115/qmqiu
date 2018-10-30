@@ -75,6 +75,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     private var mineFragment: MineFragment? = null
     private lateinit var present:UserLoginPresent
     private  var loginClick = false
+    private  var autoLoginCount = 0
+    private  var autoLoginCountMax = 3
     private lateinit var mDisposable: Disposable
     private lateinit var mWebSocket: QMWebsocket
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -299,12 +301,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     override fun onResume() {
         super.onResume()
 
-        if (checkUserInfo()) {
-            fab.hide()
-            rg_root.visibility = View.VISIBLE
-        }else{
-            fab.setOnClickListener(this)
-        }
+        bottomShow()
 
         if (loginClick){
             loginClick = false
@@ -314,6 +311,27 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         MapLocationUtils.getInstance().findMe()
 
+    }
+
+    private fun bottomShow() {
+        if (autoLoginCount > autoLoginCountMax) {
+
+            fab.show()
+
+            rg_root.visibility = View.INVISIBLE
+
+            fab.setOnClickListener(this)
+
+        } else {
+
+            if (checkUserInfo()) {
+                fab.hide()
+                rg_root.visibility = View.VISIBLE
+            } else {
+                fab.setOnClickListener(this)
+            }
+
+        }
     }
 
     override fun onStop() {
@@ -330,8 +348,11 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     override fun locationInfo(location: BDLocation?) {
 
-        if (!App.instanceApp().isLogin())
+        if (!App.instanceApp().isLogin() && autoLoginCount<=autoLoginCountMax)
+
             autoLogin(true)
+        else
+            bottomShow()
 
     }
 
@@ -365,9 +386,13 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         when (login) {
             //登录
             true -> {
-                if (App.instanceApp().getLocalUser() == null)
 
-                    present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+                    autoLoginCount++
+
+                    if (App.instanceApp().getLocalUser() == null)
+
+                        present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+
 
             }
             //登出

@@ -7,6 +7,7 @@ class ApiConst {
         const val USER_REGIST = "user/regist"
         const val USER_Login = "user/login"
         const val USER_LoginOut = "user/loginout"
+        const val USER_Find = "user/findbyname"
 
         const val IMChat_RoomGet = "chat/getroom"
         const val IMChat_RoomCreat = "chat/creatroom"

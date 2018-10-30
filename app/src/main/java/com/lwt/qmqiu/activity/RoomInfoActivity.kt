@@ -27,9 +27,6 @@ import kotlinx.android.synthetic.main.activity_roominfo.*
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 import android.content.Intent
-import android.widget.Toast
-import android.content.Context.CLIPBOARD_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
 import android.text.ClipboardManager
 
 
@@ -189,8 +186,12 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
     //活跃用户点击
     override fun userClick(user: BaseUser, position: Int) {
 
-        //进入个人用户详情
-        UiUtils.showToast("进入${user.name}的详情页")
+        val intent = Intent(this, UserInfoActivity::class.java)
+
+        intent.putExtra("name",user.name)
+
+        startActivity(intent)
+
     }
 
     override fun onClick(v: View?) {
