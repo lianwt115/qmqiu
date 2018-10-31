@@ -92,4 +92,6 @@ dependencies {
 
     //圆形图
     implementation 'com.joooonho:selectableroundedimageview:1.0.1'
+    //svga动画
+    implementation 'com.github.yyued:SVGAPlayer-Android:2.1.9'
 }

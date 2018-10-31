@@ -24,6 +24,9 @@
     <string name="handle_err">操作失败</string>
     <string name="handle_success">操作成功</string>
     <string name="user_info">用户个人资料</string>
+    <string name="gift">礼物</string>
+    <string name="gift_buy">礼物购买</string>
+    <string name="coin_notenough">无法购买更多</string>
 
 
 

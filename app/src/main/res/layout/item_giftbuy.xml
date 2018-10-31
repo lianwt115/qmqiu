@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="100dp"
+    android:layout_height="140dp"
+    android:id="@+id/gift_root"
+    tools:context=".activity.MainActivity">
+
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_line_rectangle_lastpage_noradius"
+        android:id="@+id/giftbuy_img"
+        android:padding="2px"
+        android:scaleType="fitXY"
+        android:src="@mipmap/posche"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+    <TextView
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="58dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="@color/white"
+        android:textSize="8sp"
+        android:gravity="center"
+        android:id="@+id/giftbuy_count"
+        android:text="999"
+        android:background="@drawable/bubble_8dp_1"
+        android:layout_width="22dp"
+        android:layout_height="22dp" />
+
+    <TextView
+        android:id="@+id/giftbuy_price"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/giftbuy_img"
+        android:text="青木球:100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/giftbuy_delete"
+        android:layout_marginTop="6dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/giftbuy_price"
+        android:src="@mipmap/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

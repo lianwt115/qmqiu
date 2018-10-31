@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,6 +16,8 @@
     </com.lwt.qmqiu.widget.BarView>
 
     <RelativeLayout
+        android:id="@+id/userinfo_root"
+        android:layout_below="@id/userinfo_barview"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -33,6 +35,8 @@
             app:sriv_oval="true" />
 
         <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
             android:id="@+id/user_name"
@@ -41,6 +45,8 @@
 
             />
         <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
             android:id="@+id/user_gender"
@@ -50,6 +56,8 @@
 
             />
         <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
             android:id="@+id/user_age"
@@ -59,6 +67,8 @@
 
             />
         <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
             android:id="@+id/user_basecoin"
@@ -69,6 +79,8 @@
             />
 
         <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
             android:id="@+id/user_coin"
@@ -80,5 +92,183 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/gift_root"
+        android:layout_below="@id/userinfo_root"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/gift_name"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginBottom="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/gift_name"
+            android:layout_marginTop="20dp"
+            android:id="@+id/recycleview_gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bt_other"
+        android:layout_below="@id/gift_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="60dp"
+            android:text="赠送礼物"
+            android:id="@+id/gift_send"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_20dp_13"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp" >
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_below="@id/gift_send"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="20dp"
+            android:text="开启私密聊天"
+            android:id="@+id/room_private"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_20dp_16"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp" >
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_below="@id/room_private"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="60dp"
+            android:text="投诉"
+            android:id="@+id/room_report"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_20dp_22"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp" >
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_below="@id/room_report"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="20dp"
+            android:text="阻止"
+            android:id="@+id/message_refuse"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_20dp_24"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp"
+            android:layout_marginBottom="20dp">
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        android:id="@+id/bt_me"
+        android:layout_below="@id/gift_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+           <RelativeLayout
+               android:id="@+id/giftbuy_root"
+               android:background="@color/white"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:id="@+id/gift_buy_tv"
+                   android:textSize="20sp"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginTop="20dp"
+                   android:text="@string/gift_buy"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+               <TextView
+                   android:textColor="@color/main_bottom_text"
+                   android:layout_marginRight="20dp"
+                   android:layout_alignParentRight="true"
+                   android:id="@+id/gift_buy_cash"
+                   android:textSize="14sp"
+                   android:layout_marginTop="20dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+
+               <android.support.v7.widget.RecyclerView
+                   android:layout_marginBottom="16dp"
+                   android:layout_centerHorizontal="true"
+                   android:layout_below="@id/gift_buy_tv"
+                   android:layout_marginTop="20dp"
+                   android:id="@+id/recycleview_giftbuy"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content">
+
+               </android.support.v7.widget.RecyclerView>
+           </RelativeLayout>
+
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+
+            android:layout_below="@id/giftbuy_root"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="60dp"
+            android:text="购买礼物"
+            android:id="@+id/gift_buy"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_20dp_13"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp"
+            android:layout_marginBottom="20dp"
+            >
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+
+
+    </RelativeLayout>
+
+    <com.opensource.svgaplayer.SVGAImageView
+        android:id="@+id/svgaPlayer"
+        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        />
+
+</RelativeLayout>
