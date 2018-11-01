@@ -19,5 +19,11 @@ class ApiConst {
         const val IMChat_RoomExitAndDelete = "enterlog/exitanddelete"
 
 
+        const val Gift_Buy = "gift/giftbuy"
+        const val Gift_Send = "gift/giftsend"
+
+
+
+
     }
 }

@@ -40,7 +40,7 @@ class IMChatRoomPresent(context: Context, view: IMChatRoomContract.View) : IMCha
                     mView?.setIMChatRoom(it)
                 }, {
 
-            Logger.e(it.message)
+            Logger.e(it.message?:"错误为空")
 
             if (it is ApiException){
 

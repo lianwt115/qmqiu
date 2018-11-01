@@ -185,6 +185,8 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
             //获取房间失败
             1 -> {
                 smartrefreshlayout.finishRefresh()
+
+                showProgressDialog(getString(R.string.roomget_err))
             }
             //创建房间失败
             2 -> {

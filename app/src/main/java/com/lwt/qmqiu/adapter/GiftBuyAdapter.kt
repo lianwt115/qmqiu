@@ -78,6 +78,20 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
     private fun checkEnough(price: Int):Boolean {
 
+
+        var user =App.instanceApp().getLocalUser()
+
+        if (user!=null){
+
+            return  getCount() <= (user.coin-price)
+
+        }
+
+        return false
+    }
+
+    fun getCount():Int{
+
         var count = 0
 
         mTotalList?.forEach { giftInfo ->
@@ -86,30 +100,26 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
         }
 
-        var user =App.instanceApp().getLocalUser()
-
-        if (user!=null){
-
-            return count <= (user.coin-price)
-
-        }
-
-        return false
+        return  count
     }
+
+     fun getGiftCount():String{
+
+        return mTotalList!![0].count.toString().plus("*${mTotalList!![1].count}*${mTotalList!![2].count}*${mTotalList!![3].count}")
+
+    }
+     fun getPriceCount():String{
+
+        return mTotalList!![0].price.toString().plus("*${mTotalList!![1].price}*${mTotalList!![2].price}*${mTotalList!![3].price}")
+
+    }
+
 
     private fun sendCash() {
 
         if (listen != null) {
 
-            var count = 0
-
-            mTotalList?.forEach { giftInfo ->
-
-                count += giftInfo.price * giftInfo.count
-
-            }
-
-            listen?.giftBuyClick(count)
+            listen?.giftBuyClick(getCount())
 
         }
     }
@@ -134,11 +144,11 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
     }
 
-    fun getCount(): List<GiftInfo>? {
+   /* fun getCount(): List<GiftInfo>? {
 
         return mTotalList
 
-    }
+    }*/
 
     interface GiftBuyClickListen{
         fun giftBuyClick(cash: Int)

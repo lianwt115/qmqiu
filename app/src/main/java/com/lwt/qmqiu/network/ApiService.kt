@@ -49,6 +49,12 @@ interface ApiService {
     @GET(ApiConst.IMChat_RoomExitAndDelete)
     fun getRoomExitAndDelete(@Query("name") name:String,@Query("roomNumber") roomNumber:String):Observable<HttpResult<Boolean>>
 
+    @POST(ApiConst.Gift_Buy)
+    fun giftBuy(@Query("name") name:String,@Query("cashCount") cashCount:Int,@Query("giftCount") giftCount:String,@Query("priceCount") priceCount:String):Observable<HttpResult<BaseUser>>
+
+    @POST(ApiConst.Gift_Send)
+    fun giftSend(@Query("name") name:String,@Query("to") to:String,@Query("giftIndex") giftIndex:Int,@Query("giftCount") giftCount:Int):Observable<HttpResult<BaseUser>>
+
 
 
 

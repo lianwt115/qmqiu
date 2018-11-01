@@ -16,6 +16,17 @@ class UserInfoModel(context: Context) : BaseModel(context) {
         return apiService?.userFind(name)?.map(HttpResultFunc())
 
     }
+    fun giftBuy(name:String,cashCount:Int,giftCount:String,priceCount:String): Observable<BaseUser>?{
+
+        return apiService?.giftBuy(name,cashCount,giftCount,priceCount)?.map(HttpResultFunc())
+
+    }
+
+    fun giftSend(name:String, to:String, giftIndex:Int,giftCount:Int): Observable<BaseUser>?{
+
+        return apiService?.giftSend(name,to,giftIndex,giftCount)?.map(HttpResultFunc())
+
+    }
 
 
 }

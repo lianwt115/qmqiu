@@ -153,8 +153,7 @@ abstract class BaseFragment : Fragment(),LifecycleProvider<FragmentEvent> {
             mNoticeDialogBuilder!!.initView( message,cancle)
 
 
-        if (listen !=null)
-            mNoticeDialogBuilder!!.setListen(listen,type)
+        mNoticeDialogBuilder!!.setListen(listen,type)
 
         mNoticeDialog!!.show()
     }

@@ -29,7 +29,6 @@
             android:layout_marginTop="20dp"
             android:id="@+id/user_img"
             android:layout_width="80dp"
-            android:src="@mipmap/aj"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
             app:sriv_oval="true" />
@@ -109,6 +108,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:visibility="gone"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/gift_send_info"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@id/gift_send_info"
+            android:layout_marginTop="24dp"
+            android:id="@+id/gift_send_delete"
+            android:src="@mipmap/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <android.support.v7.widget.RecyclerView
             android:layout_marginBottom="16dp"
             android:layout_centerHorizontal="true"
@@ -129,7 +148,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-
+            android:layout_centerHorizontal="true"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="60dp"
@@ -146,6 +165,7 @@
         </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:layout_below="@id/gift_send"
+            android:layout_centerHorizontal="true"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="20dp"
@@ -161,6 +181,7 @@
 
         </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/room_private"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
@@ -177,6 +198,7 @@
 
         </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/room_report"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
@@ -244,6 +266,7 @@
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/giftbuy_root"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"

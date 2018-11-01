@@ -27,6 +27,8 @@
     <string name="gift">礼物</string>
     <string name="gift_buy">礼物购买</string>
     <string name="coin_notenough">无法购买更多</string>
+    <string name="roomget_err">获取房间失败</string>
+    <string name="sendgift_notice">请点击礼物</string>
 
 
 
