@@ -3,7 +3,6 @@ package com.lwt.qmqiu.activity
 import android.Manifest
 import android.app.ActivityOptions
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -18,56 +17,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
 import android.view.KeyEvent
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
-import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.fragment.FindFragment
 import com.lwt.qmqiu.fragment.MineFragment
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
-import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
-import com.lwt.qmqiu.widget.NoticeDialog
 import com.tencent.bugly.beta.Beta
-import io.reactivex.disposables.Disposable
 
 
 
-class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View, QMWebsocket.QMMessageListen {
+class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View {
 
-
-    override fun errorWS(type: Int, message: String) {
-
-        runOnUiThread {
-
-            when (type) {
-
-                0,1 -> {
-                    showProgressDialog(message,true)
-                }
-
-                2 -> {
-
-                    dismissProgressDialog()
-                }
-            }
-
-
-
-        }
-    }
-
-    //可以用于全局通知类
-    override fun qmMessage(message: QMMessage) {
-
-        Logger.e("通知:$message")
-    }
 
     private var mExitTime: Long = 0
     private var findFragment: FindFragment? = null
@@ -77,8 +43,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     private  var loginClick = false
     private  var autoLoginCount = 0
     private  var autoLoginCountMax = 3
-    private lateinit var mDisposable: Disposable
-    private lateinit var mWebSocket: QMWebsocket
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -103,9 +68,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         MapLocationUtils.getInstance().findMe()
 
-        mWebSocket = QMWebsocket()
-
-        mWebSocket.connect("notification",this)
     }
 
     private fun initView() {
@@ -265,10 +227,14 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     }
 
+    override fun needWSListenErr(): Boolean {
+
+        return true
+
+    }
 
 
     override fun onDestroy() {
-
 
         super.onDestroy()
 
@@ -278,7 +244,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
             if (System.currentTimeMillis().minus(mExitTime) <= 3000 ) {
 
-                mWebSocket.close()
+                App.instanceApp().closeWs()
                 autoLogin(false)
 
                 finish()
@@ -336,9 +302,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     override fun onStop() {
         super.onStop()
-        if (!mDisposable.isDisposed) {
-            mDisposable.dispose()
-        }
 
         MapLocationUtils.getInstance().exit()
 

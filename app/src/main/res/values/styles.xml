@@ -41,21 +41,15 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-
-    <style name="WorkInfo3">
-        <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="WorkInfo3_1" parent="WorkInfo3" >
-        <item name="android:layout_centerHorizontal">true</item>
-    </style>
-    <style name="WorkInfo3_2" parent="WorkInfo3" >
-        <item name="android:layout_centerVertical">true</item>
+    <style name="GiftDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
 

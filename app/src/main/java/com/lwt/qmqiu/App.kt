@@ -15,22 +15,25 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.bean.WSErr
+import com.lwt.qmqiu.network.QMWebsocket
+import com.lwt.qmqiu.utils.RxBus
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.applySchedulers
 import com.tencent.bugly.beta.Beta
+import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 
-
-
-
-
-
-class App : Application() {
+class App : Application(), QMWebsocket.QMMessageListen {
 
 
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
+    private val NOTIFICATION = "notification"
     private var mLocalUser:BaseUser?= null
     private var mBDLocation: BDLocation?= null
-
+    private  var mWebSocket: QMWebsocket?=null
     companion object {
         private var instance: App? = null
         fun instanceApp() = instance!!
@@ -60,8 +63,44 @@ class App : Application() {
 
         initBuglyAndUP()
 
+        initWebsocket()
+
     }
 
+    private fun initWebsocket() {
+
+        val localName = SPHelper.getInstance().get("loginName","") as String
+
+        if (!TextUtils.isEmpty(localName)){
+
+            mWebSocket = QMWebsocket()
+
+            mWebSocket!!.connect(NOTIFICATION.plus(localName),this)
+        }
+
+
+    }
+
+    fun closeWs(){
+
+        mWebSocket?.close()
+    }
+
+    override fun errorWS(type: Int, message: String) {
+
+        RxBus.getInstance()?.post(WSErr(type,message))
+
+    }
+
+    //可以用于全局通知类
+    override fun qmMessage(message: QMMessage) {
+
+        //为毛传不出去
+        RxBus.getInstance()?.post(message)
+
+        Logger.e("通知:$message")
+
+    }
 
     private fun  initBuglyAndUP(){
         /***** Beta高级设置 *****/
@@ -168,12 +207,9 @@ class App : Application() {
     }
     fun setBDLocation(location:BDLocation?) {
 
-
         this.mBDLocation = location
 
-
     }
-
 
 
 

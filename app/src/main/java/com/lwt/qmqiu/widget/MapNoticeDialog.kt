@@ -3,7 +3,6 @@ package com.lwt.qmqiu.widget
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.text.Html
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
@@ -50,7 +49,7 @@ class MapNoticeDialog : Dialog {
 
             mMapNoticeDialog = MapNoticeDialog(mContext, R.style.MyDialog)
             mMapNoticeDialog!!.setCanceledOnTouchOutside(true)
-            layout = inflater.inflate(R.layout.dialog_ordernotice, null)
+            layout = inflater.inflate(R.layout.dialog_mapnotice, null)
             mMapNoticeDialog!!.addContentView(layout!!, ViewGroup.LayoutParams(
                     DeviceUtil.dip2px(mContext, 360f), DeviceUtil.dip2px(mContext, 72f)))
 

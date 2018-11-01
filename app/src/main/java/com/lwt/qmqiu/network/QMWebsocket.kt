@@ -3,6 +3,8 @@ package com.lwt.qmqiu.network
 import com.google.gson.Gson
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.bean.WSErr
+import com.lwt.qmqiu.utils.RxBus
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
@@ -87,6 +89,7 @@ class QMWebsocket {
 
             if (this@QMWebsocket.listen != null)
                 this@QMWebsocket.listen!!.qmMessage(qmMessage)
+
         }
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
