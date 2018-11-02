@@ -152,12 +152,10 @@
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="60dp"
-            android:text="赠送礼物"
             android:id="@+id/gift_send"
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/bg_20dp_13"
             app:spinning_bar_width="4dp"
             app:spinning_bar_color="@color/white"
             app:spinning_bar_padding="6dp" >
@@ -186,35 +184,17 @@
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="60dp"
-            android:text="投诉"
-            android:id="@+id/room_report"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_20dp_22"
-            app:spinning_bar_width="4dp"
-            app:spinning_bar_color="@color/white"
-            app:spinning_bar_padding="6dp" >
-
-        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/room_report"
-            android:layout_marginRight="60dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="20dp"
-            android:text="阻止"
             android:id="@+id/message_refuse"
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/bg_20dp_24"
             app:spinning_bar_width="4dp"
             app:spinning_bar_color="@color/white"
-            app:spinning_bar_padding="6dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            app:spinning_bar_padding="6dp" >
 
         </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+
 
 
     </RelativeLayout>
@@ -271,12 +251,10 @@
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="60dp"
-            android:text="购买礼物"
             android:id="@+id/gift_buy"
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/bg_20dp_13"
             app:spinning_bar_width="4dp"
             app:spinning_bar_color="@color/white"
             app:spinning_bar_padding="6dp"

@@ -1,10 +1,7 @@
 package com.lwt.qmqiu.network
 
 
-import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.bean.HttpResult
-import com.lwt.qmqiu.bean.IMChatRoom
-import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.bean.*
 import com.lwt.qmqiu.network.ApiConst
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -54,6 +51,15 @@ interface ApiService {
 
     @POST(ApiConst.Gift_Send)
     fun giftSend(@Query("name") name:String,@Query("to") to:String,@Query("giftIndex") giftIndex:Int,@Query("giftCount") giftCount:Int):Observable<HttpResult<BaseUser>>
+
+    @POST(ApiConst.Refuse_User)
+    fun refuseUser(@Query("from") name:String,@Query("to") to:String,@Query("refuse") refuse:Boolean):Observable<HttpResult<RefuseLog>>
+
+    @GET(ApiConst.Refuse_Check)
+    fun refuseCheck(@Query("from") name:String,@Query("to") to:String):Observable<HttpResult<Boolean>>
+
+    @POST(ApiConst.Report_User)
+    fun reportUser(@Query("from") name:String,@Query("to") to:String,@Query("why") why:Int,@Query("roomNumber") roomNumber:String,@Query("messageContent") messageContent:String,@Query("messageId") messageId:Long):Observable<HttpResult<Boolean>>
 
 
 

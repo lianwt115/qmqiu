@@ -2,6 +2,7 @@ package com.lwt.qmqiu.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.network.ApiService
+import com.lwt.qmqiu.utils.RSAUtils
+import com.lwt.qmqiu.utils.UiUtils
 import java.text.SimpleDateFormat
 
 
@@ -52,7 +55,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         contentBg(obj!!.colorIndex,holder.message_content)
 
-        holder.message_content.text=obj.message
+        holder.message_content.text=getShowMessage(obj.message)
 
         val messageTime= timeData(obj.time)
 
@@ -76,6 +79,22 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
 
     }
+
+    private fun getShowMessage(message: String):String{
+
+        var user =App.instanceApp().getLocalUser()
+
+        if (user != null){
+
+            return String(RSAUtils.decryptData(Base64.decode(message,0), RSAUtils.loadPrivateKey(user.privateKey))!!)
+
+        }else{
+
+            return message
+        }
+
+    }
+
 
     private fun contentBg(from: Int, text: TextView) {
 

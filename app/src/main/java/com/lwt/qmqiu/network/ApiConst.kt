@@ -22,6 +22,13 @@ class ApiConst {
         const val Gift_Buy = "gift/giftbuy"
         const val Gift_Send = "gift/giftsend"
 
+        const val Refuse_User = "refuse/refuseuser"
+        const val Refuse_Check = "refuse/refusecheck"
+
+        const val Report_User = "report/reportuser"
+
+
+
 
 
 

@@ -3,6 +3,7 @@ package com.lwt.qmqiu.mvp.present
 import android.content.Context
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.IMChatRoom
+import com.lwt.qmqiu.bean.RefuseLog
 import com.lwt.qmqiu.mvp.contract.UserInfoContract
 import com.lwt.qmqiu.mvp.model.UserInfoModel
 import com.lwt.qmqiu.network.ApiException
@@ -13,7 +14,6 @@ import io.reactivex.Observable
 
 
 class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoContract.Presenter{
-
 
 
     var mContext : Context? = null
@@ -130,4 +130,60 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
 
         )
     }
+
+    override fun refuseUser(name: String, to: String, refuse: Boolean, bindToLifecycle: LifecycleTransformer<RefuseLog>) {
+        val observable : Observable<RefuseLog>? = mContext?.let {
+            mModel.refuseUser(name,to,refuse) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setRefuseUser(it)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,5)
+
+            }else{
+                mView?.err(-1,it.message,5)
+            }
+
+        }
+
+        )
+    }
+
+    override fun refuseCheck(name: String, to: String, bindToLifecycle: LifecycleTransformer<Boolean>) {
+        val observable : Observable<Boolean>? = mContext?.let {
+            mModel.refuseCheck(name,to) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setRefuseCheck(it)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,6)
+
+            }else{
+
+                mView?.err(-1,it.message,6)
+
+            }
+
+        }
+
+        )
+    }
+
+
 }

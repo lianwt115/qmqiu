@@ -69,6 +69,11 @@ class NoticeDialog : Dialog {
             mBtNext = mLayout!!.findViewById(R.id.bt_go) as CircularProgressButton
             mLine = mLayout!!.findViewById(R.id.line) as View
 
+
+            mBtNext?.setFinalCornerRadius(6F)
+            mBtNext?.text = "NEXT"
+            mBtNext?.background = mContext.getDrawable(R.drawable.bt_shape_2)
+
             mBtNext!!.setOnClickListener {
 
                 if (mType == 3  && TextUtils.isEmpty(mRoomName!!.text.toString())){

@@ -25,6 +25,7 @@ class QMWebsocket {
     private  var url  = "ws://192.168.2.10:9898/api/websocket/"
     private  var connectUrl  = ""
     private  var connectcount  = 0
+    private  var connectcountMax  = 20*3
 
 
     fun connect(wsUrl: String,listen:QMMessageListen?): QMWebsocket {
@@ -73,7 +74,7 @@ class QMWebsocket {
                 this@QMWebsocket.listen!!.errorWS(1,"连接失败")
 
 
-            if (connectcount<10)
+            if (connectcount<connectcountMax)
                 tryConnect()
 
         }

@@ -16,6 +16,11 @@ class RoomMessageModel(context: Context) : BaseModel(context) {
         return apiService?.getRoomMessage(name,roomNumber)?.map(HttpResultFunc())
 
     }
+    fun reportUser(name:String, to: String, why:Int,roomNumber:String,messageContent:String, messageId:Long): Observable<Boolean>?{
+
+        return apiService?.reportUser(name,to,why,roomNumber,messageContent,messageId)?.map(HttpResultFunc())
+
+    }
 
 
 }

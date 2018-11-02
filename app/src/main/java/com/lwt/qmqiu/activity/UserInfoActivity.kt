@@ -31,10 +31,10 @@ import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.SVGAParser
 import org.jetbrains.annotations.NotNull
 import android.text.style.ForegroundColorSpan
+import br.com.simplepass.loading_button_lib.interfaces.OnAnimationEndListener
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.IMChatRoom
-import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
-import com.lwt.qmqiu.mvp.present.IMChatRoomPresent
+import com.lwt.qmqiu.bean.RefuseLog
 import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.NoticeDialog
 import com.opensource.svgaplayer.SVGADynamicEntity
@@ -45,7 +45,6 @@ import java.util.concurrent.TimeUnit
 class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoContract.View, GiftShowAdapter.GiftClickListen, GiftBuyAdapter.GiftBuyClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
 
 
-
     private lateinit var mUserName:String
     private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
     private lateinit var present: UserInfoPresent
@@ -54,6 +53,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     private  var mGiftInfoList = ArrayList<GiftInfo>()
     private  var mGiftInfoListBuy = ArrayList<GiftInfo>()
     private  var mIsMySelf = false
+    private  var mLocalRefuseOther = false
     private  lateinit var mSVGAParser:SVGAParser
     private  var mSendGiftIndex = -1
     private  var mSendGiftCount = 0
@@ -86,12 +86,31 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             initButton()
 
             initRecycleViewBuy()
+        }else{
+
+            //检测 我有没有阻止他
+            present.refuseCheck(mLocalUserName,mUserName,bindToLifecycle())
         }
 
+        gift_buy.text = "购买礼物"
+        gift_buy.background = getDrawable(R.drawable.bg_20dp_13)
+        gift_buy.setFinalCornerRadius(20F)
         gift_buy.setOnClickListener(this)
+
+
+        gift_send.text = "赠送礼物"
+        gift_send.background = getDrawable(R.drawable.bg_20dp_13)
+        gift_send.setFinalCornerRadius(20F)
         gift_send.setOnClickListener(this)
+
+
+
         gift_send_delete.setOnClickListener(this)
+
         room_private.setOnClickListener(this)
+
+        message_refuse.setFinalCornerRadius(20F)
+        message_refuse.setOnClickListener(this)
 
     }
 
@@ -124,6 +143,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
                 }else{
 
                     gift_send.startAnimation()
+
                     present.giftSend(mLocalUserName,mUserName,mSendGiftIndex,mSendGiftCount,bindToLifecycle())
 
                 }
@@ -157,7 +177,22 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             //开启私人聊天
             R.id.room_private -> {
 
+                if (this.mLocalRefuseOther){
+
+                    UiUtils.showToast("请先解除阻止")
+
+                    return
+                }
+
                 showProgressDialog("需 10青木 或 免费",true,2,this)
+
+            }
+            //阻止
+            R.id.message_refuse -> {
+
+                message_refuse.startAnimation()
+
+                present.refuseUser(mLocalUserName,mUserName,!mLocalRefuseOther,bindToLifecycle())
 
             }
 
@@ -165,6 +200,64 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         }
 
     }
+
+    //阻止动作
+    override fun setRefuseUser(refuseLog: RefuseLog) {
+
+        this.mLocalRefuseOther = refuseLog.status!!
+
+        message_refuse.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
+
+        Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+            message_refuse.revertAnimation {
+
+                when (refuseLog.status) {
+
+                    true -> {
+
+                        message_refuse.text = "解除阻止"
+                        message_refuse.background = getDrawable(R.drawable.bg_20dp_21)
+                    }
+
+                    false -> {
+
+                        message_refuse.text = "阻止"
+                        message_refuse.background = getDrawable(R.drawable.bg_20dp_24)
+                    }
+                }
+            }
+
+        },{
+            Logger.e("按钮复原异常")
+        })
+
+    }
+
+    //阻止检测
+    override fun setRefuseCheck(refuse: Boolean) {
+
+        this.mLocalRefuseOther = refuse
+
+        when (refuse) {
+
+            true-> {
+
+                message_refuse.text = "解除阻止"
+                message_refuse.background = getDrawable(R.drawable.bg_20dp_21)
+            }
+            false-> {
+
+                message_refuse.text = "阻止"
+                message_refuse.background = getDrawable(R.drawable.bg_20dp_24)
+            }
+
+        }
+
+    }
+
+
+
 
     override fun btClick(etContent: String): Boolean {
 
@@ -486,6 +579,21 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
                 showProgressDialogSuccess(false)
 
             }
+
+            5 -> {
+
+                message_refuse!!.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.error))
+
+                Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+                    message_refuse.revertAnimation()
+                },{
+                    Logger.e("按钮复原异常")
+                })
+
+                Logger.e("阻止失败")
+
+            }
         }
 
 
@@ -572,6 +680,9 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         super.onDestroy()
 
         gift_buy.dispose()
+        gift_send.dispose()
+        room_private.dispose()
+        message_refuse.dispose()
     }
 
 

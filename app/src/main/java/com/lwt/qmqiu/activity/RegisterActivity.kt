@@ -83,6 +83,12 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
         )
 
+        bt_go.setFinalCornerRadius(6F)
+
+        bt_go.text = "NEXT"
+
+        bt_go.background =getDrawable(R.drawable.bt_shape_2)
+
 
         present = UserLoginPresent(this,this)
 

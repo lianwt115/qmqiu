@@ -39,13 +39,11 @@
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:layout_marginBottom="20dp"
-        android:text="@string/next"
         android:layout_marginTop="20dp"
         android:id="@+id/bt_go"
         android:layout_gravity="center_horizontal"
         android:layout_width="120dp"
         android:layout_height="40dp"
-        android:background="@drawable/bt_shape_2"
         app:spinning_bar_width="4dp"
         app:spinning_bar_color="@color/colorAccent"
         app:spinning_bar_padding="6dp" >

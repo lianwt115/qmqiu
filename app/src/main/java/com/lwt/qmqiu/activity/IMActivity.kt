@@ -11,11 +11,9 @@ import android.view.View
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.IMListAdapter
-import com.lwt.qmqiu.adapter.VideoListAdapter
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.QMMessage
 import com.orhanobut.logger.Logger
-import com.lwt.qmqiu.bean.VideoSurface
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
@@ -36,6 +34,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     private lateinit var mWebSocket: QMWebsocket
     private  var mIMMessageList = ArrayList<QMMessage>()
     private lateinit var present: RoomMessagePresent
+    private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
+
+    private  var refuse = false
 
     companion object {
 
@@ -56,8 +57,6 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         im_barview.setBarOnClickListener(this)
         //连接聊天室ws
-
-
         im_barview.changeTitle((if (mIMChatRoom.roomType == 3)mIMChatRoom.roomName.replace("ALWTA","&") else mIMChatRoom.roomName).plus("(${mIMChatRoom.currentCount})"))
 
         mWebSocket = QMWebsocket()
@@ -67,7 +66,28 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         present = RoomMessagePresent(this,this)
 
         getRoomMessage()
+
+        //如果是私人聊天则检测是否阻止
+        if (mIMChatRoom.roomType == 3){
+
+
+            var info = mIMChatRoom.roomName.split("ALWTA")
+
+            if (info.size == 2)
+
+                //对方拒绝我没有
+                present.refuseCheck(if (mLocalUserName == info[1])info[0] else info[1] ,mLocalUserName,bindToLifecycle())
+
+        }
+
     }
+
+    override fun setRefuseCheck(refuse: Boolean) {
+
+        this.refuse = refuse
+
+    }
+
 
     private fun getRoomMessage() {
 
@@ -143,6 +163,12 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             R.id.im_bt -> {
 
+                        if (refuse){
+
+                            UiUtils.showToast("对方拒绝接受,发送失败")
+
+                            return
+                        }
 
                         if (im_et.text.isEmpty())
                             return
@@ -184,7 +210,13 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             }
 
             IMListAdapter.CONTENTCLICK -> {
-                UiUtils.showToast("内容点击")
+
+                //不能举报自己
+                if (mLocalUserName == content.from)
+                    return
+
+                present.reportUser(mLocalUserName,content.from,1,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
+
             }
         }
 
@@ -267,18 +299,6 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     //请求来的是加密的密文需解密
     override fun setRoomMessage(messageList: List<QMMessage>) {
 
-        var user =App.instanceApp().getLocalUser()
-        if (user != null){
-
-            for (qmMessage in messageList) {
-
-                qmMessage.message = String(RSAUtils.decryptData(Base64.decode(qmMessage.message,0),RSAUtils.loadPrivateKey(user.privateKey))!!)
-            }
-        }else{
-
-            UiUtils.showToast(getString(R.string.see_clear))
-        }
-
         mIMMessageList.addAll(messageList)
 
         mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
@@ -318,5 +338,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         }
     }
 
+    //举报成功
+    override fun setReportUser(success: Boolean) {
+
+       UiUtils.showToast("举报:${if (success) "成功" else "失败"}")
+    }
 
 }

@@ -39,7 +39,7 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
                     mView?.setRoomMessage(it)
                 }, {
 
-            Logger.e(it.message)
+            Logger.e(it.message?:"错误消息为空")
 
             if (it is ApiException){
 
@@ -47,6 +47,59 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
 
             }else{
                 mView?.err(-1,it.message,1)
+            }
+
+        }
+
+        )
+    }
+
+    override fun refuseCheck(name: String, to: String, bindToLifecycle: LifecycleTransformer<Boolean>) {
+        val observable : Observable<Boolean>? = mContext?.let {
+            mModel.refuseCheck(name,to) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setRefuseCheck(it)
+                }, {
+
+            Logger.e(it.message?:"错误为空")
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,2)
+
+            }else{
+                mView?.err(-1,it.message,2)
+            }
+
+        }
+
+        )
+
+    }
+
+    override fun reportUser(name: String, to: String, why: Int, roomNumber: String, messageContent: String, messageId: Long, bindToLifecycle: LifecycleTransformer<Boolean>) {
+        val observable : Observable<Boolean>? = mContext?.let {
+            mModel.reportUser(name,to,why,roomNumber,messageContent,messageId) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setReportUser(it)
+                }, {
+
+            Logger.e(it.message?:"错误为空")
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,3)
+
+            }else{
+                mView?.err(-1,it.message,3)
             }
 
         }

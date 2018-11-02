@@ -72,12 +72,10 @@
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="100dp"
-        android:text="删除并退出"
         android:id="@+id/room_exit"
         android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/bg_20dp_16"
         app:spinning_bar_width="4dp"
         app:spinning_bar_color="@color/white"
         app:spinning_bar_padding="6dp" >

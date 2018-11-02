@@ -21,4 +21,10 @@ open class BaseModel(val context: Context) {
         return apiService?.creatIMChatRoom(name, latitude,longitude,type,roomName)?.map(HttpResultFunc())
 
     }
+
+    fun refuseCheck(name:String, to:String): Observable<Boolean>?{
+
+        return apiService?.refuseCheck(name,to)?.map(HttpResultFunc())
+
+    }
 }

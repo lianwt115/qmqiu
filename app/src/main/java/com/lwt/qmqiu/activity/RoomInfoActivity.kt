@@ -142,7 +142,13 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
 
         })
 
+        room_exit.setFinalCornerRadius(20f)
+
+        room_exit.text = "删除并退出"
+        room_exit.background =getDrawable(R.drawable.bg_20dp_16)
         room_exit.setOnClickListener(this)
+
+
 
     }
     private fun initRecycleView() {
