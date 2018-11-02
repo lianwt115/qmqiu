@@ -227,13 +227,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     }
 
-    override fun needWSListenErr(): Boolean {
-
-        return true
-
-    }
-
-
     override fun onDestroy() {
 
         super.onDestroy()
@@ -280,24 +273,35 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     }
 
     private fun bottomShow() {
+
+
+        //本地有无记录
+        if (checkUserInfo()) {
+
+            fab.hide()
+            rg_root.visibility = View.VISIBLE
+
+        }
+
         if (autoLoginCount > autoLoginCountMax) {
 
             fab.show()
 
             rg_root.visibility = View.INVISIBLE
 
-            fab.setOnClickListener(this)
+        }
 
-        } else {
 
-            if (checkUserInfo()) {
-                fab.hide()
-                rg_root.visibility = View.VISIBLE
-            } else {
-                fab.setOnClickListener(this)
-            }
+        if (App.instanceApp().isLogin()){
+
+            fab.hide()
+
+            rg_root.visibility = View.VISIBLE
 
         }
+
+        fab.setOnClickListener(this)
+
     }
 
     override fun onStop() {
@@ -325,7 +329,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         MapLocationUtils.getInstance().setListen(null)
         Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
-
     }
 
     override fun err(code: Int, errMessage: String?) {

@@ -19,7 +19,7 @@ class JsonpHandleInterceptor : Interceptor  {
             if ( index != -1) {
                 content = content?.substring(index + 1, content.length - 1)
             }
-            Logger.e(content)
+           // Logger.e(content)
             return response.newBuilder()
                     .body(ResponseBody.create(mediaType, content))
                     .build()

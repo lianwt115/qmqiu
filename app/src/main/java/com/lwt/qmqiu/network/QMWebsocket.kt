@@ -27,9 +27,8 @@ class QMWebsocket {
     private  var connectcount  = 0
 
 
-    fun connect(wsUrl: String,listen:QMMessageListen): QMWebsocket {
+    fun connect(wsUrl: String,listen:QMMessageListen?): QMWebsocket {
         //将姓名使用公钥加密
-
         this.request =  Request.Builder()
 
                 .url(url.plus(wsUrl))
@@ -42,6 +41,12 @@ class QMWebsocket {
         this.connectUrl = wsUrl
 
         return this
+    }
+
+    fun  setListen(listen:QMMessageListen?){
+
+        this.listen = listen
+
     }
 
     private var listener = object : WebSocketListener(){
@@ -88,6 +93,7 @@ class QMWebsocket {
             var qmMessage = gson.fromJson<QMMessage>(text,QMMessage::class.java)
 
             if (this@QMWebsocket.listen != null)
+
                 this@QMWebsocket.listen!!.qmMessage(qmMessage)
 
         }

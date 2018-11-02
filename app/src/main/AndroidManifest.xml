@@ -89,7 +89,8 @@
         </activity>
         <activity android:name=".activity.FaceVideoActivity" />
 
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"> </service>
+        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
+        </service>
 
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
@@ -117,6 +118,7 @@
 
 
             />
+
         <service android:name=".service.RomoteService"
             android:enabled="true"
             android:exported="true"

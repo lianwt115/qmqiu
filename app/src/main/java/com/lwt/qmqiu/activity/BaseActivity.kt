@@ -9,6 +9,7 @@ import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.bean.WSErr
+import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.RxBus
 import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.GiftDialog
@@ -25,7 +26,57 @@ import io.reactivex.subjects.BehaviorSubject
 
 
 
-open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent> {
+open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, QMWebsocket.QMMessageListen {
+
+
+    override fun qmMessage(it: QMMessage) {
+
+
+        runOnUiThread {
+
+            Logger.e("通知RX:$it")
+            when (it.type) {
+                //礼物
+                2 -> {
+                    Logger.e("通知RX:$it")
+                    val infoList = it.message.split("*") //数量-单位-名称-动画名称
+
+
+                    val info = Html.fromHtml("${it.from}  赠送: <font color='#FF4081'>"+infoList[0]+"</font>\t"+"${infoList[1]}"+"<font color='#FF4081'>\t${infoList[2]}</font>" +"给<font color='#FF4081'> ${it.to}</font>")
+
+
+                    showGiftDialog(info,infoList[3])
+
+                }
+
+            }
+
+
+        }
+
+
+    }
+
+    override fun errorWS(type: Int, message: String) {
+
+                runOnUiThread {
+
+                    when (type) {
+
+                        0,1 -> {
+                            showProgressDialog(message,true)
+                        }
+
+                        2 -> {
+
+                            dismissProgressDialog()
+                        }
+                    }
+
+
+                }
+
+        }
 
 
     protected val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
@@ -33,8 +84,6 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent> {
     protected var mDestroy:Boolean=false
     private var mNoticeDialog: NoticeDialog?=null
     private var mGiftDialog: GiftDialog?=null
-    private var mDisposableMessage: Disposable?=null
-    private var mDisposableWSErr: Disposable?=null
     private var mNoticeDialogBuilder: NoticeDialog.Builder?=null
     private var mGiftDialogBuilder: GiftDialog.Builder?=null
 
@@ -61,41 +110,6 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent> {
         super.onCreate(savedInstanceState)
         lifecycleSubject.onNext(ActivityEvent.CREATE)
 
-
-        if (needWSListenErr()) {
-
-            mDisposableWSErr = RxBus.getInstance()?.toObservale(WSErr::class.java)?.applySchedulers()?.subscribe({
-
-
-                when (it.type) {
-
-                    0,1 -> {
-                        showProgressDialog(it.message,true)
-                    }
-
-                    2 -> {
-
-                        dismissProgressDialog()
-                    }
-                }
-
-
-            },{
-
-                Logger.e("通知RX异常:${it.localizedMessage}")
-
-            })
-
-
-        }
-
-
-
-    }
-
-    open fun needWSListenErr():Boolean {
-
-        return false
     }
 
     override fun onStart() {
@@ -107,36 +121,8 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent> {
         super.onResume()
         lifecycleSubject.onNext(ActivityEvent.RESUME)
 
-        mDisposableMessage = RxBus.getInstance()?.toObservale(QMMessage::class.java)?.applySchedulers()?.subscribe({
-
-            Logger.e("通知RX:$it")
-            when (it.type) {
-                //礼物
-                2 -> {
-                    Logger.e("通知RX:$it")
-                    val infoList = it.message.split("*") //数量-单位-名称-动画名称
-
-
-                    val info = Html.fromHtml("${it.from}  赠送: <font color='#FF4081'>"+infoList[0]+"</font>\t"+"${infoList[1]}"+"<font color='#FF4081'>\t${infoList[2]}</font>" +"给<font color='#FF4081'> ${it.to}</font>")
-
-
-                    showGiftDialog(info,infoList[3])
-
-                }
-
-            }
-
-        },{
-
-            Logger.e("通知RX异常:${it.localizedMessage}")
-
-        })
-
-
+        App.instanceApp().setListen(this)
     }
-
-
-
 
 
     override fun onPause() {
@@ -147,18 +133,12 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent> {
         super.onStop()
         lifecycleSubject.onNext(ActivityEvent.STOP)
 
-        if (mDisposableMessage!=null && !mDisposableMessage!!.isDisposed)
-            mDisposableMessage!!.dispose()
-
-
+        Logger.e("取消了监听")
+        App.instanceApp().setListen(null)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
-        if (mDisposableWSErr!=null && !mDisposableWSErr!!.isDisposed)
-            mDisposableWSErr!!.dispose()
-
 
         mDestroy=true
 

@@ -191,19 +191,32 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     override fun qmMessage(message: QMMessage) {
 
-        runOnUiThread {
+        when (message.type) {
+            //普通消息
+            0 -> {
 
-            im_barview.changeTitle(mIMChatRoom.roomName.plus("(${message.currentCount})"))
+                runOnUiThread {
 
-            mIMMessageList.add(message)
+                    im_barview.changeTitle(mIMChatRoom.roomName.plus("(${message.currentCount})"))
 
-            mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
-            //如果自己发的则活动不是则不管
-            if (message.from == App.instanceApp().getLocalUser()?.name?:"xxx")
+                    mIMMessageList.add(message)
 
-                recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+                    mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
+                    //如果自己发的则活动不是则不管
+                    if (message.from == App.instanceApp().getLocalUser()?.name?:"xxx")
 
-            Logger.e(message.toString())
+                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+
+                    Logger.e(message.toString())
+                }
+
+            }
+            //礼物
+            2 -> {
+
+                super.qmMessage(message)
+
+            }
         }
 
     }

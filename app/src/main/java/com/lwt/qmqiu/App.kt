@@ -1,8 +1,8 @@
 package com.lwt.qmqiu
 
+import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
-import android.graphics.Color
 import android.os.Environment
 import com.baidu.mapapi.CoordType
 import com.baidu.mapapi.SDKInitializer
@@ -15,18 +15,12 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.bean.WSErr
 import com.lwt.qmqiu.network.QMWebsocket
-import com.lwt.qmqiu.utils.RxBus
 import com.lwt.qmqiu.utils.SPHelper
-import com.lwt.qmqiu.utils.applySchedulers
 import com.tencent.bugly.beta.Beta
-import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
 
 
-class App : Application(), QMWebsocket.QMMessageListen {
+class App : Application() {
 
 
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
@@ -63,7 +57,13 @@ class App : Application(), QMWebsocket.QMMessageListen {
 
         initBuglyAndUP()
 
-        initWebsocket()
+        if (applicationContext.packageName == (getCurrentProcessName())) {
+
+            Logger.e("initWebsocket")
+
+            initWebsocket()
+
+        }
 
     }
 
@@ -75,7 +75,7 @@ class App : Application(), QMWebsocket.QMMessageListen {
 
             mWebSocket = QMWebsocket()
 
-            mWebSocket!!.connect(NOTIFICATION.plus(localName),this)
+            mWebSocket!!.connect(NOTIFICATION.plus(localName),null)
         }
 
 
@@ -86,20 +86,9 @@ class App : Application(), QMWebsocket.QMMessageListen {
         mWebSocket?.close()
     }
 
-    override fun errorWS(type: Int, message: String) {
-
-        RxBus.getInstance()?.post(WSErr(type,message))
-
-    }
-
-    //可以用于全局通知类
-    override fun qmMessage(message: QMMessage) {
-
-        //为毛传不出去
-        RxBus.getInstance()?.post(message)
-
-        Logger.e("通知:$message")
-
+    fun setListen(listen: QMWebsocket.QMMessageListen?){
+        Logger.e("APP设置了监听")
+        this.mWebSocket?.setListen(listen)
     }
 
     private fun  initBuglyAndUP(){
@@ -188,6 +177,9 @@ class App : Application(), QMWebsocket.QMMessageListen {
 
         this.mLocalUser = baseUser
 
+        if (mWebSocket == null)
+            initWebsocket()
+
     }
 
     fun getLocalUser():BaseUser?{
@@ -210,6 +202,25 @@ class App : Application(), QMWebsocket.QMMessageListen {
         this.mBDLocation = location
 
     }
+
+    /**
+  * 获取当前进程名
+     */
+    private fun getCurrentProcessName():String {
+        var pid = android.os.Process.myPid()
+        var processName = ""
+        var manager = applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+        manager.runningAppProcesses.forEach {
+
+            if (it.pid == pid) {
+                processName = it.processName
+            }
+        }
+
+        return processName
+    }
+
 
 
 
