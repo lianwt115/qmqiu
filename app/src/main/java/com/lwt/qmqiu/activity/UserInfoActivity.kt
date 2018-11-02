@@ -2,6 +2,7 @@ package com.lwt.qmqiu.activity
 
 
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Paint
@@ -31,16 +32,18 @@ import com.opensource.svgaplayer.SVGAParser
 import org.jetbrains.annotations.NotNull
 import android.text.style.ForegroundColorSpan
 import com.lwt.qmqiu.App
-import com.lwt.qmqiu.R.id.*
-import com.lwt.qmqiu.R.string.gift
+import com.lwt.qmqiu.bean.IMChatRoom
+import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
+import com.lwt.qmqiu.mvp.present.IMChatRoomPresent
 import com.lwt.qmqiu.utils.applySchedulers
+import com.lwt.qmqiu.widget.NoticeDialog
 import com.opensource.svgaplayer.SVGADynamicEntity
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_userinfo.view.*
 import java.util.concurrent.TimeUnit
 
 
-class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoContract.View, GiftShowAdapter.GiftClickListen, GiftBuyAdapter.GiftBuyClickListen, View.OnClickListener {
+class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoContract.View, GiftShowAdapter.GiftClickListen, GiftBuyAdapter.GiftBuyClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
+
 
 
     private lateinit var mUserName:String
@@ -88,6 +91,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         gift_buy.setOnClickListener(this)
         gift_send.setOnClickListener(this)
         gift_send_delete.setOnClickListener(this)
+        room_private.setOnClickListener(this)
 
     }
 
@@ -150,12 +154,58 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
 
             }
+            //开启私人聊天
+            R.id.room_private -> {
+
+                showProgressDialog("需 10青木 或 免费",true,2,this)
+
+            }
 
 
         }
 
     }
 
+    override fun btClick(etContent: String): Boolean {
+
+        var user = App.instanceApp().getLocalUser()
+        var location = App.instanceApp().getBDLocation()
+
+        if (user != null){
+
+            present.creatIMChatRoom(user.name,location?.latitude ?: 0.000000, location?.longitude
+                    ?: 0.000000,3,user.name.plus("ALWTA$mUserName"),bindToLifecycle())
+
+            return true
+
+        }else{
+
+            UiUtils.showToast("请先登录")
+
+            return false
+        }
+
+    }
+
+
+    override fun creatIMChatRoomSuccess(room: IMChatRoom) {
+
+        showProgressDialogSuccess(true)
+
+        Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+            //进入聊天室
+            val intent = Intent(this, IMActivity::class.java)
+
+            intent.putExtra("imChatRoom",room)
+
+            startActivity(intent)
+
+        },{
+            Logger.e("按钮复原异常")
+        })
+
+    }
 
     private fun initRecycleViewBuy() {
 
@@ -429,6 +479,11 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
                 })
 
                 Logger.e("礼物赠送失败")
+
+            }
+            4 -> {
+
+                showProgressDialogSuccess(false)
 
             }
         }

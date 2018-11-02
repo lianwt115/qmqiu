@@ -63,13 +63,18 @@
         android:layout_height="wrap_content" />
 
 
-    <ImageView
-        android:id="@+id/notice"
-        android:layout_marginBottom="12dp"
+    <TextView
+        android:visibility="gone"
+        android:layout_marginBottom="12sp"
         android:layout_marginRight="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/notice"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="附近"
+        android:textColor="@color/column_bg1"
+        android:id="@+id/room_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <View

@@ -5,19 +5,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.et_username
 import com.lwt.qmqiu.bean.IMChatRoom
-import com.lwt.qmqiu.utils.UiUtils
-import kotlinx.android.synthetic.main.activity_register.*
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 
 
-class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, listen: RoomClickListen?) : RecyclerView.Adapter<IMChatRoomListAdapter.ListViewHolder>() {
+class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, listen: RoomClickListen?, mStrategy: Int) : RecyclerView.Adapter<IMChatRoomListAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -28,6 +24,7 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
     private val formatter1 = SimpleDateFormat("MM月dd日")
     private val formatter2 = SimpleDateFormat("HH:mm")
     private val today = formatter.format(System.currentTimeMillis())
+    private val mType = mStrategy
     init {
         this.context = context
         this.mTotalList = list
@@ -42,15 +39,16 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
         checkRoom(holder.room_first,obj?.roomName?.substring(0,1))
 
-        holder.room_name.text = obj?.roomName
+        holder.room_name.text = if (obj?.roomType == 3)obj.roomName.replace("ALWTA","&") else obj?.roomName
 
         holder.room_lastcontent.text = obj?.lastContent
 
         holder.room_time.text = timeData(obj?.lastContentTime!!)
 
-        holder.notice.visibility = if (obj.status) View.INVISIBLE else View.VISIBLE
-
         roomFirstBg(obj.roomNumber,holder.room_first)
+
+        if (mType == 3)
+            roonType(obj.roomType,holder.room_type)
 
         holder.root_contain.setOnClickListener {
             if (listen!= null)
@@ -60,6 +58,32 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
 
 
+    }
+
+    private fun roonType(roomType: Int, room_type: TextView) {
+
+        room_type.visibility = View.VISIBLE
+        //1 附近 2公共 3私人
+        when (roomType) {
+
+            1-> {
+
+                room_type.text = "附近"
+            }
+
+            2 -> {
+
+                room_type.text = "推荐"
+                room_type.setTextColor(context!!.resources.getColor(R.color.bg_start_color))
+            }
+
+            3 -> {
+
+                room_type.text = "私密"
+
+                room_type.setTextColor(context!!.resources.getColor(R.color.colorAccent))
+            }
+        }
     }
 
     private fun checkRoom(text: TextView, roomName: String?) {
@@ -190,11 +214,10 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
     class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
 
         var room_first: TextView = itemView.findViewById(R.id.room_first) as TextView
+        var room_type: TextView = itemView.findViewById(R.id.room_type) as TextView
         var room_name: TextView = itemView.findViewById(R.id.room_name) as TextView
         var room_lastcontent: TextView = itemView.findViewById(R.id.room_lastcontent) as TextView
         var room_time: TextView = itemView.findViewById(R.id.room_time) as TextView
-        var notice: ImageView = itemView.findViewById(R.id.notice) as ImageView
-
 
 
         var root_contain: RelativeLayout = itemView.findViewById(R.id.root_contain) as RelativeLayout

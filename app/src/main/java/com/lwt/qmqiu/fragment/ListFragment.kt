@@ -1,31 +1,22 @@
 package com.lwt.qmqiu.fragment
 
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.Rect
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Base64
 import android.view.View
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-import com.baidu.location.BDLocation
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.color.bg_tv_money
 import com.lwt.qmqiu.activity.IMActivity
 import com.lwt.qmqiu.adapter.IMChatRoomListAdapter
 import com.lwt.qmqiu.bean.IMChatRoom
-import com.lwt.qmqiu.bean.VideoSurface
-import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
 import com.lwt.qmqiu.mvp.present.IMChatRoomPresent
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
-import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.NoticeDialog
 import com.orhanobut.logger.Logger
 import com.scwang.smartrefresh.header.MaterialHeader
@@ -34,11 +25,8 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_list.*
-import java.util.concurrent.TimeUnit
-
 
 
 class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMChatRoomContract.View, IMChatRoomListAdapter.RoomClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
@@ -60,6 +48,13 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
     override fun initView() {
 
+
+        if (arguments != null) {
+            mStrategy = arguments!!.getInt("type")
+            mPresenter= IMChatRoomPresent(context!!,this)
+        }
+
+
         val linearLayoutManager = object : LinearLayoutManager(activity){
             override fun canScrollVertically(): Boolean {
                 return true
@@ -72,7 +67,7 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
         recyclerView.layoutManager=linearLayoutManager
 
-        mAdapter= IMChatRoomListAdapter(context!!,mList,this)
+        mAdapter= IMChatRoomListAdapter(context!!,mList,this,mStrategy)
 
         recyclerView.adapter=mAdapter
 
@@ -85,10 +80,7 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
             }
         })
 
-        if (arguments != null) {
-            mStrategy = arguments!!.getInt("type")
-            mPresenter= IMChatRoomPresent(context!!,this)
-        }
+
 
 
         //刷新和加载更多
@@ -233,7 +225,7 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
             R.id.room_fab -> {
 
-                showProgressDialog("创建聊天室",true,3,this)
+                showProgressDialog("需".plus(if (mStrategy==1) 50 else 100).plus("青木 或 ").plus(if (mStrategy==1) 5 else 10).plus("青木球"),true,3,this)
 
             }
 

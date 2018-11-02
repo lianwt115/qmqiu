@@ -56,7 +56,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         im_barview.setBarOnClickListener(this)
         //连接聊天室ws
-        im_barview.changeTitle(mIMChatRoom.roomName.plus("(${mIMChatRoom.currentCount})"))
+
+
+        im_barview.changeTitle((if (mIMChatRoom.roomType == 3)mIMChatRoom.roomName.replace("ALWTA","&") else mIMChatRoom.roomName).plus("(${mIMChatRoom.currentCount})"))
 
         mWebSocket = QMWebsocket()
 

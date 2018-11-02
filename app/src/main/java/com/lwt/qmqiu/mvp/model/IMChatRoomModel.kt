@@ -15,11 +15,5 @@ class IMChatRoomModel(context: Context) : BaseModel(context) {
         return apiService?.getIMChatRoom(name, latitude,longitude,type)?.map(HttpResultFunc())
 
     }
-    fun creatIMChatRoom(name:String, latitude:Double, longitude:Double,type:Int,roomName:String): Observable<IMChatRoom>?{
-
-        return apiService?.creatIMChatRoom(name, latitude,longitude,type,roomName)?.map(HttpResultFunc())
-
-    }
-
 
 }

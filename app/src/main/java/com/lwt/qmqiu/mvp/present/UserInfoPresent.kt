@@ -2,6 +2,7 @@ package com.lwt.qmqiu.mvp.present
 
 import android.content.Context
 import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.mvp.contract.UserInfoContract
 import com.lwt.qmqiu.mvp.model.UserInfoModel
 import com.lwt.qmqiu.network.ApiException
@@ -97,6 +98,32 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
 
             }else{
                 mView?.err(-1,it.message,3)
+            }
+
+        }
+
+        )
+    }
+
+    override fun creatIMChatRoom(name: String, latitude: Double, longitude: Double, type: Int, roomName: String, bindToLifecycle: LifecycleTransformer<IMChatRoom>) {
+        val observable : Observable<IMChatRoom>? = mContext?.let {
+            mModel.creatIMChatRoom(name,latitude,longitude,type,roomName) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.creatIMChatRoomSuccess(it)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,4)
+
+            }else{
+                mView?.err(-1,it.message,4)
             }
 
         }
