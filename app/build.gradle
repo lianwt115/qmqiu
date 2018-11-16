@@ -97,4 +97,7 @@ dependencies {
 
     //文字特效
     implementation "com.hanks:htextview-line:0.1.6"
+
+    //键盘处理方案
+    implementation 'cn.dreamtobe.kpswitch:library:1.6.1'
 }

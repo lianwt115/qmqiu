@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    tools:context=".activity.MainActivity">
+
+    <ImageView
+        android:layout_marginTop="6dp"
+        android:id="@+id/plus_iv"
+        android:background="@drawable/bg_grey_rectangle_8"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/photo"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
+    <TextView
+        android:textSize="10sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/plus_iv"
+        android:id="@+id/plus_tv"
+        android:text="相册相册"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -2,16 +2,27 @@ package com.lwt.qmqiu.activity
 
 import android.content.Intent
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Base64
+import android.util.Log
+import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
+import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
+import cn.dreamtobe.kpswitch.util.KeyboardUtil
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.IMListAdapter
+import com.lwt.qmqiu.adapter.PlusAdapter
 import com.lwt.qmqiu.bean.IMChatRoom
+import com.lwt.qmqiu.bean.PlusInfo
 import com.lwt.qmqiu.bean.QMMessage
 import com.orhanobut.logger.Logger
 import com.lwt.qmqiu.map.MapLocationUtils
@@ -24,22 +35,25 @@ import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.ReporterDialog
 import kotlinx.android.synthetic.main.activity_im.*
+import kotlinx.android.synthetic.main.layout_send_message_bar.*
 
 
-class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View{
-
+class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen {
 
 
     private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mIMListAdapter:IMListAdapter
+    private lateinit var mPlusAdapter:PlusAdapter
     private lateinit var mReporterDialogBuilder:ReporterDialog.Builder
     private lateinit var mReporterDialog:ReporterDialog
     private lateinit var mWebSocket: QMWebsocket
     private  var mIMMessageList = ArrayList<QMMessage>()
+    private  var mPlusList = ArrayList<PlusInfo>()
     private lateinit var present: RoomMessagePresent
     private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
 
     private  var refuse = false
+    private  var voice = false
 
     companion object {
 
@@ -57,6 +71,56 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         initRecycleView()
 
         im_bt.setOnClickListener(this)
+
+        voice_iv.setOnClickListener(this)
+
+        send_voice_btn.setOnClickListener(this)
+
+        im_et.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                plus_iv.visibility = if (TextUtils.isEmpty(s))View.VISIBLE else View.GONE
+
+                im_bt.visibility = if (TextUtils.isEmpty(s))View.GONE else View.VISIBLE
+
+            }
+        })
+
+        //键盘监听
+        KeyboardUtil.attach(this, panel_root
+                // Add keyboard showing state callback, do like this when you want to listen in the
+                // keyboard's show/hide change.
+        ) { isShowing ->
+
+            Logger.e("Keyboard is $isShowing")
+        }
+
+        //键盘收起
+        KPSwitchConflictUtil.attach(panel_root, plus_iv, im_et) { switchToPanel ->
+
+            if (switchToPanel) {
+                im_et.clearFocus()
+            } else {
+                im_et.requestFocus()
+            }
+        }
+
+        recycleview_im.setOnTouchListener { view, motionEvent ->
+
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                KPSwitchConflictUtil.hidePanelAndKeyboard(panel_root)
+            }
+
+            false
+        }
 
         im_barview.setBarOnClickListener(this)
         //连接聊天室ws
@@ -138,9 +202,44 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 outRect.right =0
             }
         })
+
+        val gridLayoutManager = object :GridLayoutManager(this,4){
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+
+            override fun canScrollHorizontally(): Boolean {
+                return false
+            }
+        }
+        recycleview_plus.layoutManager=gridLayoutManager
+
+        mPlusAdapter= PlusAdapter(this,mPlusList,this)
+
+        recycleview_plus.adapter = mPlusAdapter
+
+        recycleview_plus.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                outRect.top = 0
+                outRect.bottom = 0
+                outRect.left = 0
+                outRect.right =10
+            }
+        })
+
+        mPlusList.add(PlusInfo("相册",R.mipmap.photo))
+        mPlusList.add(PlusInfo("拍摄",R.mipmap.camera))
+        mPlusList.add(PlusInfo("视频通话",R.mipmap.video))
+        mPlusList.add(PlusInfo("位置",R.mipmap.location))
+
+        mPlusAdapter.notifyDataSetChanged()
+
     }
 
+    override fun plusClick(position: Int) {
 
+        UiUtils.showToast(position.toString())
+    }
 
 
     override fun onDestroy() {
@@ -193,10 +292,50 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             }
 
+            R.id.voice_iv ->{
+
+                if (voice){
+
+                    voice_iv.setImageDrawable(getDrawable(R.mipmap.keybord))
+
+                    send_voice_btn.visibility =View.VISIBLE
+
+                    KPSwitchConflictUtil.hidePanelAndKeyboard(panel_root)
+
+                    im_et.visibility =View.GONE
+
+                }else{
+
+                    voice_iv.setImageDrawable(getDrawable(R.mipmap.voice_iv))
+
+                    send_voice_btn.visibility =View.GONE
+
+                    im_et.visibility =View.VISIBLE
+
+
+
+                }
+
+                voice = !voice
+            }
+
+            R.id.send_voice_btn ->{
+
+               UiUtils.showToast("功能还没实现")
+            }
 
         }
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_UP
+                && event.keyCode == KeyEvent.KEYCODE_BACK
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            KPSwitchConflictUtil.hidePanelAndKeyboard(panel_root)
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
 
     override fun imClick(content: QMMessage, type: Int) {
 
@@ -263,6 +402,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     //如果自己发的则活动不是则不管
                     if (message.from == App.instanceApp().getLocalUser()?.name?:"xxx")
 
+                        //需要顺滑
                         recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
 
                     Logger.e(message.toString())
@@ -325,11 +465,12 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         mIMMessageList.addAll(messageList)
 
-        mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
+        mIMListAdapter.notifyDataSetChanged()
 
         if (mIMMessageList.size > 0)
 
-            recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+            //直接滑到
+            recycleview_im.scrollToPosition(mIMMessageList.size-1)
 
 
     }
