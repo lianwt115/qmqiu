@@ -32,13 +32,15 @@ import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
+import com.lwt.qmqiu.voice.VoiceManager
 import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.ReporterDialog
 import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.layout_send_message_bar.*
+import java.io.File
 
 
-class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen {
+class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener {
 
 
     private lateinit var mIMChatRoom:IMChatRoom
@@ -53,7 +55,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
 
     private  var refuse = false
-    private  var voice = false
+    private  var voice = true
 
     companion object {
 
@@ -74,7 +76,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         voice_iv.setOnClickListener(this)
 
-        send_voice_btn.setOnClickListener(this)
+        send_voice_btn.setOnTouchListener(this)
 
         im_et.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -319,13 +321,57 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 voice = !voice
             }
 
-            R.id.send_voice_btn ->{
 
-               UiUtils.showToast("功能还没实现")
-            }
+
 
         }
     }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        when (v?.id) {
+
+            R.id.send_voice_btn ->{
+
+                when (event?.action) {
+
+
+                    MotionEvent.ACTION_DOWN-> {
+
+                        //开始录音
+                        VoiceManager.getInstance().startRecord("lwt${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
+
+                            override fun start() {
+
+                                Logger.e("开始录制")
+                            }
+
+                            override fun finished(file: File) {
+                                UiUtils.showToast("结束录制:${file.absolutePath}")
+                                Logger.e("结束录制:${file.absolutePath}")
+                            }
+
+                            override fun err(errMessage: String) {
+                                UiUtils.showToast(errMessage)
+                            }
+
+                        })
+
+                    }
+
+                    MotionEvent.ACTION_UP-> {
+
+                        VoiceManager.getInstance().stopRecord()
+                    }
+
+                }
+
+                return true
+            }
+        }
+
+        return false
+    }
+
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_UP
