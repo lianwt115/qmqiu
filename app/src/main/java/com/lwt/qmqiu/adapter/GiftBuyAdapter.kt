@@ -144,11 +144,6 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
     }
 
-   /* fun getCount(): List<GiftInfo>? {
-
-        return mTotalList
-
-    }*/
 
     interface GiftBuyClickListen{
         fun giftBuyClick(cash: Int)

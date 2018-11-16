@@ -133,7 +133,6 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         super.onStop()
         lifecycleSubject.onNext(ActivityEvent.STOP)
 
-        Logger.e("取消了监听")
         App.instanceApp().setListen(null)
     }
 

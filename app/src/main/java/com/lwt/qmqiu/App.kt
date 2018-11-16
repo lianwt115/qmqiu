@@ -87,7 +87,6 @@ class App : Application() {
     }
 
     fun setListen(listen: QMWebsocket.QMMessageListen?){
-        Logger.e("APP设置了监听")
         this.mWebSocket?.setListen(listen)
     }
 

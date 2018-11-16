@@ -86,7 +86,18 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         if (user != null){
 
-            return String(RSAUtils.decryptData(Base64.decode(message,0), RSAUtils.loadPrivateKey(user.privateKey))!!)
+            try{
+
+                return String(RSAUtils.decryptData(Base64.decode(message,0), RSAUtils.loadPrivateKey(user.privateKey))!!)
+
+
+            }catch (e:Exception){
+
+
+                return message
+
+            }
+
 
         }else{
 

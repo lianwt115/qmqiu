@@ -22,15 +22,18 @@ import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.widget.BarView
+import com.lwt.qmqiu.widget.ReporterDialog
 import kotlinx.android.synthetic.main.activity_im.*
 
 
-class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View {
+class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View{
 
 
 
     private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mIMListAdapter:IMListAdapter
+    private lateinit var mReporterDialogBuilder:ReporterDialog.Builder
+    private lateinit var mReporterDialog:ReporterDialog
     private lateinit var mWebSocket: QMWebsocket
     private  var mIMMessageList = ArrayList<QMMessage>()
     private lateinit var present: RoomMessagePresent
@@ -215,7 +218,28 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 if (mLocalUserName == content.from)
                     return
 
-                present.reportUser(mLocalUserName,content.from,1,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
+                 mReporterDialogBuilder =  ReporterDialog.Builder(this,true)
+
+                 mReporterDialog = mReporterDialogBuilder.create("举报",object :ReporterDialog.Builder.BtClickListen{
+
+                    override fun btClick(type: Int): Boolean {
+
+                        if (type == -1){
+
+                            UiUtils.showToast("请选择举报内容")
+
+                            return false
+
+                        }
+
+                        present.reportUser(mLocalUserName,content.from,type,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
+
+                        return true
+                    }
+
+                })
+
+                mReporterDialog.show()
 
             }
         }
@@ -313,7 +337,13 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     //请求记录
     override fun err(code: Int, errMessage: String?, type: Int) {
 
-        UiUtils.showToast(errMessage!!)
+        when (type) {
+
+            3 -> {
+                mReporterDialogBuilder.btFinish(false)
+            }
+
+        }
 
     }
 
@@ -341,7 +371,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     //举报成功
     override fun setReportUser(success: Boolean) {
 
-       UiUtils.showToast("举报:${if (success) "成功" else "失败"}")
+        mReporterDialogBuilder.btFinish(success)
+
     }
 
 }
