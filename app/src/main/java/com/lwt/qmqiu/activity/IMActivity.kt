@@ -1,5 +1,7 @@
 package com.lwt.qmqiu.activity
 
+
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Build
@@ -7,11 +9,10 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.ClipboardManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Base64
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -24,12 +25,14 @@ import com.lwt.qmqiu.adapter.PlusAdapter
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.PlusInfo
 import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.bean.UploadLog
+import com.lwt.qmqiu.download.DownloadListen
+import com.lwt.qmqiu.download.DownloadManager
 import com.orhanobut.logger.Logger
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
-import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.voice.VoiceManager
@@ -37,11 +40,17 @@ import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.ReporterDialog
 import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.layout_send_message_bar.*
+import okhttp3.MediaType
 import java.io.File
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+
+
+
+
 
 
 class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener {
-
 
     private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mIMListAdapter:IMListAdapter
@@ -279,6 +288,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         val message = QMMessage()
 
+                        message.type = 0
                         message.message = im_et.text.toString()
 
                        /* mIMMessageList.add(message)
@@ -332,11 +342,20 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             R.id.send_voice_btn ->{
 
+                var location = IntArray(2)
+
+                send_voice_btn.getLocationOnScreen(location)
+                var yY = location[1]
+                var yHeight = send_voice_btn.bottom
+
                 when (event?.action) {
 
 
                     MotionEvent.ACTION_DOWN-> {
 
+                        send_voice_btn.isPressed = true
+
+                        send_voice_btn.text = "松开发送"
                         //开始录音
                         VoiceManager.getInstance().startRecord("lwt${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
 
@@ -345,9 +364,24 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                 Logger.e("开始录制")
                             }
 
-                            override fun finished(file: File) {
-                                UiUtils.showToast("结束录制:${file.absolutePath}")
-                                Logger.e("结束录制:${file.absolutePath}")
+                            override fun finished(file: File, time: Int) {
+
+                                var user = App.instanceApp().getLocalUser()
+
+                                if (user !=null){
+
+                                    val requestFile = RequestBody.create(MediaType.parse("application/otcet-stream"), file)
+
+                                    val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+                                    //type 为文件类型
+                                    present.upload(user.name,0,mIMChatRoom.roomNumber,time,body,bindToLifecycle())
+
+                                }else{
+
+                                    UiUtils.showToast("未登录,无法发送")
+                                }
+
                             }
 
                             override fun err(errMessage: String) {
@@ -360,7 +394,35 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     MotionEvent.ACTION_UP-> {
 
-                        VoiceManager.getInstance().stopRecord()
+                        Logger.e("UP:event.y:${event.rawY}--$yHeight--$yY")
+                        //判断该点是否还在控件内
+                        if ( event.rawY<=yHeight+yY && event.rawY>=yY){
+
+                            VoiceManager.getInstance().stopRecord(true)
+                            Logger.e("发送成功")
+
+                        }else{
+
+                            Logger.e("发送失败")
+
+                            VoiceManager.getInstance().stopRecord(false)
+
+                        }
+
+                        send_voice_btn.text = "按住说话"
+                        send_voice_btn.isPressed = false
+
+                    }
+
+                    MotionEvent.ACTION_MOVE-> {
+                        if ( event.rawY<=yHeight+yY && event.rawY>=yY){
+
+                            Logger.e("内")
+                        }else{
+                            Logger.e("外")
+                            UiUtils.showToast("松开,取消发送")
+                        }
+
                     }
 
                 }
@@ -370,6 +432,22 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         }
 
         return false
+    }
+
+
+    //上传成功
+    override fun setUpload(uploadLog: UploadLog) {
+        //上传成功后,发ws消息
+        Logger.e(uploadLog.toString())
+
+        val message = QMMessage()
+
+        message.type = 3
+
+        message.message = uploadLog._id.plus("_ALWTA_${uploadLog.length}")
+
+        mWebSocket.sengText(message,mIMChatRoom.roomNumber)
+
     }
 
 
@@ -383,7 +461,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         return super.dispatchKeyEvent(event)
     }
 
-    override fun imClick(content: QMMessage, type: Int) {
+    override fun imClick(content: QMMessage, type: Int, longClick: Boolean) {
 
         when (type) {
 
@@ -397,34 +475,129 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             }
 
+            //消息内容点击
             IMListAdapter.CONTENTCLICK -> {
 
-                //不能举报自己
-                if (mLocalUserName == content.from)
-                    return
+                if (longClick) {
 
-                 mReporterDialogBuilder =  ReporterDialog.Builder(this,true)
+                    mReporterDialogBuilder =  ReporterDialog.Builder(this,true)
 
-                 mReporterDialog = mReporterDialogBuilder.create("举报",object :ReporterDialog.Builder.BtClickListen{
+                    mReporterDialog = mReporterDialogBuilder.create("选择",object :ReporterDialog.Builder.BtClickListen{
 
-                    override fun btClick(type: Int): Boolean {
+                        override fun btClick(index: Int, type: Int): Boolean {
 
-                        if (type == -1){
+                            when (type) {
+                                //选择
+                                0 -> {
 
-                            UiUtils.showToast("请选择举报内容")
+                                    when (index) {
 
-                            return false
+                                        0 -> {
 
+                                            if (content.type ==0){
+
+                                                val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                                // 将文本内容放到系统剪贴板里。
+                                                cm.text = content.message
+
+                                                UiUtils.showToast("复制成功",false)
+                                            }else{
+
+                                                UiUtils.showToast("只能复制文本信息",false)
+                                            }
+
+
+                                        }
+
+                                        1 -> {
+
+                                            mReporterDialogBuilder.initData(1,"举报")
+
+                                        }
+                                    }
+
+                                }
+
+                                1 -> {
+
+                                    //不能举报自己
+                                    if (mLocalUserName == content.from){
+
+                                        UiUtils.showToast("无法举报自己")
+
+                                        return false
+                                    }
+
+
+
+                                    if (index == -1){
+
+                                        UiUtils.showToast("请选择举报内容")
+
+                                        return false
+
+                                    }
+
+                                    present.reportUser(mLocalUserName,content.from,index,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
+
+                                    return true
+                                }
+
+                            }
+
+                           return false
                         }
 
-                        present.reportUser(mLocalUserName,content.from,type,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
+                    })
 
-                        return true
+                    mReporterDialog.show()
+
+                }else{
+                    //点击
+                    when (content.type) {
+
+                        0 -> {
+
+                            //普通消息点击
+                        }
+
+                        3 -> {
+                            //进行下载和播放
+
+                            var fileID = App.instanceApp().getShowMessage(content.message)
+                            //文件下载
+                            var params = fileID.split("_ALWTA_")
+
+                            if (params.size>=2){
+
+                                var down = DownloadManager(object :DownloadListen{
+                                    override fun onStartDownload() {
+                                        Logger.e("onStartDownload")
+                                    }
+
+                                    override fun onProgress(progress: Int) {
+                                        Logger.e("onProgress:$progress")
+                                    }
+
+                                    override fun onFinishDownload(path: String) {
+
+                                        VoiceManager.getInstance().playerStart(path)
+
+                                        Logger.e("onFinishDownload:$path")
+                                    }
+
+                                    override fun onFail(errorInfo: String) {
+                                        Logger.e("onFail:$errorInfo")
+                                    }
+                                }).download(params[0],"test.3gp")
+
+                            }
+
+                        }
                     }
 
-                })
+                }
 
-                mReporterDialog.show()
 
             }
         }
@@ -436,7 +609,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         when (message.type) {
             //普通消息
-            0 -> {
+            0,3-> {
 
                 runOnUiThread {
 
@@ -461,6 +634,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 super.qmMessage(message)
 
             }
+
         }
 
     }
@@ -529,8 +703,13 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             3 -> {
                 mReporterDialogBuilder.btFinish(false)
             }
+            4 -> {
+                Logger.e("上传失败")
+            }
 
         }
+
+        Logger.e(errMessage)
 
     }
 
@@ -561,5 +740,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         mReporterDialogBuilder.btFinish(success)
 
     }
+
+
 
 }

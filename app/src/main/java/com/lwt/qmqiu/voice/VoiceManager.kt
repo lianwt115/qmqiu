@@ -19,8 +19,8 @@ class VoiceManager {
         @Volatile
         private  var mInstance: VoiceManager?=null
 
-        private lateinit var mMediaRecorder: MediaRecorder
-        private lateinit var mMediaPlayer: MediaPlayer
+        private  var mMediaRecorder: MediaRecorder?=null
+        private  var mMediaPlayer: MediaPlayer?=null
 
         //最大时长
         private var MAX_LENGTH = 20*1000
@@ -69,27 +69,34 @@ class VoiceManager {
             /* ①Initial：实例化MediaRecorder对象 */
             try {
 
+                if (mMediaRecorder == null)
+
+                    mMediaRecorder = MediaRecorder()
+
+
                 /* ②setAudioSource/setVedioSource */
-                mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)// 设置麦克风
+                mMediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)// 设置麦克风
                 /* ②设置音频文件的编码：AAC/AMR_NB/AMR_MB/Default 声音的（波形）的采样 */
-                mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                mMediaRecorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
                 /*
              * ②设置输出文件的格式：THREE_GPP/MPEG-4/RAW_AMR/Default THREE_GPP(3gp格式
              * ，H263视频/ARM音频编码)、MPEG-4、RAW_AMR(只支持音频且音频编码要求为AMR_NB)
              */
-                mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                mMediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
                 /* ③准备 */
-                mMediaRecorder.setOutputFile(mFile)
-                mMediaRecorder.setMaxDuration(MAX_LENGTH)
-                mMediaRecorder.prepare()
+                mMediaRecorder?.setOutputFile(mFile)
+                mMediaRecorder?.setMaxDuration(MAX_LENGTH)
+                mMediaRecorder?.prepare()
                 /* ④开始 */
-                mMediaRecorder.start()
+                mMediaRecorder?.start()
                 mStartTime = System.currentTimeMillis()
                 if (mVoiceRecordListen!=null)
                     mVoiceRecordListen!!.start()
 
+
+                mStartTime = System.currentTimeMillis()
                 // AudioRecord audioRecord.
-                Logger.e( "startTime${System.currentTimeMillis()}")
+                Logger.e( "startTime${mStartTime}")
             } catch (e:Exception) {
 
                 if (mVoiceRecordListen!=null)
@@ -100,15 +107,15 @@ class VoiceManager {
         }
 
 
-        fun stopRecord() {
+        fun stopRecord(ok: Boolean) {
 
             // 开始录音
             /* ①Initial：实例化MediaRecorder对象 */
             try {
 
-                mMediaRecorder.stop()
+                mMediaRecorder?.stop()
 
-                mMediaRecorder.reset()
+                mMediaRecorder?.reset()
 
                 if (System.currentTimeMillis() - mStartTime<1000){
 
@@ -116,16 +123,23 @@ class VoiceManager {
                         mVoiceRecordListen!!.err("录制时间过短")
 
                 }else{
+                    mEndTime = System.currentTimeMillis()
+                    // AudioRecord audioRecord.
+                    Logger.e( "mEndTime${mEndTime}")
+                    if (mVoiceRecordListen!=null && ok)
+                        mVoiceRecordListen!!.finished(mFile,(mEndTime-mStartTime).toInt()/1000+1)
 
-                    if (mVoiceRecordListen!=null)
-                        mVoiceRecordListen!!.finished(mFile)
+                    else
+                        mFile.delete()
+
                 }
-
 
             } catch (e: Exception) {
 
+                mMediaRecorder = null
+
                 if (mVoiceRecordListen!=null)
-                    mVoiceRecordListen!!.err("stopRecord:${e.message}")
+                    mVoiceRecordListen!!.err("录制时间过短")
 
             }
 
@@ -134,21 +148,25 @@ class VoiceManager {
         fun playerStart(filePath: String) {
             try {
 
-                mMediaPlayer.reset()
-                mMediaPlayer.setDataSource(filePath)
-                mMediaPlayer.prepare()
+                mMediaPlayer?.reset()
+                mMediaPlayer?.setDataSource(filePath)
+                mMediaPlayer?.prepare()
+                mMediaPlayer?.setOnCompletionListener {
+
+                    mMediaPlayer?.start()
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
             }
 
-            mMediaPlayer.start()
+
         }
 
     interface VoiceRecordListen{
 
         fun start()
 
-        fun finished(file: File)
+        fun finished(file: File,time:Int)
 
         fun err(errMessage: String)
 

@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.util.Base64
 import android.view.LayoutInflater
@@ -55,7 +56,43 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         contentBg(obj!!.colorIndex,holder.message_content)
 
-        holder.message_content.text=getShowMessage(obj.message)
+
+
+        //
+        when (obj.type) {
+
+            0 -> {
+
+                holder.message_content.text=App.instanceApp().getShowMessage(obj.message)
+            }
+
+            3 -> {
+
+                var data = App.instanceApp().getShowMessage(obj.message).split("_ALWTA_")
+
+                if (data?.size>=2){
+
+                    var drawableLeft = context!!.getDrawable(
+                            R.mipmap.voice_type)
+
+                    holder.message_content.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                            null, null, null)
+
+                    holder.message_content.compoundDrawablePadding = 10
+
+                    holder.message_content.text=data[1].plus("s")
+
+                }else{
+
+                    holder.message_content.text=data[0]
+
+                }
+
+
+            }
+        }
+
+
 
         val messageTime= timeData(obj.time)
 
@@ -69,43 +106,24 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         holder.message_who.setOnClickListener {
             if (listen!=null)
-                listen?.imClick(obj,WHOCLICK)
+                listen?.imClick(obj,WHOCLICK,false)
         }
 
         holder.message_content.setOnClickListener {
             if (listen!=null)
-                listen?.imClick(obj,CONTENTCLICK)
+                listen?.imClick(obj,CONTENTCLICK,false)
+        }
+
+        holder.message_content.setOnLongClickListener {
+
+            if (listen!=null)
+                listen?.imClick(obj,CONTENTCLICK,true)
+
+            return@setOnLongClickListener true
         }
 
 
     }
-
-    private fun getShowMessage(message: String):String{
-
-        var user =App.instanceApp().getLocalUser()
-
-        if (user != null){
-
-            try{
-
-                return String(RSAUtils.decryptData(Base64.decode(message,0), RSAUtils.loadPrivateKey(user.privateKey))!!)
-
-
-            }catch (e:Exception){
-
-
-                return message
-
-            }
-
-
-        }else{
-
-            return message
-        }
-
-    }
-
 
     private fun contentBg(from: Int, text: TextView) {
 
@@ -225,7 +243,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     }
 
     interface IMClickListen{
-        fun imClick(content:QMMessage, type: Int)
+        fun imClick(content:QMMessage, type: Int,longClick:Boolean)
     }
 
     private fun timeData(currentTime :Long):String{

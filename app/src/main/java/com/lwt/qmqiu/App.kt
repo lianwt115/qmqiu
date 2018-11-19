@@ -11,11 +11,13 @@ import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import android.support.multidex.MultiDex
 import android.text.TextUtils
+import android.util.Base64
 import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.network.QMWebsocket
+import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.tencent.bugly.beta.Beta
 
@@ -221,6 +223,28 @@ class App : Application() {
     }
 
 
+     fun getShowMessage(message: String):String{
 
+        if (this.mLocalUser != null){
+
+            try{
+
+                return String(RSAUtils.decryptData(Base64.decode(message,0), RSAUtils.loadPrivateKey(this.mLocalUser!!.privateKey))!!)
+
+
+            }catch (e:Exception){
+
+
+                return message
+
+            }
+
+
+        }else{
+
+            return message
+        }
+
+    }
 
 }

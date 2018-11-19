@@ -6,15 +6,20 @@ import com.lwt.qmqiu.network.ApiConst
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.http.*
-
 
 interface ApiService {
     companion object{
+
+        val IP = "192.168.2.10:9898"
+
         val BASE_URL_Api : String
-            get() = "http://192.168.2.10:9898/api/"
+            get() = "http://$IP/api/"
         val BASE_URL : String
-            get() = "http://192.168.2.10:9898/"
+            get() = "http://$IP/"
+        val BASE_URL_WS : String
+            get() = "ws://$IP/api/websocket/"
     }
 
 
@@ -61,7 +66,13 @@ interface ApiService {
     @POST(ApiConst.Report_User)
     fun reportUser(@Query("from") name:String,@Query("to") to:String,@Query("why") why:Int,@Query("roomNumber") roomNumber:String,@Query("messageContent") messageContent:String,@Query("messageId") messageId:Long):Observable<HttpResult<Boolean>>
 
+    @Multipart
+    @POST(ApiConst.Upload)
+    fun upload(@Query("from") name:String,@Query("type") type:Int,@Query("where") where:String,@Query("length") length:Int,@Part file:MultipartBody.Part):Observable<HttpResult<UploadLog>>
 
+    @Streaming
+    @POST(ApiConst.Download)
+    fun download(@Query("id") id:String): Observable<ResponseBody>
 
 
 

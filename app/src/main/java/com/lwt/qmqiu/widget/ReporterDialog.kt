@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.R.id.bt_go
 import com.lwt.qmqiu.R.id.recycleview_im
+import com.lwt.qmqiu.R.mipmap.notice
 import com.lwt.qmqiu.R.mipmap.tip
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.ReportAdapter
@@ -58,8 +59,9 @@ class ReporterDialog : Dialog {
         private lateinit var mBtNext: CircularProgressButton
         private var mListen: BtClickListen? = null
         private var index = -1
+        private var type = -1
 
-        fun create(notice:String,listen:BtClickListen?): ReporterDialog {
+        fun create(notice:String,listen:BtClickListen?,type: Int=0): ReporterDialog {
 
             val inflater = mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -81,6 +83,8 @@ class ReporterDialog : Dialog {
 
             mRecyclerView = mLayout.findViewById(R.id.report_rv) as RecyclerView
 
+            this.type = type
+
             initRecycleView()
 
             mBtNext.setFinalCornerRadius(6F)
@@ -92,7 +96,7 @@ class ReporterDialog : Dialog {
 
                 if (mListen !=null) {
 
-                    if (mListen!!.btClick(index)) {
+                    if (mListen!!.btClick(index,this.type)) {
 
                         mBtNext.startAnimation()
                     }
@@ -132,26 +136,55 @@ class ReporterDialog : Dialog {
                 }
             })
 
-            initData()
+            initData(this.type)
 
         }
 
-        private fun initData() {
+         fun initData(type: Int,title:String="") {
 
-            mReporterList.add(ReportInfo("恋童癖,儿童色情"))
-            mReporterList.add(ReportInfo("垃圾,灌水.钓鱼信息"))
-            mReporterList.add(ReportInfo("骚扰.变态.攻击信息"))
-            mReporterList.add(ReportInfo("个人数据"))
-            mReporterList.add(ReportInfo("轻度色情内容"))
-            mReporterList.add(ReportInfo("色情,生殖器官"))
+             this.type  = type
+             this.index = -1
+            mReporterList.clear()
+
+            when (this.type) {
+
+                //选择
+                0 -> {
+
+                    mReporterList.add(ReportInfo("复制"))
+                    mReporterList.add(ReportInfo("举报"))
+
+                }
+
+                //举报
+                1 -> {
+
+                    mReporterList.add(ReportInfo("恋童癖,儿童色情"))
+                    mReporterList.add(ReportInfo("垃圾,灌水.钓鱼信息"))
+                    mReporterList.add(ReportInfo("骚扰.变态.攻击信息"))
+                    mReporterList.add(ReportInfo("个人数据"))
+                    mReporterList.add(ReportInfo("轻度色情内容"))
+                    mReporterList.add(ReportInfo("色情,生殖器官"))
+                }
+            }
 
             mReportAdapter.notifyDataSetChanged()
 
+            mBtNext.visibility =if (this.type == 0) View.GONE else View.VISIBLE
+
+            mTitle.text = title
         }
 
         override fun reportClick(report: String, position: Int) {
 
             this.index = position
+
+            if (mListen !=null && this.type == 0) {
+
+                mListen!!.btClick(index,this.type)
+
+            }
+
 
         }
 
@@ -159,9 +192,11 @@ class ReporterDialog : Dialog {
 
             this.mListen = listen
 
-            mTitle.text=notice
+            mTitle.text = notice
 
             mReporterDialog.setCanceledOnTouchOutside(cancle)
+
+
         }
 
         fun btFinish(boolean: Boolean){
@@ -181,7 +216,7 @@ class ReporterDialog : Dialog {
 
         interface BtClickListen{
 
-            fun  btClick(type:Int):Boolean
+            fun  btClick(index:Int,type: Int):Boolean
         }
 
 

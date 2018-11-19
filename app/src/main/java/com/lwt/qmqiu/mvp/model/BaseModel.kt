@@ -2,10 +2,12 @@ package com.lwt.qmqiu.mvp.model
 
 import android.content.Context
 import com.lwt.qmqiu.bean.IMChatRoom
+import com.lwt.qmqiu.bean.UploadLog
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.network.HttpResultFunc
 import com.lwt.qmqiu.network.RetrofitClient
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 
 
 open class BaseModel(val context: Context) {
@@ -25,6 +27,11 @@ open class BaseModel(val context: Context) {
     fun refuseCheck(name:String, to:String): Observable<Boolean>?{
 
         return apiService?.refuseCheck(name,to)?.map(HttpResultFunc())
+
+    }
+    fun upload(from:String, type: Int, where:String,length:Int, file: MultipartBody.Part): Observable<UploadLog>?{
+
+        return apiService?.upload(from,type,where,length,file)?.map(HttpResultFunc())
 
     }
 }

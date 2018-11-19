@@ -3,12 +3,9 @@ package com.lwt.qmqiu.network
 import com.google.gson.Gson
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.bean.WSErr
-import com.lwt.qmqiu.utils.RxBus
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.TimeUnit
@@ -22,7 +19,6 @@ class QMWebsocket {
     private  var request: Request?=null
     private  var listen: QMMessageListen? = null
     private  var connectStatus  = false
-    private  var url  = "ws://192.168.2.10:9898/api/websocket/"
     private  var connectUrl  = ""
     private  var connectcount  = 0
     private  var connectcountMax  = 20*3
@@ -32,7 +28,7 @@ class QMWebsocket {
         //将姓名使用公钥加密
         this.request =  Request.Builder()
 
-                .url(url.plus(wsUrl))
+                .url(ApiService.BASE_URL_WS.plus(wsUrl))
                 .build()
 
         client.newWebSocket(request, listener)
@@ -153,8 +149,6 @@ class QMWebsocket {
 
         //到时候为房间号
         content.to = roomNumber
-        //消息类型
-        content.type = 0
 
         //将对象转为json
         var gson =Gson()

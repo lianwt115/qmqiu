@@ -44,7 +44,7 @@
             android:id="@+id/send_voice_btn"
             android:layout_width="fill_parent"
             android:layout_height="38dp"
-            android:background="@drawable/chatting_voice_bg"
+            android:background="@drawable/voice_bg_selected"
             android:clickable="true"
             android:gravity="center"
             android:soundEffectsEnabled="true"

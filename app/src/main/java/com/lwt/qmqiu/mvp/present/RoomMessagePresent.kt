@@ -3,6 +3,7 @@ package com.lwt.qmqiu.mvp.present
 import android.content.Context
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.bean.UploadLog
 import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
 import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.model.IMChatRoomModel
@@ -12,11 +13,10 @@ import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import com.trello.rxlifecycle2.LifecycleTransformer
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 
 
 class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : RoomMessageContract.Presenter{
-
-
 
     var mContext : Context? = null
     var mView : RoomMessageContract.View? = null
@@ -100,6 +100,32 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
 
             }else{
                 mView?.err(-1,it.message,3)
+            }
+
+        }
+
+        )
+    }
+
+    override fun upload(from: String, type: Int, where: String, length: Int, file: MultipartBody.Part, bindToLifecycle: LifecycleTransformer<UploadLog>) {
+        val observable : Observable<UploadLog>? = mContext?.let {
+            mModel.upload(from,type,where,length,file) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setUpload(it)
+                }, {
+
+            Logger.e(it.message?:"错误为空")
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,4)
+
+            }else{
+                mView?.err(-1,it.message,4)
             }
 
         }

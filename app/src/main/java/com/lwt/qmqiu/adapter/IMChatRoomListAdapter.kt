@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.IMChatRoom
 import java.text.SimpleDateFormat
@@ -41,7 +42,26 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
         holder.room_name.text = if (obj?.roomType == 3)obj.roomName.replace("ALWTA","&") else obj?.roomName
 
-        holder.room_lastcontent.text = obj?.lastContent
+        var data = obj?.lastContent?.split("_ALWTA_")
+
+        if (data?.size!! >= 2){
+
+                var drawableLeft = context!!.getDrawable(
+                        R.mipmap.voice_type1)
+
+                holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                        null, null, null)
+
+                holder.room_lastcontent.compoundDrawablePadding = 10
+
+                holder.room_lastcontent.text= data[1].plus("s")
+
+        }else{
+
+            holder.room_lastcontent.text = obj?.lastContent
+
+        }
+
 
         holder.room_time.text = timeData(obj?.lastContentTime!!)
 

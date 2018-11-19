@@ -27,9 +27,10 @@ class ApiConst {
 
         const val Report_User = "report/reportuser"
 
+        //上传
+        const val Upload = "upload/uploadfile"
 
-
-
+        const val Download = "upload/download"
 
 
     }
