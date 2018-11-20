@@ -28,12 +28,13 @@ class DownloadManager {
 
 
     private  var listener:DownloadListen
+    private  var mInterceptor:DownloadInterceptor
 
     constructor(listener:DownloadListen){
 
         this.listener = listener
 
-        var mInterceptor = DownloadInterceptor(listener)
+         mInterceptor = DownloadInterceptor(listener)
 
         var httpClient = OkHttpClient.Builder()
                 .addInterceptor(mInterceptor)
@@ -60,7 +61,7 @@ class DownloadManager {
      * @param filePath
      * @param subscriber
      */
-    fun download(id:String,fileName:String) {
+    fun download(id:String) {
 
         listener.onStartDownload()
 
@@ -68,7 +69,7 @@ class DownloadManager {
 
         retrofit.create(ApiService::class.java).download(id)?.map(DownloadResultFunc()).doOnNext {
 
-            filePath= writeFile(it, fileName)
+            filePath= writeFile(it, mInterceptor.fileName)
 
         }.applySchedulers().subscribe({
 

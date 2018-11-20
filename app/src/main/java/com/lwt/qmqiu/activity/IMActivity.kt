@@ -357,7 +357,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         send_voice_btn.text = "松开发送"
                         //开始录音
-                        VoiceManager.getInstance().startRecord("lwt${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
+                        VoiceManager.getInstance().startRecord("${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
 
                             override fun start() {
 
@@ -562,7 +562,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         }
 
                         3 -> {
-                            //进行下载和播放
+                            //进行下载和播放  将是否下载的文件用数据库做记录  id  name  path
 
                             var fileID = App.instanceApp().getShowMessage(content.message)
                             //文件下载
@@ -581,15 +581,15 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                     override fun onFinishDownload(path: String) {
 
-                                        VoiceManager.getInstance().playerStart(path)
-
+                                        voice_play.setVideoPath(path)
+                                        voice_play.start()
                                         Logger.e("onFinishDownload:$path")
                                     }
 
                                     override fun onFail(errorInfo: String) {
                                         Logger.e("onFail:$errorInfo")
                                     }
-                                }).download(params[0],"test.3gp")
+                                }).download(params[0])
 
                             }
 

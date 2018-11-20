@@ -20,7 +20,6 @@ class VoiceManager {
         private  var mInstance: VoiceManager?=null
 
         private  var mMediaRecorder: MediaRecorder?=null
-        private  var mMediaPlayer: MediaPlayer?=null
 
         //最大时长
         private var MAX_LENGTH = 20*1000
@@ -33,7 +32,6 @@ class VoiceManager {
                     if (mInstance == null) {
                         mInstance = VoiceManager()
                         mMediaRecorder = MediaRecorder()
-                        mMediaPlayer = MediaPlayer()
                         var file = File(FILE_PATH)
                         if (!file.exists()){
                             file.mkdirs()
@@ -145,22 +143,7 @@ class VoiceManager {
 
         }
 
-        fun playerStart(filePath: String) {
-            try {
 
-                mMediaPlayer?.reset()
-                mMediaPlayer?.setDataSource(filePath)
-                mMediaPlayer?.prepare()
-                mMediaPlayer?.setOnCompletionListener {
-
-                    mMediaPlayer?.start()
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-
-        }
 
     interface VoiceRecordListen{
 

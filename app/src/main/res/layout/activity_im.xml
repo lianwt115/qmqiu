@@ -46,6 +46,10 @@
         </android.support.v7.widget.RecyclerView>
 
     </cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout>
+    <VideoView
+        android:id="@+id/voice_play"
+        android:layout_width="1px"
+        android:layout_height="1px" />
 
 
 
