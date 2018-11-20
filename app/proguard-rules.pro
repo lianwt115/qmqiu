@@ -165,3 +165,5 @@
  -keep class com.youth.banner.** {
      *;
   }
+
+  -dontwarn com.squareup.picasso.**

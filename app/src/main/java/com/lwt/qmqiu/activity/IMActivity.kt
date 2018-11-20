@@ -3,7 +3,9 @@ package com.lwt.qmqiu.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -33,11 +35,15 @@ import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
+import com.lwt.qmqiu.utils.Glide4Engine
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.voice.VoiceManager
 import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.ReporterDialog
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.filter.Filter
 import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.layout_send_message_bar.*
 import okhttp3.MediaType
@@ -65,8 +71,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     private  var refuse = false
     private  var voice = true
-
+    private  var mSelected:List<Uri>?=null
     companion object {
+
+        const  val REQUEST_CODE_CHOOSE = 110
 
         const val EXITFORRESULT = 1
     }
@@ -257,7 +265,36 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     override fun plusClick(position: Int) {
 
-        UiUtils.showToast(position.toString())
+
+        when (position) {
+
+            0 -> {
+
+            Matisse.from(IMActivity@this)
+                    .choose(MimeType.ofImage())
+                    .countable(true)
+                    .maxSelectable(9)
+                    .addFilter(GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                    .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
+                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                    .thumbnailScale(0.85f)
+                    .imageEngine(Glide4Engine())
+                    .forResult(REQUEST_CODE_CHOOSE)
+            }
+
+            1 -> {
+
+            }
+
+            2 -> {
+
+            }
+
+            3 -> {
+
+            }
+        }
+
     }
 
 
@@ -660,6 +697,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
+        if (resultCode != RESULT_OK)
+            return
+
         when (requestCode) {
 
             EXITFORRESULT -> {
@@ -668,6 +708,14 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                 if (boolean == true)
                     finish()
+            }
+
+            REQUEST_CODE_CHOOSE  -> {
+
+                mSelected = Matisse.obtainResult(data)
+
+                Logger.e("mSelected: $mSelected")
+
             }
 
         }

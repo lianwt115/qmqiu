@@ -29,7 +29,7 @@
     <string name="coin_notenough">无法购买更多</string>
     <string name="roomget_err">获取房间失败</string>
     <string name="sendgift_notice">请点击礼物</string>
-
+    <string name="error_gif">长宽尺寸至少 %1$dpx 且 文件大小不能超过 %2$sM</string>
 
 
 
