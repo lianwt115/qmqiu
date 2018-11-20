@@ -16,6 +16,7 @@ import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.UiUtils
+import com.orhanobut.logger.Logger
 import java.text.SimpleDateFormat
 
 
@@ -57,6 +58,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         contentBg(obj!!.colorIndex,holder.message_content)
 
 
+        Logger.e(obj.toString())
 
         //
         when (obj.type) {
@@ -64,6 +66,11 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
             0 -> {
 
                 holder.message_content.text=App.instanceApp().getShowMessage(obj.message)
+
+                holder.message_voice_time.visibility = View.GONE
+
+                holder.message_content.setCompoundDrawablesWithIntrinsicBounds(null,
+                        null, null, null)
             }
 
             3 -> {
@@ -80,7 +87,11 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                     holder.message_content.compoundDrawablePadding = 10
 
-                    holder.message_content.text=data[1].plus("s")
+                    holder.message_content.text=""
+
+
+                    holder.message_voice_time.visibility = View.VISIBLE
+                    holder.message_voice_time.text = "${data[1]}''"
 
                 }else{
 
@@ -239,6 +250,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         var message_who: SelectableRoundedImageView = itemView?.findViewById(R.id.message_who) as SelectableRoundedImageView
         var message_content: TextView = itemView?.findViewById(R.id.message_content) as TextView
         var message_time: TextView = itemView?.findViewById(R.id.message_time) as TextView
+        var message_voice_time: TextView = itemView?.findViewById(R.id.message_voice_time) as TextView
 
     }
 

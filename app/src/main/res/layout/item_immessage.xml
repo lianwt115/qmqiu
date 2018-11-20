@@ -31,11 +31,26 @@
         android:layout_toRightOf="@id/message_who"
         android:paddingBottom="6dp"
         android:paddingTop="6dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:background="@drawable/bg_20dp_1"
         android:id="@+id/message_content"
-        android:text="45445474454654564564646456456465444654564564456456465464645645646464646464"
+        android:text="45645645646464646464"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:visibility="gone"
+        android:textSize="18dp"
+        android:layout_below="@id/message_time"
+        android:layout_margin="8dp"
+        android:layout_toRightOf="@id/message_content"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/message_voice_time"
+        android:text="11''"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>

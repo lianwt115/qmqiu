@@ -202,7 +202,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
                     ?.subscribe {
                         if (it) {
 
-                            Logger.e("权限全部同意")
+                           // Logger.e("权限全部同意")
 
                         } else {
                             //至少一个没有同意
@@ -232,6 +232,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         super.onDestroy()
 
     }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
@@ -327,7 +328,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
 
         MapLocationUtils.getInstance().setListen(null)
-        Logger.e("自动登录成功")
+        //Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
     }
 

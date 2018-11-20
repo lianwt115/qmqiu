@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.text.Spanned
+import android.view.KeyEvent
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.bean.WSErr
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.RxBus
+import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.GiftDialog
 import com.lwt.qmqiu.widget.NoticeDialog
@@ -194,6 +196,15 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         if (!mDestroy && mNoticeDialog != null) {
             mNoticeDialog!!.dismiss()
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            finish()
+
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
 }

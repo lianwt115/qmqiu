@@ -146,8 +146,6 @@ class VoiceManager {
 
           }
 
-          Logger.e("分贝:$db")
-
           return (db/7 +1)
       }
 

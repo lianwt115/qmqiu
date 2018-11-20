@@ -436,7 +436,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     //上传成功
     override fun setUpload(uploadLog: UploadLog) {
         //上传成功后,发ws消息
-        Logger.e(uploadLog.toString())
+        Logger.e("上传完成")
 
         val message = QMMessage()
 

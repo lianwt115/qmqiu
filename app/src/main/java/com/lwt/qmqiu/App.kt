@@ -63,7 +63,7 @@ class App : Application() {
 
         if (applicationContext.packageName == (getCurrentProcessName())) {
 
-            Logger.e("initWebsocket")
+           // Logger.e("initWebsocket")
 
             initWebsocket()
 
