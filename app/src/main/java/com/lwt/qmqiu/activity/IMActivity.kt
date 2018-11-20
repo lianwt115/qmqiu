@@ -570,6 +570,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                             if (params.size>=2){
 
+
                                 var down = DownloadManager(object :DownloadListen{
                                     override fun onStartDownload() {
                                         Logger.e("onStartDownload")
@@ -589,7 +590,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                     override fun onFail(errorInfo: String) {
                                         Logger.e("onFail:$errorInfo")
                                     }
-                                }).download(params[0])
+                                },params[0])
 
                             }
 

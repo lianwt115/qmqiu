@@ -16,6 +16,8 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.greendao.DaoMaster
+import com.lwt.qmqiu.greendao.DaoSession
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
@@ -24,7 +26,7 @@ import com.tencent.bugly.beta.Beta
 
 class App : Application() {
 
-
+    private lateinit var daoSession: DaoSession
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
     private val NOTIFICATION = "notification"
     private var mLocalUser:BaseUser?= null
@@ -65,6 +67,8 @@ class App : Application() {
 
             initWebsocket()
 
+            initDb()
+
         }
 
     }
@@ -81,6 +85,24 @@ class App : Application() {
         }
 
 
+    }
+
+    private fun initDb(){
+
+        // regular SQLite database
+        val helper = DaoMaster.DevOpenHelper(instance, "ncsb_bill")
+        val db = helper.writableDb
+
+        // encrypted SQLCipher database
+        // note: you need to add SQLCipher to your dependencies, check the build.gradle file
+        // DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "notes-db-encrypted");
+        // Database db = helper.getEncryptedWritableDb("encryption-key");
+
+        daoSession = DaoMaster(db).newSession()
+    }
+
+    fun getDaoSession(): DaoSession {
+        return daoSession
     }
 
     fun closeWs(){

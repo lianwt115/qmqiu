@@ -2,14 +2,12 @@ package com.lwt.qmqiu.download
 
 
 import android.os.Environment
+import com.lwt.qmqiu.bean.DownloadFileDb
+import com.lwt.qmqiu.dao.DownloadFileDbUtils
 import com.lwt.qmqiu.network.ApiService
-import com.lwt.qmqiu.network.HttpResultFunc
 import com.lwt.qmqiu.utils.applySchedulers
-import com.lwt.qmqiu.voice.VoiceManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.orhanobut.logger.Logger
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.io.*
@@ -24,17 +22,52 @@ class DownloadManager {
         private lateinit var retrofit: Retrofit
 
         private var FILE_PATH = Environment.getExternalStorageDirectory().absolutePath+"/qmqiu/download/"
+
+
     }
 
 
     private  var listener:DownloadListen
-    private  var mInterceptor:DownloadInterceptor
+    private  lateinit var mInterceptor:DownloadInterceptor
 
-    constructor(listener:DownloadListen){
+    constructor(listener:DownloadListen,id: String){
 
         this.listener = listener
 
-         mInterceptor = DownloadInterceptor(listener)
+
+        var path = checkFileExits(id)
+
+        if (path!=null) {
+            Logger.e("无需下载")
+            listener.onFinishDownload(path)
+
+        }else{
+
+            Logger.e("需要下载")
+
+            init()
+
+            download(id)
+
+        }
+
+    }
+
+    private fun  checkFileExits(id: String):String?{
+
+        var obj = DownloadFileDbUtils.findByIdOne(id)
+
+        //有记录
+        if (obj != null && File(obj.filePath).exists())
+
+            return obj.filePath
+
+        return null
+    }
+
+    private fun  init(){
+
+        mInterceptor = DownloadInterceptor(listener)
 
         var httpClient = OkHttpClient.Builder()
                 .addInterceptor(mInterceptor)
@@ -52,6 +85,7 @@ class DownloadManager {
         if (!file.exists()){
             file.mkdirs()
         }
+
     }
 
     /**
@@ -61,7 +95,7 @@ class DownloadManager {
      * @param filePath
      * @param subscriber
      */
-    fun download(id:String) {
+    private fun download(id:String) {
 
         listener.onStartDownload()
 
@@ -72,6 +106,10 @@ class DownloadManager {
             filePath= writeFile(it, mInterceptor.fileName)
 
         }.applySchedulers().subscribe({
+
+            //下载完成后,将记录写入数据库
+
+            DownloadFileDbUtils.insertOrReplace(DownloadFileDb(null,mInterceptor.fileName,id,System.currentTimeMillis(),filePath))
 
             listener.onFinishDownload(filePath)
 
@@ -122,5 +160,7 @@ class DownloadManager {
         }
         return file.absolutePath
     }
+
+
 
 }

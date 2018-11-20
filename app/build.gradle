@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
@@ -36,7 +38,13 @@ android {
 
 }
 
-
+greendao {
+    schemaVersion 2//数据库版本号
+    daoPackage 'com.lwt.qmqiu.greendao'//设置DaoMaster、DaoSession、Dao包名
+    targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
+    //targetGenDirTest：设置生成单元测试目录
+    //generateTests：设置自动生成单元测试用例
+}
 
 
 
@@ -100,4 +108,7 @@ dependencies {
 
     //键盘处理方案
     implementation 'cn.dreamtobe.kpswitch:library:1.6.1'
+
+    //greendao
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
 }
