@@ -117,8 +117,16 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         //键盘收起
         KPSwitchConflictUtil.attach(panel_root, plus_iv, im_et) { switchToPanel ->
 
+
             if (switchToPanel) {
+
+                if (!voice){
+                    changeInput()
+                    voice = true
+                }
+
                 im_et.clearFocus()
+
             } else {
                 im_et.requestFocus()
             }
@@ -267,7 +275,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     override fun onStop() {
         super.onStop()
-
+        voice_view.stopRecord()
     }
 
     override fun onClick(v: View?) {
@@ -306,35 +314,41 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             R.id.voice_iv ->{
 
-                if (voice){
-
-                    voice_iv.setImageDrawable(getDrawable(R.mipmap.keybord))
-
-                    send_voice_btn.visibility =View.VISIBLE
-
-                    KPSwitchConflictUtil.hidePanelAndKeyboard(panel_root)
-
-                    im_et.visibility =View.GONE
-
-                }else{
-
-                    voice_iv.setImageDrawable(getDrawable(R.mipmap.voice_iv))
-
-                    send_voice_btn.visibility =View.GONE
-
-                    im_et.visibility =View.VISIBLE
-
-
-
-                }
+                changeInput()
 
                 voice = !voice
+
             }
 
 
 
 
         }
+    }
+
+    private fun changeInput() {
+
+        if (voice) {
+
+            voice_iv.setImageDrawable(getDrawable(R.mipmap.keybord))
+
+            send_voice_btn.visibility = View.VISIBLE
+
+            KPSwitchConflictUtil.hidePanelAndKeyboard(panel_root)
+
+            im_et.visibility = View.GONE
+
+        } else {
+
+            voice_iv.setImageDrawable(getDrawable(R.mipmap.voice_iv))
+
+            send_voice_btn.visibility = View.GONE
+
+            im_et.visibility = View.VISIBLE
+
+
+        }
+
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -357,7 +371,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         send_voice_btn.text = "松开发送"
                         //开始录音
-                        VoiceManager.getInstance().startRecord("${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
+
+                        voice_view.startRecord("${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
 
                             override fun start() {
 
@@ -394,20 +409,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     MotionEvent.ACTION_UP-> {
 
-                        Logger.e("UP:event.y:${event.rawY}--$yHeight--$yY")
-                        //判断该点是否还在控件内
-                        if ( event.rawY<=yHeight+yY && event.rawY>=yY){
-
-                            VoiceManager.getInstance().stopRecord(true)
-                            Logger.e("发送成功")
-
-                        }else{
-
-                            Logger.e("发送失败")
-
-                            VoiceManager.getInstance().stopRecord(false)
-
-                        }
+                        voice_view.stopRecord( event.rawY>=yY-yHeight)
 
                         send_voice_btn.text = "按住说话"
                         send_voice_btn.isPressed = false
@@ -415,13 +417,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     }
 
                     MotionEvent.ACTION_MOVE-> {
-                        if ( event.rawY<=yHeight+yY && event.rawY>=yY){
+                        //修正一下yHeight个高度的误差
 
-                            Logger.e("内")
-                        }else{
-                            Logger.e("外")
-                            UiUtils.showToast("松开,取消发送")
-                        }
+                        voice_view.setCancle(event.rawY<yY-yHeight)
 
                     }
 
@@ -705,7 +703,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 mReporterDialogBuilder.btFinish(false)
             }
             4 -> {
-                Logger.e("上传失败")
+
+                UiUtils.showToast("发送失败")
+
             }
 
         }
@@ -741,6 +741,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         mReporterDialogBuilder.btFinish(success)
 
     }
+
 
 
 

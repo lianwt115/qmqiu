@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:background="@drawable/bg_20dp_voiceview"
+    android:id="@+id/voiceview_root"
+    android:visibility="gone"
+    >
+
+    <ImageView
+
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/voice_cancle"
+        android:id="@+id/voice_img"
+        android:layout_width="118dp"
+        android:layout_height="118dp" />
+
+    <TextView
+        android:padding="10dp"
+        android:id="@+id/voice_text"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/voice_img"
+        android:textColor="@color/white"
+        android:text="手指上滑,取消发送"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

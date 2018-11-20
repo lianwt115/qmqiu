@@ -6,6 +6,7 @@ import android.util.Log
 import com.orhanobut.logger.Logger
 import java.io.IOException
 import android.media.MediaPlayer
+import android.os.Build.VERSION_CODES.BASE
 import cn.dreamtobe.kpswitch.IFSPanelConflictLayout
 import com.lwt.qmqiu.utils.RxBus
 import java.io.File
@@ -49,8 +50,8 @@ class VoiceManager {
     private   var  mVoiceRecordListen: VoiceRecordListen?= null
     private   var  mStartTime: Long = 0L
     private   var  mEndTime: Long = 0L
-
-
+    var MAX_VOICE = 50
+    var BASE = 600
         /**
          * 开始录音 使用amr格式
          * 录音文件
@@ -61,7 +62,7 @@ class VoiceManager {
 
             this.mVoiceRecordListen = listen
 
-            mFile = File(FILE_PATH,fileName.plus(".3gp"))
+            mFile = File(FILE_PATH,fileName.plus(".aac"))
 
             // 开始录音
             /* ①Initial：实例化MediaRecorder对象 */
@@ -80,7 +81,7 @@ class VoiceManager {
              * ②设置输出文件的格式：THREE_GPP/MPEG-4/RAW_AMR/Default THREE_GPP(3gp格式
              * ，H263视频/ARM音频编码)、MPEG-4、RAW_AMR(只支持音频且音频编码要求为AMR_NB)
              */
-                mMediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                mMediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 /* ③准备 */
                 mMediaRecorder?.setOutputFile(mFile)
                 mMediaRecorder?.setMaxDuration(MAX_LENGTH)
@@ -91,8 +92,6 @@ class VoiceManager {
                 if (mVoiceRecordListen!=null)
                     mVoiceRecordListen!!.start()
 
-
-                mStartTime = System.currentTimeMillis()
                 // AudioRecord audioRecord.
                 Logger.e( "startTime${mStartTime}")
             } catch (e:Exception) {
@@ -115,22 +114,15 @@ class VoiceManager {
 
                 mMediaRecorder?.reset()
 
-                if (System.currentTimeMillis() - mStartTime<1000){
 
-                    if (mVoiceRecordListen!=null)
-                        mVoiceRecordListen!!.err("录制时间过短")
-
-                }else{
-                    mEndTime = System.currentTimeMillis()
+                mEndTime = System.currentTimeMillis()
                     // AudioRecord audioRecord.
-                    Logger.e( "mEndTime${mEndTime}")
-                    if (mVoiceRecordListen!=null && ok)
-                        mVoiceRecordListen!!.finished(mFile,(mEndTime-mStartTime).toInt()/1000+1)
+                Logger.e( "mEndTime${mEndTime}")
+                if (mVoiceRecordListen!=null && ok)
+                    mVoiceRecordListen!!.finished(mFile,(mEndTime-mStartTime).toInt()/1000+1)
 
-                    else
-                        mFile.delete()
-
-                }
+                else
+                    mFile.delete()
 
             } catch (e: Exception) {
 
@@ -142,6 +134,22 @@ class VoiceManager {
             }
 
         }
+
+      fun getVolume():Int{
+
+          val ratio = mMediaRecorder?.maxAmplitude!! / BASE
+          var db = 0// 分贝 也可以理解为定义的音量大小
+
+          if (ratio > 1){
+
+              db = (10 * Math.log10(ratio.toDouble())).toInt()
+
+          }
+
+          Logger.e("分贝:$db")
+
+          return (db/7 +1)
+      }
 
 
 

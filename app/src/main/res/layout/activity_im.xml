@@ -15,16 +15,29 @@
 
     </com.lwt.qmqiu.widget.BarView>
 
-    <android.support.v7.widget.RecyclerView
-        android:paddingTop="4dp"
-        android:overScrollMode="never"
+    <RelativeLayout
         android:layout_weight="1"
-        android:id="@+id/recycleview_im"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:paddingTop="4dp"
+            android:overScrollMode="never"
+            android:id="@+id/recycleview_im"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </android.support.v7.widget.RecyclerView>
+
+        <com.lwt.qmqiu.widget.VoiceView
+            android:layout_centerInParent="true"
+            android:id="@+id/voice_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp">
+
+        </com.lwt.qmqiu.widget.VoiceView>
+
+    </RelativeLayout>
 
     <include layout="@layout/layout_send_message_bar" />
 

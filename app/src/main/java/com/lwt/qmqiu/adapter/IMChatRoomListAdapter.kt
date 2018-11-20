@@ -57,7 +57,8 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
                 holder.room_lastcontent.text= data[1].plus("s")
 
         }else{
-
+            holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(null,
+                    null, null, null)
             holder.room_lastcontent.text = obj?.lastContent
 
         }
