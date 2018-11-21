@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Rect
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -50,10 +49,8 @@ import okhttp3.MediaType
 import java.io.File
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-
-
-
-
+import top.zibin.luban.Luban
+import top.zibin.luban.OnCompressListener
 
 
 class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener {
@@ -71,7 +68,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     private  var refuse = false
     private  var voice = true
-    private  var mSelected:List<Uri>?=null
+    private lateinit var mSelected:List<String>
     companion object {
 
         const  val REQUEST_CODE_CHOOSE = 110
@@ -268,6 +265,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         when (position) {
 
+            //选择图片
             0 -> {
 
             Matisse.from(IMActivity@this)
@@ -344,7 +342,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         im_et.setText("")
 
-                        mWebSocket.sengText(message,mIMChatRoom.roomNumber)
+                        mWebSocket.sendText(message,mIMChatRoom.roomNumber)
 
 
             }
@@ -418,21 +416,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                             override fun finished(file: File, time: Int) {
 
-                                var user = App.instanceApp().getLocalUser()
-
-                                if (user !=null){
-
-                                    val requestFile = RequestBody.create(MediaType.parse("application/otcet-stream"), file)
-
-                                    val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-
-                                    //type 为文件类型
-                                    present.upload(user.name,0,mIMChatRoom.roomNumber,time,body,bindToLifecycle())
-
-                                }else{
-
-                                    UiUtils.showToast("未登录,无法发送")
-                                }
+                                uploadFile(file,0,time)
 
                             }
 
@@ -473,15 +457,33 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     //上传成功
     override fun setUpload(uploadLog: UploadLog) {
         //上传成功后,发ws消息
-        Logger.e("上传完成")
+        Logger.e("文件类型:${uploadLog.type}")
+        when (uploadLog.type) {
+            //语音文件
+            0 -> {
 
-        val message = QMMessage()
+                val message = QMMessage()
 
-        message.type = 3
+                message.type = 3
 
-        message.message = uploadLog._id.plus("_ALWTA_${uploadLog.length}")
+                message.message = uploadLog._id.plus("_ALWTA_${uploadLog.length}")
 
-        mWebSocket.sengText(message,mIMChatRoom.roomNumber)
+                mWebSocket.sendText(message,mIMChatRoom.roomNumber)
+            }
+            //图片
+            1 -> {
+
+                val message = QMMessage()
+
+                message.type = 4
+
+                message.message = uploadLog._id.plus("_ALWTA_img")
+
+                mWebSocket.sendText(message,mIMChatRoom.roomNumber)
+
+            }
+        }
+
 
     }
 
@@ -645,7 +647,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         when (message.type) {
             //普通消息
-            0,3-> {
+            0,3,4-> {
 
                 runOnUiThread {
 
@@ -712,7 +714,41 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             REQUEST_CODE_CHOOSE  -> {
 
-                mSelected = Matisse.obtainResult(data)
+                mSelected = Matisse.obtainPathResult(data)
+
+                //图片压缩
+                Luban.with(this)
+                .load(mSelected[0])
+                .ignoreBy(100)
+                .filter { path -> !(TextUtils.isEmpty(path) || path!!.toLowerCase().endsWith(".gif"))}
+                        .setRenameListener {path ->
+
+                            "${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}.${path.substring(path.length-3)}"
+
+                        }
+                        .setCompressListener(object : OnCompressListener {
+                    override fun onSuccess(file: File?) {
+
+                        if (file!=null){
+
+                            uploadFile(file,1)
+
+                        }else{
+                            Logger.e("图片压缩异常")
+                        }
+
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        Logger.e("压缩异常:${e?.localizedMessage}")
+                    }
+
+                    override fun onStart() {
+                        Logger.e("开始压缩")
+                    }
+
+                }).launch()
+
 
                 Logger.e("mSelected: $mSelected")
 
@@ -790,7 +826,26 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     }
 
+    //文件上传
+    private fun  uploadFile(file: File,type: Int,time:Int = 0){
 
+        var user = App.instanceApp().getLocalUser()
+
+        if (user !=null){
+
+            val requestFile = RequestBody.create(MediaType.parse("application/otcet-stream"), file)
+
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+            //type 为文件类型
+            present.upload(user.name,type,mIMChatRoom.roomNumber,if (type == 0) time else file.length().toInt(),body,bindToLifecycle())
+
+        }else{
+
+            UiUtils.showToast("未登录,无法发送")
+        }
+
+    }
 
 
 }

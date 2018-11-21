@@ -57,9 +57,6 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         contentBg(obj!!.colorIndex,holder.message_content)
 
-
-        Logger.e(obj.toString())
-
         //
         when (obj.type) {
 
@@ -99,6 +96,17 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                 }
 
+
+            }
+
+            4 -> {
+
+                holder.message_voice_time.visibility = View.GONE
+
+                holder.message_content.setCompoundDrawablesWithIntrinsicBounds(null,
+                        null, null, null)
+
+                holder.message_content.text= "图片:${App.instanceApp().getShowMessage(obj.message)}"
 
             }
         }

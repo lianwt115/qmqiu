@@ -44,21 +44,41 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
         var data = obj?.lastContent?.split("_ALWTA_")
 
+        holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(null,
+                null, null, null)
+
         if (data?.size!! >= 2){
 
-                var drawableLeft = context!!.getDrawable(
-                        R.mipmap.voice_type1)
+                var text:String
 
-                holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
-                        null, null, null)
+                when (data[1]) {
 
-                holder.room_lastcontent.compoundDrawablePadding = 10
+                    "img" -> {
 
-                holder.room_lastcontent.text= data[1].plus("s")
+                        text = "[图片]"
+
+                    }
+
+                    else -> {
+
+                        var drawableLeft = context!!.getDrawable(
+                                R.mipmap.voice_type1)
+
+                        holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                                null, null, null)
+
+                        holder.room_lastcontent.compoundDrawablePadding = 10
+
+
+                        text = data[1].plus("s")
+
+                    }
+                }
+
+                holder.room_lastcontent.text= text
 
         }else{
-            holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(null,
-                    null, null, null)
+
             holder.room_lastcontent.text = obj?.lastContent
 
         }

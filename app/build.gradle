@@ -105,4 +105,6 @@ dependencies {
     implementation project(':qmchat')
     //知乎图片选择
     implementation 'com.zhihu.android:matisse:0.5.2-beta3'
+    //图片压缩
+    implementation 'top.zibin:Luban-turbo:1.0.0'
 }

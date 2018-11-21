@@ -136,7 +136,7 @@ class QMWebsocket {
        // client.dispatcher()?.executorService()?.shutdown()
     }
 
-    fun sengText(content: QMMessage, roomNumber: String){
+    fun sendText(content: QMMessage, roomNumber: String){
 
         if (webSocket == null)
             return
