@@ -50,7 +50,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         setContentView(R.layout.activity_main)
 
         checkAndRequirePermissions()
-        
+
         setRadioButton()
 
         initFragment(savedInstanceState)

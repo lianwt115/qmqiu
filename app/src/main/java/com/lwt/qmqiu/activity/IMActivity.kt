@@ -498,7 +498,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         return super.dispatchKeyEvent(event)
     }
 
-    override fun imClick(content: QMMessage, type: Int, longClick: Boolean) {
+    override fun imClick(content: QMMessage, type: Int, longClick: Boolean, position: Int) {
 
         when (type) {
 
@@ -609,7 +609,6 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                             if (params.size>=2){
 
-
                                 var down = DownloadManager(object :DownloadListen{
                                     override fun onStartDownload() {
                                         Logger.e("onStartDownload")
@@ -637,8 +636,15 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         4 -> {
 
-                            //图片消息点击
-                            UiUtils.showToast("图片消息点击:${content.imgPath}")
+
+                            val intent = Intent(this, PhotoViewActivity::class.java)
+
+                            intent.putParcelableArrayListExtra("photoViewData",mIMListAdapter.getPhotoViewData())
+                            intent.putExtra("index",position)
+
+                            startActivity(intent)
+
+
                         }
                     }
 

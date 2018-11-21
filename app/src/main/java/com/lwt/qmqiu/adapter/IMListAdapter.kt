@@ -2,8 +2,6 @@ package com.lwt.qmqiu.adapter
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import androidx.recyclerview.widget.RecyclerView
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,20 +10,20 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.github.chrisbanes.photoview.PhotoView
 import com.joooonho.SelectableRoundedImageView
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.voice_play
+import com.lwt.qmqiu.bean.PhotoViewData
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.network.ApiService
-import com.lwt.qmqiu.utils.RSAUtils
-import com.lwt.qmqiu.utils.UiUtils
+import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
-import kotlinx.android.synthetic.main.activity_im.*
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 
 class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<IMListAdapter.ListViewHolder>() {
@@ -35,6 +33,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     var mTotalList: List<QMMessage>? = null
     var inflater: LayoutInflater? = null
     var listen: IMClickListen? = null
+    private var taskDisposable: Disposable? = null
     private  var textTime:String="-1:-1:-1"
 
     private val formatter = SimpleDateFormat("yyyy-MM-dd*HH:mm:ss")
@@ -103,12 +102,31 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                     holder.message_voice_time.visibility = View.VISIBLE
                     holder.message_voice_time.text = "${data[1]}''"
 
+                    //进行声音预下载
+                    DownloadManager(object :DownloadListen{
+                        override fun onStartDownload() {
+
+                        }
+
+                        override fun onProgress(progress: Int) {
+
+                        }
+
+                        override fun onFinishDownload(path: String) {
+
+                        }
+
+                        override fun onFail(errorInfo: String) {
+                            Logger.e("onFail:$errorInfo")
+                        }
+                    },data[0],3)
+
+
                 }else{
 
                     holder.message_content.text=data[0]
 
                 }
-
 
             }
 
@@ -120,7 +138,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                 holder.message_content.setCompoundDrawablesWithIntrinsicBounds(null,
                         null, null, null)
 
-                var down = DownloadManager(object : DownloadListen {
+                DownloadManager(object : DownloadListen {
                     override fun onStartDownload() {
                         Logger.e("onStartDownload")
                     }
@@ -145,7 +163,6 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                     }
                 },data[0],4)
 
-
             }
         }
 
@@ -163,22 +180,92 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         holder.message_who.setOnClickListener {
             if (listen!=null)
-                listen?.imClick(obj,WHOCLICK,false)
+                listen?.imClick(obj,WHOCLICK,false,position)
         }
 
         holder.img_root.setOnClickListener {
             if (listen!=null)
-                listen?.imClick(obj, CONTENTCLICK,false)
+                listen?.imClick(obj, CONTENTCLICK,false,position)
         }
+
         holder.message_content.setOnClickListener {
+
+            if (obj.type == 3) {
+
+                var data = App.instanceApp().getShowMessage(obj.message).split("_ALWTA_")
+
+                if (data?.size >= 2) {
+                    Logger.e("time:${data[1].toInt() * 5}")
+                    taskDisposable = Observable.interval(200, TimeUnit.MILLISECONDS).applySchedulers().subscribe({
+
+                        Logger.e("it:$it")
+                        if (it >= data[1].toInt() * 5) {
+
+                            if (taskDisposable!=null)
+
+                                taskDisposable!!.dispose()
+
+                            holder.message_content.setCompoundDrawablesWithIntrinsicBounds( context!!.getDrawable(
+                                    R.mipmap.voice_type) as Drawable,
+                                    null, null, null)
+
+                            return@subscribe
+
+                        }
+
+                        var drawableLeft = when (it % 3) {
+
+                            0L -> {
+
+                                context!!.getDrawable(
+                                        R.mipmap.voice1) as Drawable
+                            }
+
+                            1L -> {
+
+                                context!!.getDrawable(
+                                        R.mipmap.voice2) as Drawable
+                            }
+
+                            2L -> {
+
+                                context!!.getDrawable(
+                                        R.mipmap.voice3) as Drawable
+                            }
+
+                            else -> {
+
+                                context!!.getDrawable(
+                                        R.mipmap.voice_type) as Drawable
+                            }
+
+                        }
+
+                        holder.message_content.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                                null, null, null)
+
+                    }, {
+
+                        Logger.e(it.localizedMessage)
+                    })
+                }
+
+            }
             if (listen!=null)
-                listen?.imClick(obj,CONTENTCLICK,false)
+                listen?.imClick(obj,CONTENTCLICK,false,position)
         }
 
         holder.message_content.setOnLongClickListener {
 
             if (listen!=null)
-                listen?.imClick(obj,CONTENTCLICK,true)
+                listen?.imClick(obj,CONTENTCLICK,true,position)
+
+            return@setOnLongClickListener true
+        }
+        holder.img_root.setOnLongClickListener {
+
+            if (listen!=null)
+                listen?.imClick(obj,CONTENTCLICK,true,position)
 
             return@setOnLongClickListener true
         }
@@ -281,9 +368,6 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     }
 
 
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         var itemView=inflater?.inflate(R.layout.item_immessage, parent, false)
 
@@ -310,7 +394,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     }
 
     interface IMClickListen{
-        fun imClick(content:QMMessage, type: Int,longClick:Boolean)
+        fun imClick(content:QMMessage, type: Int,longClick:Boolean,position: Int)
     }
 
     private fun timeData(currentTime :Long):String{
@@ -334,5 +418,23 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
 
     }
+
+    fun  getPhotoViewData():ArrayList<PhotoViewData>{
+
+        var list =ArrayList<PhotoViewData>()
+
+
+        mTotalList?.forEachIndexed { index, qmMessage ->
+
+            //图片信息
+            if (qmMessage.type == 4)
+
+                list.add(PhotoViewData(index,qmMessage.message))
+
+        }
+
+        return list
+    }
+
 
 }
