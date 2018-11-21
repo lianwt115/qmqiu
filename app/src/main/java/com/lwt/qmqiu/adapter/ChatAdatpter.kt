@@ -1,15 +1,15 @@
 package com.lwt.qmqiu.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
 
-class ChatAdatpter(fm: FragmentManager, list: ArrayList<Fragment>, titles : MutableList<String>) : FragmentPagerAdapter(fm) {
-    var mFm : FragmentManager = fm!!
-    var mList : ArrayList<Fragment> = list
+class ChatAdatpter(fm: androidx.fragment.app.FragmentManager, list: ArrayList<androidx.fragment.app.Fragment>, titles : MutableList<String>) : androidx.fragment.app.FragmentPagerAdapter(fm) {
+    var mFm : androidx.fragment.app.FragmentManager = fm!!
+    var mList : ArrayList<androidx.fragment.app.Fragment> = list
     var mTitles : MutableList<String> = titles
-    override fun getItem(position: Int): Fragment {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment {
         return mList[position]
 
     }

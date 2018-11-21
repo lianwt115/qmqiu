@@ -1,8 +1,8 @@
 package com.lwt.qmqiu.fragment
 
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
 
 
 import com.lwt.qmqiu.App
@@ -20,7 +20,7 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
     var mTabs = listOf<String>(app.getString(R.string.list1_name), app.getString(R.string.list2_name),
             app.getString(R.string.list3_name)).toMutableList()
 
-    lateinit var mFragments: ArrayList<Fragment>
+    lateinit var mFragments: ArrayList<androidx.fragment.app.Fragment>
 
     val STRATEGY = arrayOf(1,2,3)//接口路徑路由
 
@@ -55,9 +55,9 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
 
 
         mFragments = ArrayList()
-        mFragments.add(nearFragment as Fragment)
-        mFragments.add(publicFragment as Fragment)
-        mFragments.add(myFragment as Fragment)
+        mFragments.add(nearFragment as androidx.fragment.app.Fragment)
+        mFragments.add(publicFragment as androidx.fragment.app.Fragment)
+        mFragments.add(myFragment as androidx.fragment.app.Fragment)
 
 
 

@@ -1,7 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +17,7 @@ import com.lwt.qmqiu.bean.ReportInfo
 import com.lwt.qmqiu.network.ApiService
 
 
-class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListen?) : RecyclerView.Adapter<PlusAdapter.ListViewHolder>() {
+class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<PlusAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -65,7 +65,7 @@ class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListe
         return mTotalList?.size ?: 0
     }
 
-    class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var plus_iv: ImageView = itemView.findViewById(R.id.plus_iv) as ImageView
         var plus_tv: TextView = itemView.findViewById(R.id.plus_tv) as TextView

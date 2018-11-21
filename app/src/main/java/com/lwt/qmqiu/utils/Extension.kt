@@ -2,7 +2,7 @@ package com.lwt.qmqiu.utils
 
 import android.app.Activity
 import android.content.Intent
-import android.support.design.widget.TabLayout
+import com.google.android.material.tabs.TabLayout
 import android.widget.LinearLayout
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable

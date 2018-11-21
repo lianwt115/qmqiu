@@ -110,7 +110,7 @@
 
     </RadioGroup>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
 
         android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"

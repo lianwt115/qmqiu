@@ -25,6 +25,7 @@
         app:sriv_oval="true" />
 
     <RelativeLayout
+        android:id="@+id/text_root"
         android:layout_toRightOf="@id/message_who"
         android:layout_below="@id/message_time"
         android:layout_width="wrap_content"
@@ -57,11 +58,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/img_root"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@id/message_who"
+        android:layout_below="@id/message_time"
 
+        >
+
+        <ImageView
+            android:id="@+id/photo_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:id="@+id/img_progress"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:id="@+id/img_progress_text"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
     </RelativeLayout>
+
 
 
 </RelativeLayout>

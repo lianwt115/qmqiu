@@ -2,8 +2,8 @@ package com.lwt.qmqiu.fragment
 
 import android.content.Intent
 import android.graphics.Rect
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Base64
 import android.view.View
@@ -55,7 +55,7 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
         }
 
 
-        val linearLayoutManager = object : LinearLayoutManager(activity){
+        val linearLayoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(activity){
             override fun canScrollVertically(): Boolean {
                 return true
             }
@@ -71,8 +71,8 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
         recyclerView.adapter=mAdapter
 
-        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recyclerView.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 2
                 outRect.bottom = 1
                 outRect.left = 2

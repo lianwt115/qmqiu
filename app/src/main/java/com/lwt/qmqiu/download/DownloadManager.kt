@@ -6,8 +6,8 @@ import com.lwt.qmqiu.bean.DownloadFileDb
 import com.lwt.qmqiu.dao.DownloadFileDbUtils
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.utils.applySchedulers
-import com.orhanobut.logger.Logger
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.io.*
@@ -30,35 +30,33 @@ class DownloadManager {
     private  var listener:DownloadListen
     private  lateinit var mInterceptor:DownloadInterceptor
 
-    constructor(listener:DownloadListen,id: String){
+    constructor(listener:DownloadListen,id: String,type:Int){
 
         this.listener = listener
 
 
-        var path = checkFileExits(id)
+        var path = checkFileExits(id,type)
 
         if (path!=null) {
-            Logger.e("无需下载")
+
             listener.onFinishDownload(path)
 
         }else{
 
-            Logger.e("需要下载")
-
             init()
 
-            download(id)
+            download(id,type)
 
         }
 
     }
 
-    private fun  checkFileExits(id: String):String?{
+    private fun  checkFileExits(id: String, type: Int):String?{
 
         var obj = DownloadFileDbUtils.findByIdOne(id)
 
         //有记录
-        if (obj != null && File(obj.filePath).exists())
+        if (obj != null && File(obj.filePath).exists() && type == obj.fileType)
 
             return obj.filePath
 
@@ -70,6 +68,8 @@ class DownloadManager {
         mInterceptor = DownloadInterceptor(listener)
 
         var httpClient = OkHttpClient.Builder()
+                .addNetworkInterceptor(
+                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(mInterceptor)
                 .retryOnConnectionFailure(true)
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
@@ -95,7 +95,7 @@ class DownloadManager {
      * @param filePath
      * @param subscriber
      */
-    private fun download(id:String) {
+    private fun download(id: String, type: Int) {
 
         listener.onStartDownload()
 
@@ -109,7 +109,7 @@ class DownloadManager {
 
             //下载完成后,将记录写入数据库
 
-            DownloadFileDbUtils.insertOrReplace(DownloadFileDb(null,mInterceptor.fileName,id,System.currentTimeMillis(),filePath))
+            DownloadFileDbUtils.insertOrReplace(DownloadFileDb(null,mInterceptor.fileName,id,System.currentTimeMillis(),type,filePath))
 
             listener.onFinishDownload(filePath)
 

@@ -9,7 +9,7 @@ import com.baidu.mapapi.SDKInitializer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
-import android.support.multidex.MultiDex
+import androidx.multidex.MultiDex
 import android.text.TextUtils
 import android.util.Base64
 import com.tencent.bugly.Bugly

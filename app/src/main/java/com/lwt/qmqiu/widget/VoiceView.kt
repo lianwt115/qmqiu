@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.voice.VoiceManager
 import kotlinx.android.synthetic.main.widget_voiceview.view.*
-import android.support.v4.os.HandlerCompat.postDelayed
+import androidx.core.os.HandlerCompat.postDelayed
 import java.io.File
 
 

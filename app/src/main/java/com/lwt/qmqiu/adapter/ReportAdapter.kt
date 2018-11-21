@@ -1,7 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ import com.lwt.qmqiu.bean.GiftInfo
 import com.lwt.qmqiu.bean.ReportInfo
 
 
-class ReportAdapter(context: Context, list: List<ReportInfo>, listen: ReportClickListen?) : RecyclerView.Adapter<ReportAdapter.ListViewHolder>() {
+class ReportAdapter(context: Context, list: List<ReportInfo>, listen: ReportClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<ReportAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -72,7 +72,7 @@ class ReportAdapter(context: Context, list: List<ReportInfo>, listen: ReportClic
         return mTotalList?.size ?: 0
     }
 
-    class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var report_content: Button = itemView.findViewById(R.id.report_content) as Button
 

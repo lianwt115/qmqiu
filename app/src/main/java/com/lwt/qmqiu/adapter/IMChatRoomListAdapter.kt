@@ -1,7 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 
 
-class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, listen: RoomClickListen?, mStrategy: Int) : RecyclerView.Adapter<IMChatRoomListAdapter.ListViewHolder>() {
+class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, listen: RoomClickListen?, mStrategy: Int) : androidx.recyclerview.widget.RecyclerView.Adapter<IMChatRoomListAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -252,7 +252,7 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
         return mTotalList?.size ?: 0
     }
 
-    class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var room_first: TextView = itemView.findViewById(R.id.room_first) as TextView
         var room_type: TextView = itemView.findViewById(R.id.room_type) as TextView

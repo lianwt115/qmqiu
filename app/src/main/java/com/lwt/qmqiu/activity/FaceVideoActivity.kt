@@ -3,9 +3,9 @@ package com.lwt.qmqiu.activity
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.SystemClock
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import com.baidu.location.BDLocation
@@ -108,7 +108,7 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
     }
 
     private fun initRecycleView() {
-        val gridLayoutManager = object :GridLayoutManager(this, 3){
+        val gridLayoutManager = object : androidx.recyclerview.widget.GridLayoutManager(this, 3){
             override fun canScrollVertically(): Boolean {
                 return true
             }
@@ -122,8 +122,8 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
 
         recycleview_video.adapter = mVideoListAdapter
 
-        recycleview_video.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recycleview_video.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 0
                 outRect.bottom = 0
                 outRect.left = 0

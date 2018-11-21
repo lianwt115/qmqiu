@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.graphics.Rect
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -52,7 +52,7 @@ class ReporterDialog : Dialog {
 
         private lateinit var mReportAdapter: ReportAdapter
 
-        private lateinit var mRecyclerView: RecyclerView
+        private lateinit var mRecyclerView: androidx.recyclerview.widget.RecyclerView
 
         private  var mReporterList = ArrayList<ReportInfo>()
 
@@ -81,7 +81,7 @@ class ReporterDialog : Dialog {
 
             mBtNext = mLayout.findViewById(R.id.report_go) as CircularProgressButton
 
-            mRecyclerView = mLayout.findViewById(R.id.report_rv) as RecyclerView
+            mRecyclerView = mLayout.findViewById(R.id.report_rv) as androidx.recyclerview.widget.RecyclerView
 
             this.type = type
 
@@ -112,7 +112,7 @@ class ReporterDialog : Dialog {
 
         private fun initRecycleView() {
 
-            val linearLayoutManager = object : LinearLayoutManager(mContext){
+            val linearLayoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(mContext){
                 override fun canScrollVertically(): Boolean {
                     return true
                 }
@@ -127,8 +127,8 @@ class ReporterDialog : Dialog {
 
             mRecyclerView.adapter = mReportAdapter
 
-            mRecyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            mRecyclerView.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                     outRect.top = 0
                     outRect.bottom = 0
                     outRect.left = 0

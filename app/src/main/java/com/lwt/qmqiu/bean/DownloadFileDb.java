@@ -19,19 +19,21 @@ public class DownloadFileDb {
     //文件名
     private String fileName;
     //文件id
-    @Unique
     private String fileId;
     //下载时间
     private Long time;
+    //文件类型
+    private int fileType;
     //文件path
     private String filePath;
-    @Generated(hash = 498193780)
+    @Generated(hash = 563820361)
     public DownloadFileDb(Long id, @NotNull String fileName, String fileId,
-            Long time, String filePath) {
+            Long time, int fileType, String filePath) {
         this.id = id;
         this.fileName = fileName;
         this.fileId = fileId;
         this.time = time;
+        this.fileType = fileType;
         this.filePath = filePath;
     }
     @Generated(hash = 885526998)
@@ -61,11 +63,18 @@ public class DownloadFileDb {
     public void setTime(Long time) {
         this.time = time;
     }
+    public int getFileType() {
+        return this.fileType;
+    }
+    public void setFileType(int fileType) {
+        this.fileType = fileType;
+    }
     public String getFilePath() {
         return this.filePath;
     }
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
 
 }

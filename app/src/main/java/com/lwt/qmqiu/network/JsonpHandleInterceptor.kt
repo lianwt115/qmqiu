@@ -26,8 +26,6 @@ class JsonpHandleInterceptor : Interceptor  {
         }catch (e:Exception){
             var t=Time()
             t.setToNow()
-            Logger.e(t.minute.toString())
-            Logger.e(t.second.toString())
             throw e
         }
 

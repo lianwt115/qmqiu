@@ -7,9 +7,9 @@ import android.content.pm.ActivityInfo
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.ClipboardManager
 import android.text.Editable
 import android.text.TextUtils
@@ -203,7 +203,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     private fun initRecycleView() {
 
 
-        val linearLayoutManager = object :LinearLayoutManager(this){
+        val linearLayoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(this){
             override fun canScrollVertically(): Boolean {
                 return true
             }
@@ -218,8 +218,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         recycleview_im.adapter = mIMListAdapter
 
-        recycleview_im.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recycleview_im.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 0
                 outRect.bottom = 0
                 outRect.left = 0
@@ -227,7 +227,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             }
         })
 
-        val gridLayoutManager = object :GridLayoutManager(this,4){
+        val gridLayoutManager = object : androidx.recyclerview.widget.GridLayoutManager(this,4){
             override fun canScrollVertically(): Boolean {
                 return false
             }
@@ -242,8 +242,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         recycleview_plus.adapter = mPlusAdapter
 
-        recycleview_plus.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recycleview_plus.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 0
                 outRect.bottom = 0
                 outRect.left = 0
@@ -502,6 +502,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         when (type) {
 
+            //头像点击
             IMListAdapter.WHOCLICK-> {
 
                 val intent = Intent(this, UserInfoActivity::class.java)
@@ -596,6 +597,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         0 -> {
 
                             //普通消息点击
+
                         }
 
                         3 -> {
@@ -627,10 +629,16 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                     override fun onFail(errorInfo: String) {
                                         Logger.e("onFail:$errorInfo")
                                     }
-                                },params[0])
+                                },params[0],3)
 
                             }
 
+                        }
+
+                        4 -> {
+
+                            //图片消息点击
+                            UiUtils.showToast("图片消息点击:${content.imgPath}")
                         }
                     }
 

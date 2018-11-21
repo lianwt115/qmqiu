@@ -1,7 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.GiftInfo
 
 
-class GiftShowAdapter(context: Context, list: List<GiftInfo>, listen: GiftClickListen?) : RecyclerView.Adapter<GiftShowAdapter.ListViewHolder>() {
+class GiftShowAdapter(context: Context, list: List<GiftInfo>, listen: GiftClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftShowAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -60,7 +60,7 @@ class GiftShowAdapter(context: Context, list: List<GiftInfo>, listen: GiftClickL
         return mTotalList?.size ?: 0
     }
 
-    class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var gift_img: ImageView = itemView.findViewById(R.id.gift_img) as ImageView
         var gift_count: TextView = itemView.findViewById(R.id.gift_count) as TextView

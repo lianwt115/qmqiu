@@ -1,7 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import com.lwt.qmqiu.bean.GiftInfo
 import com.lwt.qmqiu.utils.UiUtils
 
 
-class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickListen) : RecyclerView.Adapter<GiftBuyAdapter.ListViewHolder>() {
+class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickListen) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftBuyAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -135,7 +135,7 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
         return mTotalList?.size ?: 0
     }
 
-    class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var giftbuy_img: ImageView = itemView.findViewById(R.id.giftbuy_img) as ImageView
         var giftbuy_delete: ImageView = itemView.findViewById(R.id.giftbuy_delete) as ImageView

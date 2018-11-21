@@ -1,7 +1,7 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.network.ApiService
 
 
-class RoomUserAdapter(context: Context, list: List<BaseUser>, listen:UserClickListen?) : RecyclerView.Adapter<RoomUserAdapter.ListViewHolder>() {
+class RoomUserAdapter(context: Context, list: List<BaseUser>, listen:UserClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<RoomUserAdapter.ListViewHolder>() {
 
 
     var context: Context? = null
@@ -61,7 +61,7 @@ class RoomUserAdapter(context: Context, list: List<BaseUser>, listen:UserClickLi
         return mTotalList?.size ?: 0
     }
 
-    class ListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         var user_img: SelectableRoundedImageView = itemView.findViewById(R.id.user_img) as SelectableRoundedImageView
         var user_name: TextView = itemView.findViewById(R.id.user_name) as TextView

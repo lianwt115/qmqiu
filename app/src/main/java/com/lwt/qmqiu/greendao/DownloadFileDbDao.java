@@ -28,7 +28,8 @@ public class DownloadFileDbDao extends AbstractDao<DownloadFileDb, Long> {
         public final static Property FileName = new Property(1, String.class, "fileName", false, "FILE_NAME");
         public final static Property FileId = new Property(2, String.class, "fileId", false, "FILE_ID");
         public final static Property Time = new Property(3, Long.class, "time", false, "TIME");
-        public final static Property FilePath = new Property(4, String.class, "filePath", false, "FILE_PATH");
+        public final static Property FileType = new Property(4, int.class, "fileType", false, "FILE_TYPE");
+        public final static Property FilePath = new Property(5, String.class, "filePath", false, "FILE_PATH");
     }
 
 
@@ -46,9 +47,10 @@ public class DownloadFileDbDao extends AbstractDao<DownloadFileDb, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"DOWNLOAD_FILE_DB\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"FILE_NAME\" TEXT NOT NULL ," + // 1: fileName
-                "\"FILE_ID\" TEXT UNIQUE ," + // 2: fileId
+                "\"FILE_ID\" TEXT," + // 2: fileId
                 "\"TIME\" INTEGER," + // 3: time
-                "\"FILE_PATH\" TEXT);"); // 4: filePath
+                "\"FILE_TYPE\" INTEGER NOT NULL ," + // 4: fileType
+                "\"FILE_PATH\" TEXT);"); // 5: filePath
     }
 
     /** Drops the underlying database table. */
@@ -76,10 +78,11 @@ public class DownloadFileDbDao extends AbstractDao<DownloadFileDb, Long> {
         if (time != null) {
             stmt.bindLong(4, time);
         }
+        stmt.bindLong(5, entity.getFileType());
  
         String filePath = entity.getFilePath();
         if (filePath != null) {
-            stmt.bindString(5, filePath);
+            stmt.bindString(6, filePath);
         }
     }
 
@@ -102,10 +105,11 @@ public class DownloadFileDbDao extends AbstractDao<DownloadFileDb, Long> {
         if (time != null) {
             stmt.bindLong(4, time);
         }
+        stmt.bindLong(5, entity.getFileType());
  
         String filePath = entity.getFilePath();
         if (filePath != null) {
-            stmt.bindString(5, filePath);
+            stmt.bindString(6, filePath);
         }
     }
 
@@ -121,7 +125,8 @@ public class DownloadFileDbDao extends AbstractDao<DownloadFileDb, Long> {
             cursor.getString(offset + 1), // fileName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // fileId
             cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // time
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // filePath
+            cursor.getInt(offset + 4), // fileType
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // filePath
         );
         return entity;
     }
@@ -132,7 +137,8 @@ public class DownloadFileDbDao extends AbstractDao<DownloadFileDb, Long> {
         entity.setFileName(cursor.getString(offset + 1));
         entity.setFileId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setTime(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setFilePath(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setFileType(cursor.getInt(offset + 4));
+        entity.setFilePath(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override

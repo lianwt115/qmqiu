@@ -6,8 +6,8 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
@@ -154,7 +154,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
     private fun initRecycleView() {
 
 
-        val gridLayoutManager = object : GridLayoutManager(this,5){
+        val gridLayoutManager = object : androidx.recyclerview.widget.GridLayoutManager(this,5){
 
             override fun canScrollVertically(): Boolean {
                 return false
@@ -166,8 +166,8 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
 
         recycleview_roomuser.adapter = mRoomUserAdapter
 
-        recycleview_roomuser.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recycleview_roomuser.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 0
                 outRect.bottom = 0
                 outRect.left = 0

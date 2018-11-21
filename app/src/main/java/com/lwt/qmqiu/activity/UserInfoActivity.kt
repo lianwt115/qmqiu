@@ -8,8 +8,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.*
 import android.view.View
 import com.lwt.qmqiu.R
@@ -302,7 +302,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
     private fun initRecycleViewBuy() {
 
-        val linearLayoutManager = object : LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false){
+        val linearLayoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,false){
             override fun canScrollVertically(): Boolean {
                 return false
             }
@@ -317,8 +317,8 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         recycleview_giftbuy.adapter = mGiftBuyAdapter
 
-        recycleview_giftbuy.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recycleview_giftbuy.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 0
                 outRect.bottom = 0
                 outRect.left = 0
@@ -424,7 +424,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     private fun initRecycleView() {
 
 
-        val linearLayoutManager = object : LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false){
+        val linearLayoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,false){
             override fun canScrollVertically(): Boolean {
                 return false
             }
@@ -439,8 +439,8 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         recycleview_gift.adapter = mGiftShowAdapter
 
-        recycleview_gift.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        recycleview_gift.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
                 outRect.top = 0
                 outRect.bottom = 0
                 outRect.left = 14

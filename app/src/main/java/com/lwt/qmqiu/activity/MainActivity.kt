@@ -5,7 +5,7 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.View
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.R
@@ -20,6 +20,7 @@ import android.view.KeyEvent
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
+import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.fragment.FindFragment
 import com.lwt.qmqiu.fragment.MineFragment
@@ -32,7 +33,7 @@ import com.tencent.bugly.beta.Beta
 
 
 
-class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.FindMeListen, UserLoginContract.View {
+class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.View {
 
 
     private var mExitTime: Long = 0
@@ -49,9 +50,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         setContentView(R.layout.activity_main)
 
         checkAndRequirePermissions()
-
-        initView()
-
+        
         setRadioButton()
 
         initFragment(savedInstanceState)
@@ -64,16 +63,18 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
         present = UserLoginPresent(this,this)
 
-        MapLocationUtils.getInstance().setListen(this)
 
-        MapLocationUtils.getInstance().findMe()
+        //登录
+        gotoLogin()
 
     }
 
-    private fun initView() {
+    private fun gotoLogin() {
+        if (!App.instanceApp().isLogin() && autoLoginCount <= autoLoginCountMax)
 
-
-
+            autoLogin(true)
+        else
+            bottomShow()
     }
 
     private fun setRadioButton() {
@@ -87,7 +88,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     private fun initFragment(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
             //异常情况
-            val mFragments: List<Fragment> = supportFragmentManager.fragments
+            val mFragments: List<androidx.fragment.app.Fragment> = supportFragmentManager.fragments
             for (item in mFragments) {
                 if (item is FindFragment) {
                     findFragment = item
@@ -313,18 +314,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
     }
 
 
-
-    override fun locationInfo(location: BDLocation?) {
-
-        if (!App.instanceApp().isLogin() && autoLoginCount<=autoLoginCountMax)
-
-            autoLogin(true)
-        else
-            bottomShow()
-
-    }
-
-
     override fun successRegistOrLogin(baseUser: BaseUser, regist: Boolean) {
 
         MapLocationUtils.getInstance().setListen(null)
@@ -334,6 +323,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
     override fun err(code: Int, errMessage: String?) {
 
+        //登录
+        gotoLogin()
         Logger.e("自动登录失败:code:$code ** errMessage:$errMessage")
 
     }
@@ -347,8 +338,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
         val name = SPHelper.getInstance().get("loginName","") as String
         val password = SPHelper.getInstance().get("loginPassword","") as String
 
-        val location = App.instanceApp().getBDLocation()!!
-
 
         when (login) {
             //登录
@@ -358,12 +347,14 @@ class MainActivity : BaseActivity(), View.OnClickListener,  MapLocationUtils.Fin
 
                     if (App.instanceApp().getLocalUser() == null)
 
-                        present.userLogin(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+                        present.userLogin(name,password,true,"",0.00,0.00,bindToLifecycle())
 
 
             }
             //登出
             false -> {
+
+                val location = App.instanceApp().getBDLocation()!!
 
                 if (App.instanceApp().getLocalUser() != null)
 

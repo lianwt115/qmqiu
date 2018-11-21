@@ -128,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_marginBottom="16dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/gift_name"
@@ -137,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
 
     </RelativeLayout>
@@ -231,7 +231,7 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content" />
 
-               <android.support.v7.widget.RecyclerView
+               <androidx.recyclerview.widget.RecyclerView
                    android:layout_marginBottom="16dp"
                    android:layout_centerHorizontal="true"
                    android:layout_below="@id/gift_buy_tv"
@@ -240,7 +240,7 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content">
 
-               </android.support.v7.widget.RecyclerView>
+               </androidx.recyclerview.widget.RecyclerView>
            </RelativeLayout>
 
 
