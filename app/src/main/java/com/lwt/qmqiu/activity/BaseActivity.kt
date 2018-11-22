@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.activity
 
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Html
@@ -25,6 +26,10 @@ import com.trello.rxlifecycle2.android.RxLifecycleAndroid
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import android.view.WindowManager
+import android.os.Build
+
+
 
 
 
@@ -138,6 +143,21 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         App.instanceApp().setListen(null)
     }
 
+
+    protected fun changeStatusColor(color: Int){
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.statusBarColor = resources.getColor(color)
+
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
@@ -201,7 +221,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            finish()
+            super.onBackPressed()
 
         }
         return super.onKeyDown(keyCode, event)

@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,14 +20,15 @@ import android.view.MotionEvent
 import android.view.View
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
 import cn.dreamtobe.kpswitch.util.KeyboardUtil
+import com.hw.ycshareelement.YcShareElement
+import com.hw.ycshareelement.transition.IShareElementSelector
+import com.hw.ycshareelement.transition.IShareElements
+import com.hw.ycshareelement.transition.ShareElementInfo
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.PlusAdapter
-import com.lwt.qmqiu.bean.IMChatRoom
-import com.lwt.qmqiu.bean.PlusInfo
-import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.bean.UploadLog
+import com.lwt.qmqiu.bean.*
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.orhanobut.logger.Logger
@@ -34,6 +36,7 @@ import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
+import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.lwt.qmqiu.utils.Glide4Engine
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
@@ -43,6 +46,7 @@ import com.lwt.qmqiu.widget.ReporterDialog
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.filter.Filter
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.layout_send_message_bar.*
 import okhttp3.MediaType
@@ -53,7 +57,7 @@ import top.zibin.luban.Luban
 import top.zibin.luban.OnCompressListener
 
 
-class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener {
+class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener,IShareElements {
 
     private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mIMListAdapter:IMListAdapter
@@ -68,15 +72,22 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     private  var refuse = false
     private  var voice = true
+    private  var mSeleteView:View? = null
+    private  var mSeleteData:PhotoViewData? = null
     private lateinit var mSelected:List<String>
     companion object {
 
         const  val REQUEST_CODE_CHOOSE = 110
 
         const val EXITFORRESULT = 1
+
+        internal val REQUEST_CONTENT = 223
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        YcShareElement.enableContentTransition(application)
+
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_im)
@@ -498,7 +509,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         return super.dispatchKeyEvent(event)
     }
 
-    override fun imClick(content: QMMessage, type: Int, longClick: Boolean, position: Int) {
+    override fun imClick(content: QMMessage, type: Int, longClick: Boolean, position: Int, view: View?, data: PhotoViewData?) {
 
         when (type) {
 
@@ -636,14 +647,19 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         4 -> {
 
+                            //转场动画所需
+                            this.mSeleteData = data
+                            this.mSeleteView = view
 
                             val intent = Intent(this, PhotoViewActivity::class.java)
 
                             intent.putParcelableArrayListExtra("photoViewData",mIMListAdapter.getPhotoViewData())
                             intent.putExtra("index",position)
 
-                            startActivity(intent)
 
+                            val options = YcShareElement.buildOptionsBundle(this, this)
+
+                            startActivityForResult(intent, REQUEST_CONTENT, options)
 
                         }
                     }
@@ -730,39 +746,43 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                 mSelected = Matisse.obtainPathResult(data)
 
-                //图片压缩
-                Luban.with(this)
-                .load(mSelected[0])
-                .ignoreBy(100)
-                .filter { path -> !(TextUtils.isEmpty(path) || path!!.toLowerCase().endsWith(".gif"))}
-                        .setRenameListener {path ->
 
-                            "${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}.${path.substring(path.length-3)}"
+                mSelected.forEach {
 
-                        }
-                        .setCompressListener(object : OnCompressListener {
-                    override fun onSuccess(file: File?) {
+                    //图片压缩
+                    Luban.with(this)
+                            .load(it)
+                            .ignoreBy(100)
+                            .filter { path -> !(TextUtils.isEmpty(path) || path!!.toLowerCase().endsWith(".gif"))}
+                            .setRenameListener {path ->
 
-                        if (file!=null){
+                                "${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}.${path.substring(path.length-3)}"
 
-                            uploadFile(file,1)
+                            }
+                            .setCompressListener(object : OnCompressListener {
+                                override fun onSuccess(file: File?) {
 
-                        }else{
-                            Logger.e("图片压缩异常")
-                        }
+                                    if (file!=null){
 
-                    }
+                                        uploadFile(file,1)
 
-                    override fun onError(e: Throwable?) {
-                        Logger.e("压缩异常:${e?.localizedMessage}")
-                    }
+                                    }else{
+                                        Logger.e("图片压缩异常")
+                                    }
 
-                    override fun onStart() {
-                        Logger.e("开始压缩")
-                    }
+                                }
 
-                }).launch()
+                                override fun onError(e: Throwable?) {
+                                    Logger.e("压缩异常:${e?.localizedMessage}")
+                                }
 
+                                override fun onStart() {
+                                    Logger.e("开始压缩")
+                                }
+
+                            }).launch()
+
+                }
 
                 Logger.e("mSelected: $mSelected")
 
@@ -858,6 +878,26 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             UiUtils.showToast("未登录,无法发送")
         }
+
+    }
+    //转场动画
+
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+
+        YcShareElement.onActivityReenter(this, resultCode, data) {
+            list ->
+
+            recycleview_im.scrollToPosition((list[0].data as PhotoViewData).position)
+
+        }
+
+    }
+
+    //转场动画所需
+    override fun getShareElements(): Array<ShareElementInfo<PhotoViewData>> {
+
+        return  arrayOf(ShareContentInfo(this.mSeleteView!!,this.mSeleteData))
 
     }
 

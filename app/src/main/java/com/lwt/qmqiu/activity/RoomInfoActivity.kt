@@ -62,7 +62,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
             }
         }
 
-        room_exit!!.doneLoadingAnimation(resources.getColor(R.color.white),if (success) BitmapFactory.decodeResource(resources,R.mipmap.ic_done) else BitmapFactory.decodeResource(resources,R.mipmap.error))
+        room_exit!!.doneLoadingAnimation(resources.getColor(R.color.text_color_3),if (success) BitmapFactory.decodeResource(resources,R.mipmap.ic_done) else BitmapFactory.decodeResource(resources,R.mipmap.error))
 
     }
 

@@ -206,7 +206,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         this.mLocalRefuseOther = refuseLog.status!!
 
-        message_refuse.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
+        message_refuse.doneLoadingAnimation(resources.getColor(if (refuseLog.status!!) R.color.text_color_14 else R.color.text_color_9), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 
         Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -472,7 +472,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     //礼物购买成功
     override fun setGiftBuy(baseUser: BaseUser) {
 
-        gift_buy.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
+        gift_buy.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 
         Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -502,7 +502,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         //刷新当前页信息
         present.userFind(mUserName,bindToLifecycle())
 
-        gift_send.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
+        gift_send.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 
         Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -546,7 +546,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
             2 -> {
 
-                gift_buy!!.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.error))
+                gift_buy!!.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.error))
 
                 Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -561,7 +561,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             }
             3 -> {
 
-                gift_send!!.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.error))
+                gift_send!!.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.error))
 
                 Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -582,7 +582,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
             5 -> {
 
-                message_refuse!!.doneLoadingAnimation(resources.getColor(R.color.white), BitmapFactory.decodeResource(resources,R.mipmap.error))
+                message_refuse!!.doneLoadingAnimation(resources.getColor(if (!this.mLocalRefuseOther) R.color.text_color_14 else R.color.text_color_9), BitmapFactory.decodeResource(resources,R.mipmap.error))
 
                 Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 

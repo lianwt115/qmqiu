@@ -1,1 +1,1 @@
-include ':app', ':qmchat'
+include ':app', ':qmchat', ':ycshareelement'

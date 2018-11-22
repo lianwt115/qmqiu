@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 import com.joooonho.SelectableRoundedImageView
 import com.lwt.qmqiu.App
@@ -70,11 +71,13 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         holder.img_root.visibility =if (obj.type == 4)View.VISIBLE else View.GONE
 
+        var data = App.instanceApp().getShowMessage(obj.message)
+
         when (obj.type) {
 
             0 -> {
 
-                holder.message_content.text=App.instanceApp().getShowMessage(obj.message)
+                holder.message_content.text = data
 
                 holder.message_voice_time.visibility = View.GONE
 
@@ -84,9 +87,9 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
             3 -> {
 
-                var data = App.instanceApp().getShowMessage(obj.message).split("_ALWTA_")
+                var dataAll = data.split("_ALWTA_")
 
-                if (data?.size>=2){
+                if (dataAll?.size>=2){
 
                     var drawableLeft = context!!.getDrawable(
                             R.mipmap.voice_type)
@@ -119,12 +122,12 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                         override fun onFail(errorInfo: String) {
                             Logger.e("onFail:$errorInfo")
                         }
-                    },data[0],3)
+                    },dataAll[0],3)
 
 
                 }else{
 
-                    holder.message_content.text=data[0]
+                    holder.message_content.text=dataAll[0]
 
                 }
 
@@ -132,7 +135,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
             4 -> {
 
-                var data = App.instanceApp().getShowMessage(obj.message).split("_ALWTA_")
+                var dataAll = data.split("_ALWTA_")
 
 
                 holder.message_content.setCompoundDrawablesWithIntrinsicBounds(null,
@@ -161,7 +164,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                     override fun onFail(errorInfo: String) {
                         Logger.e("onFail:$errorInfo")
                     }
-                },data[0],4)
+                },dataAll[0],4)
 
             }
         }
@@ -185,7 +188,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         holder.img_root.setOnClickListener {
             if (listen!=null)
-                listen?.imClick(obj, CONTENTCLICK,false,position)
+                listen?.imClick(obj, CONTENTCLICK,false,position,holder.photo_view,PhotoViewData(position,obj.message))
         }
 
         holder.message_content.setOnClickListener {
@@ -269,6 +272,10 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
             return@setOnLongClickListener true
         }
+
+
+        //绑定
+        ViewCompat.setTransitionName(holder.photo_view, data)
 
 
     }
@@ -394,7 +401,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
     }
 
     interface IMClickListen{
-        fun imClick(content:QMMessage, type: Int,longClick:Boolean,position: Int)
+        fun imClick(content:QMMessage, type: Int,longClick:Boolean,position: Int,view:View?=null,data:PhotoViewData?=null)
     }
 
     private fun timeData(currentTime :Long):String{

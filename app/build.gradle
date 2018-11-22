@@ -109,4 +109,7 @@ dependencies {
     implementation 'top.zibin:Luban-turbo:1.0.0'
     //图片预览
     implementation 'com.github.chrisbanes:PhotoView:2.2.0'
+    //共享元素过渡转场动画
+    //implementation 'com.github.yellowcath:YcShareElement:1.3'
+    implementation project(':ycshareelement')
 }

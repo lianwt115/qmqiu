@@ -3,6 +3,8 @@ package com.lwt.qmqiu.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
@@ -11,22 +13,31 @@ import com.lwt.qmqiu.bean.PhotoViewData
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
+import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.orhanobut.logger.Logger
+import kotlinx.android.synthetic.main.activity_photoview.*
 
 class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:PhotoSingleClick?=null): PagerAdapter() {
 
     private var mList  = list
+    private var mViewList  = ArrayList<ViewData>()
     private var mContext  = context
     private var mListen  = listen
 
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
 
-        val photoView = PhotoView(container.context)
+        val photoView = ImageView(container.context)
 
-        var data = App.instanceApp().getShowMessage(mList[position].content).split("_ALWTA_")
+        mViewList.add(ViewData(photoView,position))
 
-        var down = DownloadManager(object : DownloadListen {
+        val data = App.instanceApp().getShowMessage(mList[position].content)
+
+        ViewCompat.setTransitionName(photoView,data)
+
+        var dataAll = data.split("_ALWTA_")
+
+        DownloadManager(object : DownloadListen {
             override fun onStartDownload() {
                 Logger.e("onStartDownload")
             }
@@ -44,7 +55,7 @@ class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:
             override fun onFail(errorInfo: String) {
                 Logger.e("onFail:$errorInfo")
             }
-        },data[0],4)
+        },dataAll[0],4)
 
         photoView.setOnClickListener {
 
@@ -74,7 +85,28 @@ class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:
 
     }
 
+    fun getCurrentObj(index:Int): ShareContentInfo {
+
+        return ShareContentInfo(getViewObj(index),mList[index])
+
+    }
+
+    fun getViewObj(index:Int): View {
+
+        mViewList.forEach {
+
+            if (index == it.realIndex)
+                return it.view
+        }
+
+        return mViewList[0].view
+    }
+
+
+
     interface PhotoSingleClick{
         fun photoViewSingleClick()
     }
+
+    data class ViewData(var view:View,var realIndex:Int)
 }
