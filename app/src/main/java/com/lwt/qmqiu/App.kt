@@ -14,6 +14,8 @@ import android.text.TextUtils
 import android.util.Base64
 import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
+import com.bumptech.glide.Glide
+import com.guoxiaoxing.phoenix.picker.Phoenix
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.greendao.DaoMaster
@@ -69,8 +71,21 @@ class App : Application() {
 
             initDb()
 
+            initPhonex()
+
+
         }
 
+    }
+
+    private fun initPhonex() {
+
+        Phoenix.config()
+                .imageLoader { context, imageView, imagePath, type ->
+                    Glide.with(context)
+                            .load(imagePath)
+                            .into(imageView)
+                }
     }
 
     private fun initWebsocket() {

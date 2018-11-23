@@ -1,1 +1,1 @@
-include ':app', ':qmchat', ':ycshareelement'
+include ':app', ':qmchat', ':ycshareelement', ':phoenix-ui', ':phoenix-core'

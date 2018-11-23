@@ -171,7 +171,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
     }
 
 
-    protected fun showProgressDialog(message: String = getString(R.string.loading),cancle:Boolean = false,type:Int = 1, listen: NoticeDialog.Builder.BtClickListen?=null) {
+    protected fun showProgressDialog(message: String = getString(R.string.loading),cancle:Boolean = true,type:Int = 1, listen: NoticeDialog.Builder.BtClickListen?=null) {
 
         if (mNoticeDialogBuilder == null)
             mNoticeDialogBuilder= NoticeDialog.Builder(this,cancle)

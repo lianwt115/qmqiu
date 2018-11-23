@@ -3,14 +3,10 @@ package com.lwt.qmqiu.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.os.Environment
 import android.text.ClipboardManager
 import android.text.Editable
 import android.text.TextUtils
@@ -18,10 +14,17 @@ import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
 import cn.dreamtobe.kpswitch.util.KeyboardUtil
+import com.guoxiaoxing.phoenix.compress.picture.internal.PictureCompressor
+import com.guoxiaoxing.phoenix.compress.picture.listener.OnCompressListener
+import com.guoxiaoxing.phoenix.compress.video.VideoCompressor
+import com.guoxiaoxing.phoenix.compress.video.format.MediaFormatStrategyPresets
+import com.guoxiaoxing.phoenix.core.PhoenixOption
+import com.guoxiaoxing.phoenix.core.model.MimeType
+import com.guoxiaoxing.phoenix.picker.Phoenix
 import com.hw.ycshareelement.YcShareElement
-import com.hw.ycshareelement.transition.IShareElementSelector
 import com.hw.ycshareelement.transition.IShareElements
 import com.hw.ycshareelement.transition.ShareElementInfo
 import com.lwt.qmqiu.App
@@ -37,24 +40,19 @@ import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.shareelement.ShareContentInfo
-import com.lwt.qmqiu.utils.Glide4Engine
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.voice.VoiceManager
 import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.ReporterDialog
-import com.zhihu.matisse.Matisse
-import com.zhihu.matisse.MimeType
-import com.zhihu.matisse.filter.Filter
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.layout_send_message_bar.*
 import okhttp3.MediaType
 import java.io.File
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import top.zibin.luban.Luban
-import top.zibin.luban.OnCompressListener
+import java.io.IOException
+import java.lang.Exception
 
 
 class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener,IShareElements {
@@ -74,14 +72,16 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     private  var voice = true
     private  var mSeleteView:View? = null
     private  var mSeleteData:PhotoViewData? = null
-    private lateinit var mSelected:List<String>
     companion object {
 
-        const  val REQUEST_CODE_CHOOSE = 110
+        const  val REQUEST_CODE_CHOOSE_SELECT = 110
+        const  val REQUEST_CODE_CHOOSE_TAKE = 220
 
         const val EXITFORRESULT = 1
 
         internal val REQUEST_CONTENT = 223
+
+        internal val MAX_RECORN_TIME = 15
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -279,19 +279,37 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             //选择图片
             0 -> {
 
-            Matisse.from(IMActivity@this)
-                    .choose(MimeType.ofImage())
-                    .countable(true)
-                    .maxSelectable(9)
-                    .addFilter(GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                    .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
-                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                    .thumbnailScale(0.85f)
-                    .imageEngine(Glide4Engine())
-                    .forResult(REQUEST_CODE_CHOOSE)
+                Phoenix.with()
+                        .theme(PhoenixOption.THEME_RED)// 主题
+                        .fileType(MimeType.ofAll())//显示的文件类型图片、视频、图片和视频
+                        .maxPickNumber(9)// 最大选择数量
+                        .minPickNumber(0)// 最小选择数量
+                        .spanCount(4)// 每行显示个数
+                        .enablePreview(true)// 是否开启预览
+                        .enableAnimation(true)// 选择界面图片点击效果
+                        .enableCompress(true)// 是否开启压缩
+                        .compressPictureFilterSize(1024/2)//多少kb以下的图片不压缩
+                        .compressVideoFilterSize(1024*6)//多少kb以下的视频不压缩
+                        .thumbnailHeight(160)// 选择界面图片高度
+                        .thumbnailWidth(160)// 选择界面图片宽度
+                        .enableClickSound(false)// 是否开启点击声音
+                        .videoFilterTime(15)//显示多少秒以内的视频
+                        .mediaFilterSize(10000)//显示多少kb以下的图片/视频，默认为0，表示不限制
+                        .start(this@IMActivity, PhoenixOption.TYPE_PICK_MEDIA, REQUEST_CODE_CHOOSE_SELECT)
+
             }
 
+            //拍摄
             1 -> {
+
+                Phoenix.with()
+                        .theme(PhoenixOption.THEME_RED)// 主题
+
+                        .enablePreview(true)// 是否开启预览
+                        .enableAnimation(true)// 选择界面图片点击效果
+                        .enableCompress(true)// 是否开启压缩
+                        .start(this@IMActivity, PhoenixOption.TYPE_TAKE_PICTURE, REQUEST_CODE_CHOOSE_TAKE)
+
 
             }
 
@@ -493,6 +511,19 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 mWebSocket.sendText(message,mIMChatRoom.roomNumber)
 
             }
+            //视频
+            2 -> {
+
+                Logger.e("视频上传成功")
+                val message = QMMessage()
+
+                message.type = 5
+
+                message.message = uploadLog._id.plus("_ALWTA_video")
+
+                mWebSocket.sendText(message,mIMChatRoom.roomNumber)
+
+            }
         }
 
 
@@ -662,6 +693,21 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                             startActivityForResult(intent, REQUEST_CONTENT, options)
 
                         }
+                        5 -> {
+
+                            //转场动画所需
+                            this.mSeleteData = data
+                            this.mSeleteView = view
+
+                            val intent = Intent(this, VideoPlayActivity::class.java)
+
+                            intent.putExtra("photoViewData",this.mSeleteData)
+
+                            val options = YcShareElement.buildOptionsBundle(this, this)
+
+                            startActivityForResult(intent, REQUEST_CONTENT, options)
+
+                        }
                     }
 
                 }
@@ -677,7 +723,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         when (message.type) {
             //普通消息
-            0,3,4-> {
+            0,3,4,5-> {
 
                 runOnUiThread {
 
@@ -742,59 +788,139 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     finish()
             }
 
-            REQUEST_CODE_CHOOSE  -> {
+            REQUEST_CODE_CHOOSE_SELECT  -> {
 
-                mSelected = Matisse.obtainPathResult(data)
+                val result = Phoenix.result(data)
 
+                //在返回时需要对视频还是图片做区分,
+                //TODO  1图片  2视频
 
-                mSelected.forEach {
+                result.forEach {
 
-                    //图片压缩
-                    Luban.with(this)
-                            .load(it)
-                            .ignoreBy(100)
-                            .filter { path -> !(TextUtils.isEmpty(path) || path!!.toLowerCase().endsWith(".gif"))}
-                            .setRenameListener {path ->
-
-                                "${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}.${path.substring(path.length-3)}"
-
-                            }
-                            .setCompressListener(object : OnCompressListener {
-                                override fun onSuccess(file: File?) {
-
-                                    if (file!=null){
-
-                                        uploadFile(file,1)
-
-                                    }else{
-                                        Logger.e("图片压缩异常")
-                                    }
-
-                                }
-
-                                override fun onError(e: Throwable?) {
-                                    Logger.e("压缩异常:${e?.localizedMessage}")
-                                }
-
-                                override fun onStart() {
-                                    Logger.e("开始压缩")
-                                }
-
-                            }).launch()
+                    Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+                    uploadFile(File(it.finalPath),it.fileType)
 
                 }
 
-                Logger.e("mSelected: $mSelected")
+            }
+            //需要自己压缩
+            REQUEST_CODE_CHOOSE_TAKE  -> {
+
+                val result = Phoenix.result(data)
+
+                //在返回时需要对视频还是图片做区分,
+                //TODO  1图片  2视频
+
+                result.forEach {
+
+                    when (it.fileType) {
+
+                        1 -> {
+                            var file = File(it.finalPath)
+
+                            if (file.exists() && file.length()<=(1024*500)){
+
+                                uploadFile(file,it.fileType)
+
+                            }else{
+
+                                PictureCompressor.with(this)
+                                        .load(file)
+                                        .setCompressListener(object :OnCompressListener {
+                                            override fun onSuccess(file: File?) {
+
+                                                var mLocalFile= file
+                                                if (mLocalFile ==null)
+                                                    mLocalFile = File(it.finalPath)
+
+                                                uploadFile(mLocalFile,it.fileType)
+
+                                            }
+
+                                            override fun onError(e: Throwable?) {
+
+                                                showProgressDialog("图片压缩异常")
+                                            }
+
+                                            override fun onStart() {
+
+                                            }
+
+                                        }).launch()
+                            }
+
+
+                        }
+
+                        2 -> {
+
+                            var file = File(it.finalPath)
+
+                            if (file.exists() && file.length()<=(1024*1024*6)){
+
+                                uploadFile(file,it.fileType)
+
+                            }else{
+
+
+                                var  compressFile:File
+                                try {
+                                    var compressCachePath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "phoenix")
+
+                                    if (!compressCachePath.exists())
+                                        compressCachePath.mkdir()
+                                    compressFile = File.createTempFile("compress", ".mp4", compressCachePath);
+                                } catch ( e:IOException) {
+                                    showProgressDialog("视频压缩异常")
+                                    return
+                                }
+
+                                try {
+
+                                    VideoCompressor.with().asyncTranscodeVideo(it.getLocalPath(), compressFile.getAbsolutePath(),
+                                            MediaFormatStrategyPresets.createAndroid480pFormatStrategy(), object : VideoCompressor.Listener{
+                                        override fun onTranscodeCompleted() {
+
+                                            uploadFile(compressFile,it.fileType)
+                                            dismissProgressDialog()
+                                        }
+
+                                        override fun onTranscodeProgress(progress: Double) {
+                                            showProgressDialog("正在压缩 ${String.format("%.2f",(progress*100))}%")
+                                        }
+
+                                        override fun onTranscodeCanceled() {
+                                            showProgressDialog("视频压缩异常")
+                                        }
+
+                                        override fun onTranscodeFailed(exception: Exception?) {
+                                            showProgressDialog("视频压缩异常")
+                                        }
+
+                                    })
+                                } catch ( e:IOException) {
+                                    showProgressDialog("视频压缩异常")
+                                    return
+                                }
+
+
+                            }
+
+
+                        }
+                    }
+
+                    Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+
+
+                }
+
 
             }
 
         }
 
     }
-
-
-
-
 
 
     //请求来的是加密的密文需解密

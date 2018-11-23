@@ -103,6 +103,7 @@
         <activity android:name=".activity.RoomInfoActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.PhotoViewActivity" />
+        <activity android:name=".activity.VideoPlayActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

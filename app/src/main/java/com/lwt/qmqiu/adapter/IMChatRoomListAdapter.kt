@@ -59,6 +59,12 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
                     }
 
+                    "video" -> {
+
+                        text = "[视频]"
+
+                    }
+
                     else -> {
 
                         var drawableLeft = context!!.getDrawable(

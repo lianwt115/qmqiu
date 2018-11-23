@@ -6,7 +6,7 @@ data class UploadLog(
         var _id:String,
         //谁上传
         var from:String,
-        //什么类型 0,语音 1 图片 2 文件
+        //什么类型 0,语音 1 图片 2 视频
         var type:Int,
         //那个房间
         var where:String,

@@ -1,7 +1,10 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.media.ThumbnailUtils
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,14 +70,15 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         contentBg(obj!!.colorIndex,holder.message_content)
 
         //解决图片和文字,语音消息错乱
-        holder.text_root.visibility =if (obj.type == 4)View.GONE else View.VISIBLE
+        holder.text_root.visibility =if (obj.type == 4 || obj.type ==5)View.GONE else View.VISIBLE
 
-        holder.img_root.visibility =if (obj.type == 4)View.VISIBLE else View.GONE
+        holder.img_root.visibility =if (obj.type == 4  || obj.type ==5)View.VISIBLE else View.GONE
 
         var data = App.instanceApp().getShowMessage(obj.message)
 
         when (obj.type) {
 
+            //普通文字消息
             0 -> {
 
                 holder.message_content.text = data
@@ -85,6 +89,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                         null, null, null)
             }
 
+            //语音消息
             3 -> {
 
                 var dataAll = data.split("_ALWTA_")
@@ -133,10 +138,10 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
             }
 
-            4 -> {
+            //图片消息 视频消息
+            4,5 -> {
 
                 var dataAll = data.split("_ALWTA_")
-
 
                 holder.message_content.setCompoundDrawablesWithIntrinsicBounds(null,
                         null, null, null)
@@ -148,7 +153,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                     override fun onProgress(progress: Int) {
 
-                        Logger.e("onProgress:$progress")
+                        //Logger.e("onProgress:$progress")
 
                         holder.img_progress_text.text = "$progress %"
                     }
@@ -157,14 +162,14 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                         holder.img_progress_text.visibility =View.GONE
                         holder.img_progress.visibility =View.GONE
-                        Glide.with(context!!).load(path).into(holder.photo_view)
-
+                        Glide.with(context!!).load(if (obj.type == 4) path else getVideoThumbnail(path)).into(holder.photo_view)
+                        holder.videoplay_bg.visibility =if (obj.type == 4) View.GONE else View.VISIBLE
                     }
 
                     override fun onFail(errorInfo: String) {
                         Logger.e("onFail:$errorInfo")
                     }
-                },dataAll[0],4)
+                },dataAll[0],obj.type)
 
             }
         }
@@ -395,6 +400,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         var text_root: RelativeLayout = itemView?.findViewById(R.id.text_root) as RelativeLayout
         var img_root: RelativeLayout = itemView?.findViewById(R.id.img_root) as RelativeLayout
         var photo_view: ImageView = itemView?.findViewById(R.id.photo_view) as ImageView
+        var videoplay_bg: ImageView = itemView?.findViewById(R.id.videoplay_bg) as ImageView
         var img_progress: ProgressBar = itemView?.findViewById(R.id.img_progress) as ProgressBar
         var img_progress_text: TextView = itemView?.findViewById(R.id.img_progress_text) as TextView
 
@@ -441,6 +447,19 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         }
 
         return list
+    }
+
+
+    //获取视频文件缩略图
+    fun  getVideoThumbnail( videoPath:String,change:Boolean =false,width:Int=0,height:Int=0):Bitmap {
+        var bitmap:Bitmap
+        // 获取视频的缩略图
+        bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND) //調用ThumbnailUtils類的靜態方法createVideoThumbnail獲取視頻的截圖；
+        if(bitmap!= null && change){
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT)//調用ThumbnailUtils類的靜態方法extractThumbnail將原圖片（即上方截取的圖片）轉化為指定大小；
+        }
+        return bitmap
     }
 
 
