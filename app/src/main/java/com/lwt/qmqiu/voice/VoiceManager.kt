@@ -142,7 +142,7 @@ class VoiceManager {
 
           if (ratio > 1){
 
-              db = (10 * Math.log10(ratio.toDouble())).toInt()
+              db = (30 * Math.log10(ratio.toDouble())).toInt()
 
           }
 

@@ -108,6 +108,8 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
 
                     holder.message_voice_time.visibility = View.VISIBLE
+
+                    Logger.e("语音时长:${data[1]}")
                     holder.message_voice_time.text = "${data[1]}''"
 
                     //进行声音预下载
@@ -206,7 +208,6 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                     Logger.e("time:${data[1].toInt() * 5}")
                     taskDisposable = Observable.interval(200, TimeUnit.MILLISECONDS).applySchedulers().subscribe({
 
-                        Logger.e("it:$it")
                         if (it >= data[1].toInt() * 5) {
 
                             if (taskDisposable!=null)

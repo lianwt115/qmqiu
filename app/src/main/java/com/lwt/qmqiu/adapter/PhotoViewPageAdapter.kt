@@ -7,15 +7,12 @@ import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
-import com.github.chrisbanes.photoview.PhotoView
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.PhotoViewData
-import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.orhanobut.logger.Logger
-import kotlinx.android.synthetic.main.activity_photoview.*
 
 class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:PhotoSingleClick?=null): PagerAdapter() {
 
