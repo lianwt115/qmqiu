@@ -77,7 +77,7 @@ class QMWebsocket {
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosing(webSocket, code, reason)
-            Logger.e("onClosing:$reason")
+            //Logger.e("onClosing:$reason")
 
         }
 
@@ -92,6 +92,8 @@ class QMWebsocket {
             if (this@QMWebsocket.listen != null)
 
                 this@QMWebsocket.listen!!.qmMessage(qmMessage)
+            else
+                App.instanceApp().notificationActivity(qmMessage)
 
         }
 
@@ -102,7 +104,7 @@ class QMWebsocket {
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosed(webSocket, code, reason)
-            Logger.e("onClosed:$reason")
+            //Logger.e("onClosed:$reason")
             if (this@QMWebsocket.listen != null)
                 this@QMWebsocket.listen!!.errorWS(0,"连接已关闭")
         }

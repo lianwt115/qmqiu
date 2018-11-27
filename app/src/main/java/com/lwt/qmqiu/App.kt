@@ -16,8 +16,10 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.bumptech.glide.Glide
 import com.guoxiaoxing.phoenix.picker.Phoenix
+import com.lwt.qmqiu.activity.BaseActivity
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
+import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.greendao.DaoMaster
 import com.lwt.qmqiu.greendao.DaoSession
 import com.lwt.qmqiu.network.QMWebsocket
@@ -34,6 +36,7 @@ class App : Application() {
     private var mLocalUser:BaseUser?= null
     private var mBDLocation: BDLocation?= null
     private  var mWebSocket: QMWebsocket?=null
+    private  var mCurrentActivity: BaseActivity?=null
     companion object {
         private var instance: App? = null
         fun instanceApp() = instance!!
@@ -282,6 +285,18 @@ class App : Application() {
             return message
         }
 
+    }
+
+    fun setCurrentActivity(activity: BaseActivity){
+
+        this.mCurrentActivity = activity
+
+    }
+
+    fun notificationActivity(qmMessage: QMMessage){
+
+        if (this.mCurrentActivity!=null)
+            this.mCurrentActivity!!.qmMessage(qmMessage)
     }
 
 }

@@ -74,6 +74,11 @@ interface ApiService {
     @POST(ApiConst.Download)
     fun download(@Query("id") id:String): Observable<ResponseBody>
 
+    @POST(ApiConst.IMChat_RoomMessageVideoRequest)
+    fun videoRequest(@Query("name") name:String,@Query("to") to:String,@Query("message") message:String):Observable<HttpResult<QMMessage>>
+
+    @POST(ApiConst.IMChat_RoomMessageVideoRequestExit)
+    fun videoRequestExit(@Query("channelName") channelName:String,@Query("name") name:String,@Query("time") time:Int):Observable<HttpResult<Boolean>>
 
 
 }

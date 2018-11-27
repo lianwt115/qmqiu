@@ -1,19 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@mipmap/videocallbg"
     tools:context=".activity.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
 
-        android:id="@+id/recycleview_video"
+    <RelativeLayout
+        android:id="@+id/video_contain_big"
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
+
+   <RelativeLayout
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="20dp"
+       android:id="@+id/root_who"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+       <com.joooonho.SelectableRoundedImageView
+           xmlns:app="http://schemas.android.com/apk/res-auto"
+           android:layout_below="@id/message_time"
+           android:id="@+id/img_who"
+           android:layout_width="60dp"
+           android:src="@mipmap/aj"
+           android:layout_height="60dp"
+           android:scaleType="centerCrop"
+           app:sriv_oval="true" />
+       <TextView
+           android:textColor="@color/white"
+           android:textSize="16sp"
+           android:text="大方的说法"
+           android:id="@+id/name_who"
+           android:layout_marginLeft="10dp"
+           android:layout_centerVertical="true"
+           android:layout_toRightOf="@id/img_who"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+
+   </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_alignParentRight="true"
+        android:id="@+id/video_contain_small"
+        android:layout_width="120dp"
+        android:layout_height="192dp">
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <ImageButton
+            android:id="@+id/refusevideo"
+            android:background="@null"
+            android:src="@mipmap/refusevideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:visibility="gone"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/acceptvideo"
+            android:background="@null"
+            android:src="@mipmap/acceptvideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 
-</LinearLayout>
+
+</RelativeLayout>

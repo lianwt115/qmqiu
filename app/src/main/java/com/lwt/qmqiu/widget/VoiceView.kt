@@ -28,6 +28,7 @@ import java.io.File
     private var mCancle = false
 
     private var mStop = false
+    private var mStart = false
 
     constructor(context: Context,attrs: AttributeSet): this(context,attrs,0) {
         initView(context)
@@ -119,6 +120,8 @@ import java.io.File
 
             voiceManager.stopRecord(isFromUser)
 
+            mStart = false
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -147,12 +150,13 @@ import java.io.File
 
     fun stopRecord() {
         //异常情况下停止
-        if (!mStop)
+        if (!mStop && mStart)
             stopRecord(false)
     }
 
     //开始录音
     fun startRecord(fileName: String,listen: VoiceManager.VoiceRecordListen?=null) {
+        mStart = true
         updateStartRecordUI()
         try {
             voiceManager.startRecord(fileName,listen)
@@ -160,7 +164,6 @@ import java.io.File
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
 
     }
 

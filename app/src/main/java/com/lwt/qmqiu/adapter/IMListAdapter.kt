@@ -76,6 +76,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         var data = App.instanceApp().getShowMessage(obj.message)
 
+
         when (obj.type) {
 
             //普通文字消息
@@ -109,8 +110,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                     holder.message_voice_time.visibility = View.VISIBLE
 
-                    Logger.e("语音时长:${data[1]}")
-                    holder.message_voice_time.text = "${data[1]}''"
+                    holder.message_voice_time.text = "${dataAll[1]}''"
 
                     //进行声音预下载
                     DownloadManager(object :DownloadListen{
@@ -172,6 +172,26 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                         Logger.e("onFail:$errorInfo")
                     }
                 },dataAll[0],obj.type)
+
+            }
+            //视频消息
+            6 ->{
+
+                    var drawableLeft = context!!.getDrawable(
+                            R.mipmap.videomessage)
+
+                    holder.message_content.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                            null, null, null)
+
+                    holder.message_content.compoundDrawablePadding = 10
+
+                    holder.message_content.text=""
+
+
+                    holder.message_voice_time.visibility = View.VISIBLE
+
+                    holder.message_voice_time.text = "视频通话"
+
 
             }
         }

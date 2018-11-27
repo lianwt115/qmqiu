@@ -92,5 +92,6 @@
     <color name="room_list_back">#F8F9FA</color>
     <color name="content_color">#757575</color>
     <color name="roominfo_bg">#11ffffff</color>
+    <color name="callvideo_bg">#2F2922</color>
 
 </resources>

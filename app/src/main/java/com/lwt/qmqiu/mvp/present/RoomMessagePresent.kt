@@ -18,6 +18,7 @@ import okhttp3.MultipartBody
 
 class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : RoomMessageContract.Presenter{
 
+
     var mContext : Context? = null
     var mView : RoomMessageContract.View? = null
     val mModel : RoomMessageModel by lazy {
@@ -126,6 +127,32 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
 
             }else{
                 mView?.err(-1,it.message,4)
+            }
+
+        }
+
+        )
+    }
+
+    override fun videoRequest(from: String, to: String, message: String, bindToLifecycle: LifecycleTransformer<QMMessage>) {
+        val observable : Observable<QMMessage>? = mContext?.let {
+            mModel.videoRequest(from,to,message) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setVideoRequest(it)
+                }, {
+
+            Logger.e(it.message?:"错误为空")
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,5)
+
+            }else{
+                mView?.err(-1,it.message,5)
             }
 
         }

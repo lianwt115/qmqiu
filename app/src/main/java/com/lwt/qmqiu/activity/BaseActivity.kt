@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.activity
 
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -36,23 +37,47 @@ import android.os.Build
 open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, QMWebsocket.QMMessageListen {
 
 
-    override fun qmMessage(it: QMMessage) {
+    override fun qmMessage(qmMessage: QMMessage) {
 
 
         runOnUiThread {
 
-            Logger.e("通知RX:$it")
-            when (it.type) {
+            Logger.e("通知RX:$qmMessage")
+            when (qmMessage.type) {
                 //礼物
                 2 -> {
-                    Logger.e("通知RX:$it")
-                    val infoList = it.message.split("*") //数量-单位-名称-动画名称
+
+                    val infoList = qmMessage.message.split("*") //数量-单位-名称-动画名称
 
 
-                    val info = Html.fromHtml("${it.from}  赠送: <font color='#FF4081'>"+infoList[0]+"</font>\t"+"${infoList[1]}"+"<font color='#FF4081'>\t${infoList[2]}</font>" +"给<font color='#FF4081'> ${it.to}</font>")
+                    val info = Html.fromHtml("${qmMessage.from}  赠送: <font color='#FF4081'>"+infoList[0]+"</font>\t"+"${infoList[1]}"+"<font color='#FF4081'>\t${infoList[2]}</font>" +"给<font color='#FF4081'> ${qmMessage.to}</font>")
 
 
                     showGiftDialog(info,infoList[3])
+
+                }
+
+                //视频呼叫
+                6 ->{
+
+                    var data = App.instanceApp().getShowMessage(qmMessage.message)
+
+                    Logger.e("收到视频邀请:data")
+
+                    val intent = Intent(this, FaceVideoActivity::class.java)
+
+                    intent.putExtra("videoChannel",data)
+                    intent.putExtra("active",true)
+                    intent.putExtra("message",qmMessage)
+
+                    startActivity(intent)
+
+                }
+                //视频退出
+                7 ->{
+
+                   if (this@BaseActivity is FaceVideoActivity)
+                       finish()
 
                 }
 
@@ -117,6 +142,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         super.onCreate(savedInstanceState)
         lifecycleSubject.onNext(ActivityEvent.CREATE)
 
+        App.instanceApp().setCurrentActivity(this)
     }
 
     override fun onStart() {

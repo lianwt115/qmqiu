@@ -1,17 +1,14 @@
 package com.lwt.qmqiu.activity
 
-import android.graphics.Rect
+
 import android.os.Bundle
-import android.os.SystemClock
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.os.Vibrator
 import android.util.Log
 import android.view.View
-import com.baidu.location.BDLocation
+import cn.dreamtobe.kpswitch.IFSPanelConflictLayout
+import com.bumptech.glide.Glide
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.*
-import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.VideoListAdapter
 import com.lwt.qmqiu.bean.QMMessage
 import com.orhanobut.logger.Logger
@@ -21,9 +18,10 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.rtc.video.VideoCanvas
 import com.lwt.qmqiu.bean.VideoSurface
-import com.lwt.qmqiu.map.MapLocationUtils
-import com.lwt.qmqiu.network.QMWebsocket
-import com.lwt.qmqiu.utils.UiUtils
+import com.lwt.qmqiu.mvp.contract.FaceVideoContract
+import com.lwt.qmqiu.mvp.present.FaceVideoPresent
+import com.lwt.qmqiu.mvp.present.RoomMessagePresent
+import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.utils.applySchedulers
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -31,119 +29,135 @@ import kotlinx.android.synthetic.main.activity_facevideo.*
 import java.util.concurrent.TimeUnit
 
 
-
-class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapLocationUtils.FindMeListen {
-
+class FaceVideoActivity : BaseActivity(), View.OnClickListener, FaceVideoContract.View {
 
 
-    private var leaveTime = 0
-
-    override fun locationInfo(location: BDLocation?) {
-
-        val now1 = location!!.longitude*1000
-        val now2 = location.latitude*1000
-        val now = now1.toString().split(".")[0].plus(now2.toString().split(".")[0])
-
-        val local1 = mBDLocation!!.longitude*1000
-        val local2 = mBDLocation.latitude*1000
-        val local = local1.toString().split(".")[0].plus(local2.toString().split(".")[0])
-
-        if(now != local){
-            if (leaveTime <3)
-                leaveTime++
-
-            UiUtils.showToast("第$leaveTime,三次后将自动退出")
-
-            if (leaveTime == 3){
-                Observable.timer(2,TimeUnit.SECONDS).applySchedulers().subscribe({
-                    finish()
-                },{
-                    Logger.e("退出异常")
-                })
-            }
-
-        }
-
-       // Logger.e("离开区域:${now != local}")
+    override fun setEexitVideoRequest(success: Boolean) {
 
     }
 
+    override fun err(code: Int, errMessage: String?, type: Int) {
+
+    }
 
     private lateinit var mRtcEngine:RtcEngine
-    private lateinit var mBDLocation:BDLocation
-    private lateinit var mVideoListAdapter:VideoListAdapter
-    private lateinit var mIMListAdapter:IMListAdapter
-    private lateinit var mDisposable: Disposable
-    private  var mVideoSurfaceList = ArrayList<VideoSurface>()
-    private  var mIMMessageList = ArrayList<QMMessage>()
 
+    private  var mChannel:String?=null
+    private  var obj:QMMessage?=null
+    private  var mDisposable: Disposable?=null
+    private  var mDisposableTime: Disposable?=null
+    private lateinit var present: FaceVideoPresent
+    private  var mActive:Boolean =  false
+    private  var mCallTime =  0
+    private lateinit var mVibrator:Vibrator
+    private val patter = longArrayOf(1000, 1000, 1000, 1000)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        changeStatusColor(R.color.callvideo_bg)
+
         setContentView(R.layout.activity_facevideo)
 
-        mBDLocation=intent.getParcelableExtra<BDLocation>("location")
+        mVibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
 
-        Logger.e("纬度:${mBDLocation.latitude}**经度:${mBDLocation.longitude}")
+        mChannel = intent.getStringExtra("videoChannel")
+        mActive = intent.getBooleanExtra("active",false)
 
-        initRecycleView()
+        obj = intent.getParcelableExtra<QMMessage>("message")
 
-        initializeAgoraEngine()
-        setupLocalVideo()
-        joinChannel()
+        if (obj!=null){
+
+            //显示头像信息
+            root_who.visibility = View.VISIBLE
+
+            Glide.with(this).load(ApiService.BASE_URL_Api.plus(obj!!.imgPath)).into(img_who)
+
+            name_who.text = obj!!.from
+
+        }
+
+        if (mChannel!=null){
+
+            initializeAgoraEngine()
+
+            setupLocalVideo()
+
+            if (!mActive)
+
+                joinChannel()
+
+            else{
+
+                mVibrator.vibrate(patter, 0)
+
+                acceptvideo.visibility = View.VISIBLE
+
+            }
 
 
-        //持续定位已修改
-        mDisposable = Observable.interval(2,TimeUnit.SECONDS).applySchedulers().subscribe({
+        }else{
 
-            MapLocationUtils.getInstance().findMe()
+            showProgressDialog("视频通话异常")
+
+            exit()
+
+        }
+
+        refusevideo.setOnClickListener(this)
+        acceptvideo.setOnClickListener(this)
+
+        present = FaceVideoPresent(this,this)
+    }
+
+    private fun  exit(){
+
+        mDisposable =  Observable.timer(2,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+                finish()
+
 
         },{
 
-            Logger.e("持续定位失败")
+            Logger.e(it.localizedMessage)
         })
-
 
     }
 
-    private fun initRecycleView() {
-        val gridLayoutManager = object : androidx.recyclerview.widget.GridLayoutManager(this, 3){
-            override fun canScrollVertically(): Boolean {
-                return true
+    override fun onClick(v: View?) {
+
+        when (v?.id) {
+
+            R.id.acceptvideo -> {
+
+                mVibrator.cancel()
+
+                joinChannel()
+
+                acceptvideo.visibility =View.GONE
             }
 
-            override fun canScrollHorizontally(): Boolean {
-                return false
+            R.id.refusevideo -> {
+
+                present.exitVideoRequest(obj!!.message, App.instanceApp().getLocalUser()?.name?:"xxx",mCallTime)
+
+                mVibrator.cancel()
+
+                finish()
             }
         }
-        recycleview_video.layoutManager=gridLayoutManager
-        mVideoListAdapter= VideoListAdapter(this,mVideoSurfaceList,this)
-
-        recycleview_video.adapter = mVideoListAdapter
-
-        recycleview_video.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
-                outRect.top = 0
-                outRect.bottom = 0
-                outRect.left = 0
-                outRect.right =0
-            }
-        })
-
 
     }
 
 
     private var mRtcEventHandler =object : IRtcEngineEventHandler(){
 
-
-
         override fun onFirstRemoteVideoDecoded(uid: Int, width: Int, height: Int, elapsed: Int) {
             super.onFirstRemoteVideoDecoded(uid, width, height, elapsed)
             Logger.e("onFirstRemoteVideoDecoded:uid-$uid")
             runOnUiThread {
 
+                countTime()
                 setupRemoteVideo(uid)
             }
         }
@@ -170,20 +184,31 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
 
     }
 
+    private fun countTime() {
+
+        mDisposableTime = Observable.interval(1,TimeUnit.SECONDS).applySchedulers().subscribe({
+
+            mCallTime++
+
+
+        },{
+
+            Logger.e(it.localizedMessage)
+
+        })
+
+
+
+
+    }
+
     private fun onRemoteUserLeft(uid: Int) {
 
-       /* val container = video_remote
+        video_contain_big.removeAllViews()
 
-        container.removeAllViews()*/
+        showProgressDialog("用户已离开")
 
-        val obj = checkContain(uid)
-
-        if (obj != null) {
-
-            mVideoSurfaceList.remove(obj)
-
-            mVideoListAdapter.notifyDataSetChanged()
-        }
+        exit()
 
     }
 
@@ -217,49 +242,31 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
 
         val surfaceView = RtcEngine.CreateRendererView(baseContext)
         surfaceView.setZOrderMediaOverlay(true)
-        //video_local.addView(surfaceView)
+        video_contain_small.addView(surfaceView)
         mRtcEngine.setupLocalVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0))
 
-        mVideoSurfaceList.add(VideoSurface(0,surfaceView))
 
-        mVideoListAdapter.notifyDataSetChanged()
     }
 
-    private fun joinChannel(uid: Int =0) {
+    private fun joinChannel() {
 
-        val channel1 = "lwt"
-        val channel2 = mBDLocation.longitude*1000
-        val channel3 = mBDLocation.latitude*1000
-
-
-        val channel = channel1.plus(channel2.toString().split(".")[0]).plus(channel3.toString().split(".")[0])
-        mRtcEngine.joinChannel(null,channel,"lwt", 0) // if you do not specify the uid, Agora will assign one.
-
-        Logger.e(channel)
-        Logger.e(channel2.toString())
-        Logger.e(channel3.toString())
+        mRtcEngine.joinChannel(null,mChannel,"lwt", 0) // if you do not specify the uid, Agora will assign one.
 
     }
 
     private fun setupRemoteVideo(uid: Int) {
 
-       /* val container = video_remote
+        val container = video_contain_big
 
         if (container.childCount >= 1) {
             return
-        }*/
-
-        if(checkContain(uid) == null && mVideoSurfaceList.size<=6){
-
-            val surfaceView = RtcEngine.CreateRendererView(baseContext)
-            //container.addView(surfaceView)
-            mRtcEngine.setupRemoteVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid))
-
-
-            mVideoSurfaceList.add(VideoSurface(uid,surfaceView))
-
-            mVideoListAdapter.notifyDataSetChanged()
         }
+
+
+        val surfaceView = RtcEngine.CreateRendererView(baseContext)
+        container.addView(surfaceView)
+        mRtcEngine.setupRemoteVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid))
+
 
     }
 
@@ -269,13 +276,18 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!mDisposable.isDisposed) {
-            mDisposable.dispose()
-        }
 
-        MapLocationUtils.getInstance().exit()
+        mVibrator.cancel()
+
         leaveChannel()
+
         RtcEngine.destroy()
+
+        if (mDisposable!=null && !mDisposable!!.isDisposed)
+            mDisposable!!.dispose()
+
+        if (mDisposableTime!=null && !mDisposableTime!!.isDisposed)
+            mDisposableTime!!.dispose()
     }
 
     override fun onResume() {
@@ -290,25 +302,5 @@ class FaceVideoActivity : BaseActivity(), VideoListAdapter.TextClickListen, MapL
         mRtcEngine.disableVideo()
 
     }
-
-
-    override fun textClick(content: VideoSurface, position: Int) {
-
-        Logger.e(content.uid.toString())
-    }
-
-    fun checkContain(uid:Int):VideoSurface?{
-
-        mVideoSurfaceList.forEach {
-
-            if(it.uid == uid)
-
-                return  it
-
-        }
-
-        return null
-    }
-
 
 }

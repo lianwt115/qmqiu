@@ -17,6 +17,7 @@ import android.view.View
 import android.widget.Toast
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
 import cn.dreamtobe.kpswitch.util.KeyboardUtil
+import com.google.gson.Gson
 import com.guoxiaoxing.phoenix.compress.picture.internal.PictureCompressor
 import com.guoxiaoxing.phoenix.compress.picture.listener.OnCompressListener
 import com.guoxiaoxing.phoenix.compress.video.VideoCompressor
@@ -56,6 +57,7 @@ import java.lang.Exception
 
 
 class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener,IShareElements {
+
 
     private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mIMListAdapter:IMListAdapter
@@ -313,10 +315,42 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             }
 
+            //视频聊天
             2 -> {
+                when (mIMChatRoom.roomType) {
+
+                    1,2 -> {
+
+                        showProgressDialog(getString(R.string.roomtype_video_notice))
+                    }
+
+                    3 -> {
+
+                        val qmMessage = QMMessage()
+
+                        //到什么房间号
+                        qmMessage.to = mIMChatRoom.roomNumber
+
+                        qmMessage.from = App.instanceApp().getLocalUser()?.name?:"xxx"
+
+                        qmMessage.colorIndex = App.instanceApp().getLocalUser()?.colorIndex?:0
+
+                        qmMessage.imgPath = App.instanceApp().getLocalUser()?.imgPath?:"qmqiuimg/nddzx.jpg"
+
+                        qmMessage.type = 6
+
+                        //将对象转为json
+                        var gson = Gson()
+
+                        present.videoRequest(qmMessage.from,qmMessage.to,gson.toJson(qmMessage),bindToLifecycle())
+
+                       // Logger.e("请求参数:${gson.toJson(qmMessage)}")
+                    }
+                }
 
             }
 
+            //位置
             3 -> {
 
             }
@@ -324,11 +358,24 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     }
 
+    override fun setVideoRequest(videoChannel: QMMessage) {
+
+        var data = App.instanceApp().getShowMessage(videoChannel.message)
+
+
+        val intent = Intent(this, FaceVideoActivity::class.java)
+
+        intent.putExtra("videoChannel",data)
+        intent.putExtra("active",false)
+        intent.putExtra("message",videoChannel)
+        startActivity(intent)
+
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         mWebSocket.close()
-        MapLocationUtils.getInstance().exit()
 
     }
 
@@ -482,6 +529,18 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         return false
     }
 
+    private fun sendMessage(type: Int,message:String){
+
+        val qmMessage = QMMessage()
+
+        qmMessage.type = type
+
+        qmMessage.message = message
+
+        mWebSocket.sendText(qmMessage,mIMChatRoom.roomNumber)
+
+
+    }
 
     //上传成功
     override fun setUpload(uploadLog: UploadLog) {
@@ -489,39 +548,24 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         Logger.e("文件类型:${uploadLog.type}")
         when (uploadLog.type) {
             //语音文件
+
             0 -> {
 
-                val message = QMMessage()
+                sendMessage(3,uploadLog._id.plus("_ALWTA_${uploadLog.length}"))
 
-                message.type = 3
-
-                message.message = uploadLog._id.plus("_ALWTA_${uploadLog.length}")
-
-                mWebSocket.sendText(message,mIMChatRoom.roomNumber)
             }
+
             //图片
             1 -> {
 
-                val message = QMMessage()
-
-                message.type = 4
-
-                message.message = uploadLog._id.plus("_ALWTA_img")
-
-                mWebSocket.sendText(message,mIMChatRoom.roomNumber)
+                sendMessage(4,uploadLog._id.plus("_ALWTA_img"))
 
             }
+
             //视频
             2 -> {
 
-                Logger.e("视频上传成功")
-                val message = QMMessage()
-
-                message.type = 5
-
-                message.message = uploadLog._id.plus("_ALWTA_video")
-
-                mWebSocket.sendText(message,mIMChatRoom.roomNumber)
+                sendMessage(5,uploadLog._id.plus("_ALWTA_video"))
 
             }
         }
@@ -739,11 +783,12 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
 
                     Logger.e(message.toString())
+
                 }
 
             }
-            //礼物
-            2 -> {
+            //礼物 视频聊天
+            2 ,6-> {
 
                 super.qmMessage(message)
 
@@ -944,11 +989,20 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         when (type) {
 
             3 -> {
+
                 mReporterDialogBuilder.btFinish(false)
+
             }
+
             4 -> {
 
                 UiUtils.showToast("发送失败")
+
+            }
+
+            5 -> {
+
+                UiUtils.showToast(if (code == 206)"用户不在线" else "发送视频聊天失败")
 
             }
 

@@ -18,7 +18,7 @@ class DownloadInterceptor(downloadListener:DownloadListen): Interceptor {
 
         var fileName= response?.header("Content-Disposition")!!.split("filename=")[1]
 
-        Logger.e(fileName.substring(1,fileName.length-1))
+        //Logger.e(fileName.substring(1,fileName.length-1))
 
         this.fileName = fileName.substring(1,fileName.length-1)
 

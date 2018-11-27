@@ -13,6 +13,8 @@ class ApiConst {
         const val IMChat_RoomCreat = "chat/creatroom"
 
         const val IMChat_RoomMessageGet = "message/getmessage"
+        const val IMChat_RoomMessageVideoRequest = "message/sendVideoRequest"
+        const val IMChat_RoomMessageVideoRequestExit = "message/exitVideoRequest"
 
 
         const val IMChat_RoomActiveUser = "enterlog/getactiveuser"
@@ -31,6 +33,8 @@ class ApiConst {
         const val Upload = "upload/uploadfile"
 
         const val Download = "upload/download"
+
+
 
 
     }

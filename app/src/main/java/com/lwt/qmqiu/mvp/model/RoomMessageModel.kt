@@ -21,6 +21,11 @@ class RoomMessageModel(context: Context) : BaseModel(context) {
         return apiService?.reportUser(name,to,why,roomNumber,messageContent,messageId)?.map(HttpResultFunc())
 
     }
+    fun videoRequest(name:String, to: String,message:String): Observable<QMMessage>?{
+
+        return apiService?.videoRequest(name,to,message)?.map(HttpResultFunc())
+
+    }
 
 
 }

@@ -19,6 +19,7 @@ interface RoomMessageContract {
         fun setReportUser(success: Boolean)
         fun setRoomMessage(messageList:List<QMMessage>)
         fun setUpload(uploadLog: UploadLog)
+        fun setVideoRequest(videoChannel: QMMessage)
 
         fun err(code:Int,errMessage:String?,type:Int)
 
@@ -29,6 +30,7 @@ interface RoomMessageContract {
         fun refuseCheck(name:String, to: String,bindToLifecycle: LifecycleTransformer<Boolean>)
         fun reportUser(name:String, to: String, why:Int,roomNumber:String,messageContent:String, messageId:Long,bindToLifecycle: LifecycleTransformer<Boolean>)
         fun upload(from:String, type: Int, where:String,length:Int, file: MultipartBody.Part, bindToLifecycle: LifecycleTransformer<UploadLog>)
+        fun videoRequest(from:String,to: String,message: String, bindToLifecycle: LifecycleTransformer<QMMessage>)
 
     }
 }
