@@ -110,7 +110,7 @@ class FaceVideoActivity : BaseActivity(), View.OnClickListener, FaceVideoContrac
         present = FaceVideoPresent(this,this)
     }
 
-    private fun  exit(){
+     fun  exit(){
 
         mDisposable =  Observable.timer(2,TimeUnit.SECONDS).applySchedulers().subscribe({
 

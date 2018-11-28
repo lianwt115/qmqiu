@@ -287,7 +287,7 @@ class App : Application() {
 
     }
 
-    fun setCurrentActivity(activity: BaseActivity){
+    fun setCurrentActivity(activity: BaseActivity?){
 
         this.mCurrentActivity = activity
 

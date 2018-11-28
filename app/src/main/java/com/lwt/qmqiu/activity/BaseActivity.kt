@@ -60,6 +60,16 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
                 //视频呼叫
                 6 ->{
 
+                    //TODO 如果当前用户忙
+                    if (this@BaseActivity is FaceVideoActivity){
+
+
+                        showProgressDialog("已拒绝${qmMessage.from}的视频通话")
+
+                        return@runOnUiThread
+                    }
+
+
                     var data = App.instanceApp().getShowMessage(qmMessage.message)
 
                     Logger.e("收到视频邀请:data")
@@ -76,8 +86,13 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
                 //视频退出
                 7 ->{
 
-                   if (this@BaseActivity is FaceVideoActivity)
-                       finish()
+                   if (this@BaseActivity is FaceVideoActivity){
+
+                       showProgressDialog("用户已离开")
+                       this@BaseActivity.exit()
+
+                   }
+
 
                 }
 
@@ -142,7 +157,6 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         super.onCreate(savedInstanceState)
         lifecycleSubject.onNext(ActivityEvent.CREATE)
 
-        App.instanceApp().setCurrentActivity(this)
     }
 
     override fun onStart() {
@@ -155,6 +169,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         lifecycleSubject.onNext(ActivityEvent.RESUME)
 
         App.instanceApp().setListen(this)
+        App.instanceApp().setCurrentActivity(this)
     }
 
 
@@ -167,6 +182,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
         lifecycleSubject.onNext(ActivityEvent.STOP)
 
         App.instanceApp().setListen(null)
+
     }
 
 
@@ -186,7 +202,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
 
     override fun onDestroy() {
         super.onDestroy()
-
+        App.instanceApp().setCurrentActivity(null)
         mDestroy=true
 
         lifecycleSubject.onNext(ActivityEvent.DESTROY)
