@@ -23,8 +23,6 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
 
-
-
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <!--//读取系统信息，包含系统版本等信息，用作统计-->
 
@@ -78,9 +76,6 @@
 
         </meta-data>
 
-        <meta-data
-            android:name="com.netease.nim.appKey"
-            android:value="861d00ff8fcae600d3b404d24c5cd69e" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -2,11 +2,9 @@ package com.lwt.qmqiu.widget
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.lwt.qmqiu.R
