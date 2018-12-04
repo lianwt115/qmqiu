@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <com.lwt.qmqiu.widget.BarView
+        app:show_more="true"
+        android:id="@+id/map_barview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </com.lwt.qmqiu.widget.BarView>
+
+
+    <RelativeLayout
+        android:layout_below="@id/map_barview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+        <ImageButton
+            android:layout_alignParentBottom="true"
+            android:padding="4dp"
+            android:id="@+id/location_img"
+            android:scaleType="center"
+            android:background="@drawable/bg_oval_3"
+            android:layout_margin="20dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

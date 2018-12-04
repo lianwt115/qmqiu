@@ -353,6 +353,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             //位置
             3 -> {
 
+                val intent = Intent(this, MapActivity::class.java)
+
+                startActivity(intent)
+
             }
         }
 

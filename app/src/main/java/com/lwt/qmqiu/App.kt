@@ -16,6 +16,7 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.bumptech.glide.Glide
 import com.guoxiaoxing.phoenix.picker.Phoenix
+import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.activity.BaseActivity
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
@@ -35,6 +36,7 @@ class App : Application() {
     private val NOTIFICATION = "notification"
     private var mLocalUser:BaseUser?= null
     private var mBDLocation: BDLocation?= null
+    private var mBDLocationString: String = "未知地区"
     private  var mWebSocket: QMWebsocket?=null
     private  var mCurrentActivity: BaseActivity?=null
     companion object {
@@ -241,6 +243,18 @@ class App : Application() {
     fun setBDLocation(location:BDLocation?) {
 
         this.mBDLocation = location
+
+    }
+
+    fun getBDLocationString(): String {
+
+        return this.mBDLocationString
+
+    }
+
+    fun setBDLocationString(locationString: String) {
+
+        this.mBDLocationString = locationString
 
     }
 

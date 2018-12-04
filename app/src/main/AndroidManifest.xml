@@ -94,7 +94,7 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.IMActivity" />
-        <activity android:name=".activity.MainActivity1" />
+        <activity android:name=".activity.MapActivity" />
         <activity android:name=".activity.RoomInfoActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.PhotoViewActivity" />

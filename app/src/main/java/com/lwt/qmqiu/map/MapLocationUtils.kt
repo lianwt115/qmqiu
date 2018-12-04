@@ -70,8 +70,10 @@ class MapLocationUtils private constructor() {
         //可选，是否需要位置描述信息，默认为不需要，即参数为false
         //如果开发者需要获得当前点的位置信息，此处必须为true
 
+        //是否需要周边信息
+        option.setIsNeedLocationPoiList(true)
 
-        option.setIsNeedAddress(true);
+        option.setIsNeedAddress(true)
         //可选，是否需要地址信息，默认为不需要，即参数为false
         //如果开发者需要获得当前点的地址信息，此处必须为true
 
@@ -130,6 +132,7 @@ class MapLocationUtils private constructor() {
             //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
 
             App.instanceApp().setBDLocation(location)
+            App.instanceApp().setBDLocationString("${location?.addrStr}")
 
            /* val latitude = location?.latitude    //获取纬度信息
             val longitude = location?.longitude    //获取经度信息
