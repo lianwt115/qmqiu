@@ -49,14 +49,28 @@
         <androidx.recyclerview.widget.RecyclerView
 
             android:layout_gravity="center_horizontal"
-            android:paddingTop="50dp"
-            android:paddingBottom="50dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
             android:overScrollMode="never"
             android:id="@+id/recycleview_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:id="@+id/gift_send"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp" >
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
 
     </cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout>
     <VideoView

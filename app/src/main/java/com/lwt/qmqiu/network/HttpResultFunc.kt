@@ -15,9 +15,6 @@ class HttpResultFunc<T> : Function<HttpResult<T>, T> {
                     throw ApiException(tHttpResult.code, tHttpResult.message)
                 }
 
-                if ("free" == tHttpResult.message)
-                    UiUtils.showToast("Is Free")
-
                 return tHttpResult.data
             }
 

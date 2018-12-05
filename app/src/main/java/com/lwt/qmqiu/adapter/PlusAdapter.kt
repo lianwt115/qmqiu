@@ -20,30 +20,37 @@ import com.lwt.qmqiu.network.ApiService
 class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<PlusAdapter.ListViewHolder>() {
 
 
-    var context: Context? = null
-    var mTotalList: List<PlusInfo>? = null
-    var inflater: LayoutInflater? = null
-    var listen: PlusClickListen? = null
-    var index = -1
+    private var mContext: Context = context
+    private var mTotalList: List<PlusInfo> = list
+    private var mInflater: LayoutInflater = LayoutInflater.from(mContext)
+    private var listen: PlusClickListen? = listen
+    private var index = -1
 
-    init {
-        this.context = context
-        this.mTotalList = list
-        this.listen = listen
-        this.inflater = LayoutInflater.from(context)
 
-    }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
-        val obj=mTotalList?.get(position)
+        val obj= mTotalList[position]
 
-        holder.plus_tv.text=obj?.content
+        holder.plus_tv.text=obj.content
 
+        holder.plus_iv.background = mContext.getDrawable(if (obj.select) R.drawable.bg_acc_rectangle_8 else R.drawable.bg_grey_rectangle_8)
 
-        Glide.with(context!!).load(obj?.img).into(holder.plus_iv)
+        Glide.with(mContext).load(obj.img).into(holder.plus_iv)
 
         holder.plus_iv.setOnClickListener {
+
+            if (position>=4 && position!=index){
+
+                if (index>=4)
+                    mTotalList[index].select =false
+
+                obj.select = true
+
+                index = position
+
+                notifyDataSetChanged()
+            }
 
 
             if (listen!=null)
@@ -55,14 +62,14 @@ class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListe
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        var itemView=inflater?.inflate(R.layout.item_plus, parent, false)
+        var itemView=mInflater.inflate(R.layout.item_plus, parent, false)
 
-        return ListViewHolder(itemView!!, context!!)
+        return ListViewHolder(itemView!!, mContext)
     }
 
     override fun getItemCount(): Int {
 
-        return mTotalList?.size ?: 0
+        return mTotalList.size
     }
 
     class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

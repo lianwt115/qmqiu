@@ -7,6 +7,7 @@ import com.lwt.qmqiu.bean.RefuseLog
 import com.lwt.qmqiu.mvp.contract.UserInfoContract
 import com.lwt.qmqiu.mvp.model.UserInfoModel
 import com.lwt.qmqiu.network.ApiException
+import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import com.trello.rxlifecycle2.LifecycleTransformer

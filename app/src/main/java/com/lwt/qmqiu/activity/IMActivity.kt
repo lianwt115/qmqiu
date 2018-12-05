@@ -269,7 +269,21 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         mPlusList.add(PlusInfo("视频通话",R.mipmap.video))
         mPlusList.add(PlusInfo("位置",R.mipmap.location))
 
+        if (mIMChatRoom.roomType == 3){
+
+            mPlusList.add(PlusInfo("天使", R.mipmap.angel))
+            mPlusList.add(PlusInfo("玫瑰", R.mipmap.rose))
+            mPlusList.add(PlusInfo("跑车", R.mipmap.paoche))
+            mPlusList.add(PlusInfo("王冠", R.mipmap.kingset))
+        }
+
         mPlusAdapter.notifyDataSetChanged()
+
+
+        gift_send.text = "赠送礼物"
+        gift_send.background = getDrawable(R.drawable.bg_20dp_13)
+        gift_send.setFinalCornerRadius(20F)
+        gift_send.setOnClickListener(this)
 
     }
 
@@ -358,6 +372,12 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 startActivityForResult(intent, REQUEST_MAP)
 
             }
+
+            4,5,6,7 -> {
+
+                UiUtils.showToast("礼物赠送$position")
+
+            }
         }
 
     }
@@ -432,6 +452,12 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 changeInput()
 
                 voice = !voice
+
+            }
+
+            R.id.gift_send ->{
+
+                gift_send.startAnimation()
 
             }
 

@@ -8,8 +8,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.*
 import android.view.View
 import com.lwt.qmqiu.R
@@ -31,7 +29,6 @@ import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.SVGAParser
 import org.jetbrains.annotations.NotNull
 import android.text.style.ForegroundColorSpan
-import br.com.simplepass.loading_button_lib.interfaces.OnAnimationEndListener
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.RefuseLog
@@ -374,7 +371,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
                 }
                 2 -> {
-                    giftInfo.imgPath = R.mipmap.posche
+                    giftInfo.imgPath = R.mipmap.paoche
                     giftInfo.savgPath = "posche.svga"
                     giftInfo.price = 68
 
