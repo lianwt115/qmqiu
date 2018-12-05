@@ -186,7 +186,6 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
             }
         }
 
-        UiUtils.showToast(errMessage!!)
     }
 
     //点击进入房间

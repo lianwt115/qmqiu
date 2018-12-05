@@ -99,6 +99,7 @@
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.PhotoViewActivity" />
         <activity android:name=".activity.VideoPlayActivity" />
+        <activity android:name=".activity.MapInfoActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

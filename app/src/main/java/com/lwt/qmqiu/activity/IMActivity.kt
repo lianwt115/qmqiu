@@ -14,7 +14,6 @@ import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
 import cn.dreamtobe.kpswitch.util.KeyboardUtil
 import com.google.gson.Gson
@@ -36,7 +35,6 @@ import com.lwt.qmqiu.bean.*
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.orhanobut.logger.Logger
-import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
@@ -82,6 +80,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         const val EXITFORRESULT = 1
 
         internal val REQUEST_CONTENT = 223
+        internal val REQUEST_MAP = 249
 
         internal val MAX_RECORN_TIME = 15
     }
@@ -240,6 +239,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             }
         })
 
+
         val gridLayoutManager = object : androidx.recyclerview.widget.GridLayoutManager(this,4){
             override fun canScrollVertically(): Boolean {
                 return false
@@ -355,7 +355,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                 val intent = Intent(this, MapActivity::class.java)
 
-                startActivity(intent)
+                startActivityForResult(intent, REQUEST_MAP)
 
             }
         }
@@ -741,6 +741,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                             startActivityForResult(intent, REQUEST_CONTENT, options)
 
                         }
+
                         5 -> {
 
                             //转场动画所需
@@ -754,6 +755,24 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                             val options = YcShareElement.buildOptionsBundle(this, this)
 
                             startActivityForResult(intent, REQUEST_CONTENT, options)
+
+                        }
+                        //地图消息点击
+                        8 -> {
+
+                            var data = App.instanceApp().getShowMessage(content.message).split("_ALWTA_")[0]
+
+                            var gson = Gson()
+
+                            var location = gson.fromJson<LocationInfo>(data,LocationInfo::class.java)
+
+                            Logger.e("地图点击:${content.message}")
+
+                            val intent = Intent(this, MapInfoActivity::class.java)
+
+                            intent.putExtra("locationinfo",location)
+
+                            startActivity(intent)
 
                         }
                     }
@@ -771,7 +790,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         when (message.type) {
             //普通消息
-            0,3,4,5-> {
+            0,3,4,5,8-> {
 
                 runOnUiThread {
 
@@ -808,7 +827,9 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         when (left) {
 
             true -> {
+
                 finish()
+
             }
 
             false -> {
@@ -835,6 +856,21 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                 if (boolean == true)
                     finish()
+            }
+
+            REQUEST_MAP -> {
+
+               val locationInfo =  data?.getParcelableExtra<LocationInfo>("locationinfo")
+
+                if (locationInfo != null){
+
+                    var gson =Gson()
+
+                    //地图信息
+                    sendMessage(8,gson.toJson(locationInfo).plus("_ALWTA_map"))
+
+                   Logger.e(locationInfo.toString())
+                }
             }
 
             REQUEST_CODE_CHOOSE_SELECT  -> {
@@ -865,6 +901,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     when (it.fileType) {
 
                         1 -> {
+
                             var file = File(it.finalPath)
 
                             if (file.exists() && file.length()<=(1024*1024*1)){
@@ -875,6 +912,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                 PictureCompressor.with(this)
                                         .load(file)
+                                        .savePath(Environment.getExternalStorageDirectory().absolutePath+"/qmqiu")
                                         .setCompressListener(object :OnCompressListener {
                                             override fun onSuccess(file: File?) {
 

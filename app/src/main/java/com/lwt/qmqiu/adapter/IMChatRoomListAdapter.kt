@@ -70,6 +70,11 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
                         text = "[视频聊天]"
 
                     }
+                    "map" -> {
+
+                        text = "[位置信息]"
+
+                    }
 
                     else -> {
 

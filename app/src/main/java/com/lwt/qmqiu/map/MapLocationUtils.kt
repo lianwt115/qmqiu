@@ -83,7 +83,7 @@ class MapLocationUtils private constructor() {
         //LocationMode. Battery_Saving：低功耗；
         //LocationMode. Device_Sensors：仅使用设备；
 
-        option.setCoorType("bd09ll")
+        option.setCoorType("gcj02")
         //可选，设置返回经纬度坐标类型，默认GCJ02
         //GCJ02：国测局坐标；
         //BD09ll：百度经纬度坐标；
@@ -134,11 +134,11 @@ class MapLocationUtils private constructor() {
             App.instanceApp().setBDLocation(location)
             App.instanceApp().setBDLocationString("${location?.addrStr}")
 
-           /* val latitude = location?.latitude    //获取纬度信息
-            val longitude = location?.longitude    //获取经度信息
-            val radius = location?.radius    //获取定位精度，默认值为0.0f
+           /* val latitude = location_bt?.latitude    //获取纬度信息
+            val longitude = location_bt?.longitude    //获取经度信息
+            val radius = location_bt?.radius    //获取定位精度，默认值为0.0f
 
-            val coorType = location?.coorType
+            val coorType = location_bt?.coorType
             //获取经纬度坐标类型，以LocationClientOption中设置过的坐标类型为准
             *//* 返回值	返回值说明
                      61	GPS定位结果，GPS定位成功
@@ -150,19 +150,19 @@ class MapLocationUtils private constructor() {
                      162	请求串密文解析失败，一般是由于客户端SO文件加载失败造成，请严格参照开发指南或demo开发，放入对应SO文件
                      167	服务端定位失败，请您检查是否禁用获取位置信息权限，尝试重新请求定位
                      505	AK不存在或者非法，请按照说明文档重新申请AK*//*
-            val errorCode = location?.locType
+            val errorCode = location_bt?.locType
             //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
 
             //Logger.e("定位成功:".plus(errorCode==161))
 
             //Logger.e("定位类型:$coorType**纬度:$latitude**经度:$longitude**定位精度:$radius**错误码:$errorCode**")
 
-            val addr = location?.addrStr    //获取详细地址信息
-            val country = location?.country    //获取国家
-            val province = location?.province    //获取省份
-            val city = location?.city    //获取城市
-            val district = location?.district    //获取区县
-            val street = location?.street    //获取街道信息
+            val addr = location_bt?.addrStr    //获取详细地址信息
+            val country = location_bt?.country    //获取国家
+            val province = location_bt?.province    //获取省份
+            val city = location_bt?.city    //获取城市
+            val district = location_bt?.district    //获取区县
+            val street = location_bt?.street    //获取街道信息
 
            *//* Logger.e("详细地址:$addr" +
                     "**国家:$country" +
@@ -171,7 +171,7 @@ class MapLocationUtils private constructor() {
                     "**区县:$district" +
                     "**街道:$street"
             )*//*
-            val locationDescribe = location?.locationDescribe    //获取位置描述信息
+            val locationDescribe = location_bt?.locationDescribe    //获取位置描述信息
             //Logger.e("周边描述信息:$locationDescribe")*/
 
             if (mFindMeListen != null)

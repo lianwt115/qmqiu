@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="150dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/bg_line_rectangle_from"
+    >
+
+    <TextView
+        android:text="武汉市武昌区中北路101号"
+        android:textSize="14sp"
+        android:lines="2"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:id="@+id/title_map"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <com.baidu.mapapi.map.TextureMapView
+        android:clickable="false"
+        android:layout_below="@id/title_map"
+        android:id="@+id/bmapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <FrameLayout
+        android:id="@+id/mapview_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
+
+</RelativeLayout>

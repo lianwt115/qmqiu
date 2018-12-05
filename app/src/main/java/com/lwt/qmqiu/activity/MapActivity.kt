@@ -1,7 +1,8 @@
 package com.lwt.qmqiu.activity
 
+import android.app.Activity
 import android.content.Intent
-import android.net.Uri
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import com.baidu.location.BDLocation
@@ -9,16 +10,13 @@ import com.lwt.qmqiu.R
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
 import com.lwt.qmqiu.App
-import com.lwt.qmqiu.map.MapLocationUtils
+import com.lwt.qmqiu.adapter.LocationListAdapter
+import com.lwt.qmqiu.bean.LocationInfo
 import com.lwt.qmqiu.widget.BarView
 import kotlinx.android.synthetic.main.activity_map.*
-import com.baidu.location.Poi
-import com.lwt.qmqiu.R.mipmap.location
-import com.orhanobut.logger.Logger
 
 
-class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickListener {
-
+class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickListener, LocationListAdapter.TextClickListen{
 
 
     override fun barViewClick(left: Boolean) {
@@ -33,16 +31,21 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
             false -> {
 
-                val i1 = Intent()
-                   // 地址解析
-                i1.data = Uri.parse("baidumap://map/geocoder?src=com.lwt.qmqiu&address=${App.instanceApp().getBDLocationString()}")
+                val intent = Intent()
+                //把返回数据存入Intent
+                intent.putExtra("locationinfo", mLocationInfo)
+                //设置返回数据
+                this@MapActivity.setResult(Activity.RESULT_OK, intent)
 
-                startActivity(i1)
+                finish()
             }
         }
     }
 
     private lateinit var mBaiduMap:BaiduMap
+    private lateinit var mLocationListAdapter:LocationListAdapter
+    private lateinit var mLocationInfo:LocationInfo
+    private var mLocationList = ArrayList<LocationInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,20 +53,69 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
         initView()
 
-        showLocation()
+        initRecycleView()
+
+        showLocation(App.instanceApp().getBDLocation())
+
     }
 
-    private fun showLocation() {
-        var location = App.instanceApp().getBDLocation()
+    private fun initRecycleView() {
 
-        locationOnMap(location!!)
+
+        val linearLayoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(this){
+            override fun canScrollVertically(): Boolean {
+                return true
+            }
+
+            override fun canScrollHorizontally(): Boolean {
+                return false
+            }
+        }
+
+        recycleview_location.layoutManager=linearLayoutManager
+
+        mLocationListAdapter= LocationListAdapter(this,mLocationList,this)
+
+        recycleview_location.adapter = mLocationListAdapter
+
+        recycleview_location.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+                outRect.top = 0
+                outRect.bottom = 0
+                outRect.left = 0
+                outRect.right =0
+            }
+        })
+
+    }
+
+    override fun textClick(content: LocationInfo, position: Int) {
+
+        this.mLocationInfo = content
+
+    }
+
+    private fun showLocation(location: BDLocation?) {
+
+        if (location==null)
+            return
+
+        locationOnMap(location.latitude,location.longitude)
 
         val poiList = location.poiList
 
-        for (poi in poiList) {
+        mLocationList.clear()
 
-            Logger.e("${poi.name} -- ${poi.id} --${poi.rank}")
+
+        poiList.forEachIndexed { index, poi ->
+
+            mLocationList.add(LocationInfo(poi.name,"${if (index == 0) "" else location.province}${location.city}${location.district}${location.street}${location.streetNumber}",location.latitude,location.longitude,index == 0))
+
         }
+        mLocationInfo = mLocationList[0]
+
+        mLocationListAdapter.notifyDataSetChanged()
+
     }
 
     private fun initView() {
@@ -77,7 +129,6 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
         mBaiduMap = bmapView.map
 
-
         location_img.setOnClickListener(this)
     }
 
@@ -87,7 +138,7 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
             R.id.location_img -> {
 
-                showLocation()
+                showLocation(App.instanceApp().getBDLocation())
 
             }
 
@@ -118,16 +169,16 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
     }
 
     //将定位瞄在地图上
-    fun locationOnMap(location: BDLocation){
+    fun locationOnMap(latitude:Double,longitude:Double){
         // 开启定位图层
         mBaiduMap.isMyLocationEnabled = true
 
         // 构造定位数据
         val locData = MyLocationData.Builder()
-                .accuracy(location.radius)
+                .accuracy(10.0f)
                 // 此处设置开发者获取到的方向信息，顺时针0-360
-                .direction(100f).latitude(location.latitude)
-                .longitude(location.longitude).build()
+                .direction(100f).latitude(latitude)
+                .longitude(longitude).build()
 
         // 设置定位数据
         mBaiduMap.setMyLocationData(locData)
@@ -144,13 +195,13 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
         // 当不需要定位图层时关闭定位图层
         //mBaiduMap.isMyLocationEnabled = false
 
-        moveToLocation(location)
+        moveToLocation(latitude,longitude)
     }
 
     //移动中心点到当前位置
-    fun moveToLocation(location: BDLocation){
+    fun moveToLocation(latitude: Double, longitude: Double){
 
-        val ll =  LatLng(location.latitude, location.longitude)
+        val ll =  LatLng(latitude,longitude)
         val builder =  MapStatus.Builder()
         builder.target(ll).zoom(18.0f)
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()))

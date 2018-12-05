@@ -14,15 +14,18 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.joooonho.SelectableRoundedImageView
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.bean.LocationInfo
 import com.lwt.qmqiu.bean.PhotoViewData
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.utils.applySchedulers
+import com.lwt.qmqiu.widget.LocationView
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -70,9 +73,13 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         contentBg(obj!!.colorIndex,holder.message_content)
 
         //解决图片和文字,语音消息错乱
-        holder.text_root.visibility =if (obj.type == 4 || obj.type ==5)View.GONE else View.VISIBLE
+        holder.text_root.visibility =if (obj.type == 4 || obj.type ==5 || obj.type ==8)View.GONE else View.VISIBLE
 
         holder.img_root.visibility =if (obj.type == 4  || obj.type ==5)View.VISIBLE else View.GONE
+
+        holder.map_root.visibility =if (obj.type == 8 )View.VISIBLE else View.GONE
+
+
 
         var data = App.instanceApp().getShowMessage(obj.message)
 
@@ -194,6 +201,20 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
 
             }
+
+            8 ->{
+
+                var data = data.split("_ALWTA_")[0]
+
+                var gson = Gson()
+
+                var location = gson.fromJson<LocationInfo>(data,LocationInfo::class.java)
+
+
+                holder.map_root.locationOnMap(location)
+
+
+            }
         }
 
 
@@ -217,6 +238,14 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
             if (listen!=null)
                 listen?.imClick(obj, CONTENTCLICK,false,position,holder.photo_view,PhotoViewData(position,obj.message))
         }
+
+        holder.map_root.setBarOnClickListener(object :LocationView.BarOnClickListener{
+            override fun barViewClick() {
+                if (listen!=null)
+                    listen?.imClick(obj, CONTENTCLICK,false,position)
+            }
+        })
+
 
         holder.message_content.setOnClickListener {
 
@@ -302,7 +331,6 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         //绑定
         ViewCompat.setTransitionName(holder.photo_view, data)
-
 
     }
 
@@ -424,6 +452,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         var videoplay_bg: ImageView = itemView?.findViewById(R.id.videoplay_bg) as ImageView
         var img_progress: ProgressBar = itemView?.findViewById(R.id.img_progress) as ProgressBar
         var img_progress_text: TextView = itemView?.findViewById(R.id.img_progress_text) as TextView
+        var map_root: LocationView = itemView?.findViewById(R.id.map_root) as LocationView
 
     }
 
@@ -482,6 +511,5 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         }
         return bitmap
     }
-
 
 }

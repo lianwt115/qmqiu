@@ -16,7 +16,6 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.bumptech.glide.Glide
 import com.guoxiaoxing.phoenix.picker.Phoenix
-import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.activity.BaseActivity
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
@@ -64,7 +63,7 @@ class App : Application() {
         SDKInitializer.initialize(this)
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
-        SDKInitializer.setCoordType(CoordType.BD09LL)
+        SDKInitializer.setCoordType(CoordType.GCJ02)
 
         initBuglyAndUP()
 

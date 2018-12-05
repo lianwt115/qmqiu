@@ -5,9 +5,7 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
-import com.baidu.location.BDLocation
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
@@ -17,11 +15,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
 import android.view.KeyEvent
-import com.hw.ycshareelement.YcShareElement
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
-import com.lwt.qmqiu.R.mipmap.location
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.fragment.FindFragment
 import com.lwt.qmqiu.fragment.MineFragment

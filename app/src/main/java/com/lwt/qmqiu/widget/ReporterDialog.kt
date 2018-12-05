@@ -166,11 +166,19 @@ class ReporterDialog : Dialog {
                     mReporterList.add(ReportInfo("轻度色情内容"))
                     mReporterList.add(ReportInfo("色情,生殖器官"))
                 }
+                //打开地图
+                2 -> {
+
+                    mReporterList.add(ReportInfo("百度地图"))
+                    mReporterList.add(ReportInfo("高德地图"))
+                    mReporterList.add(ReportInfo("腾讯地图"))
+
+                }
             }
 
             mReportAdapter.notifyDataSetChanged()
 
-            mBtNext.visibility =if (this.type == 0) View.GONE else View.VISIBLE
+            mBtNext.visibility =if (this.type == 1) View.VISIBLE else View.GONE
 
             mTitle.text = title
         }
@@ -179,7 +187,7 @@ class ReporterDialog : Dialog {
 
             this.index = position
 
-            if (mListen !=null && this.type == 0) {
+            if (mListen !=null && (this.type == 0 || this.type == 2)) {
 
                 mListen!!.btClick(index,this.type)
 

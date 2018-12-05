@@ -16,6 +16,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/map_root"
         android:layout_below="@id/map_barview"
         android:layout_width="match_parent"
         android:layout_height="300dp">
@@ -34,11 +35,20 @@
             android:background="@drawable/bg_oval_3"
             android:layout_margin="20dp"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/location"
+            android:src="@mipmap/location_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/map_root"
+        android:overScrollMode="never"
+        android:id="@+id/recycleview_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 
