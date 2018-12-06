@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.mvp.model
 
 import android.content.Context
+import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.UploadLog
 import com.lwt.qmqiu.network.ApiService
@@ -32,6 +33,11 @@ open class BaseModel(val context: Context) {
     fun upload(from:String, type: Int, where:String,length:Int, file: MultipartBody.Part): Observable<UploadLog>?{
 
         return apiService?.upload(from,type,where,length,file)?.map(HttpResultFunc())
+
+    }
+    fun giftSend(name:String, to:String, giftIndex:Int,giftCount:Int): Observable<BaseUser>?{
+
+        return apiService?.giftSend(name,to,giftIndex,giftCount)?.map(HttpResultFunc())
 
     }
 }

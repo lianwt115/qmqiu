@@ -59,6 +59,7 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:visibility="gone"
             android:layout_centerHorizontal="true"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
@@ -74,6 +75,7 @@
 
     </cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout>
     <VideoView
+
         android:id="@+id/voice_play"
         android:layout_width="1px"
         android:layout_height="1px" />

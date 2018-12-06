@@ -3,23 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <com.hanks.htextview.line.LineTextView
+    <TextView
 
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
         android:id="@+id/gift_info"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
         android:padding="10dp"
         android:textSize="22sp"
         android:gravity="center"
-        app:animationDuration="3000"
         android:textColor="#ffffff"
-        app:lineColor="#1367bc"
-        app:lineWidth="4dp"/>
+        />
 
     <com.opensource.svgaplayer.SVGAImageView
         android:id="@+id/svgaPlayer_dialog"

@@ -17,44 +17,53 @@ import com.lwt.qmqiu.utils.UiUtils
 class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickListen) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftBuyAdapter.ListViewHolder>() {
 
 
-    var context: Context? = null
-    var mTotalList: List<GiftInfo>? = null
-    var inflater: LayoutInflater? = null
-    var listen: GiftBuyClickListen? = null
-    init {
-        this.context = context
-        this.mTotalList = list
-        this.inflater = LayoutInflater.from(context)
-        this.listen = listen
-    }
-
+    private var mContext: Context = context
+    private var mTotalList: List<GiftInfo> = list
+    private var mInflater: LayoutInflater =  LayoutInflater.from(mContext)
+    private var mGiftBuyClickListen: GiftBuyClickListen? = listen
+    private var index = -1
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
-        val obj=mTotalList?.get(position)
+        val obj= mTotalList[position]
 
 
-        Glide.with(context!!).load(obj?.imgPath).into(holder.giftbuy_img)
+        Glide.with(mContext).load(obj.imgPath).into(holder.giftbuy_img)
 
 
-        holder.giftbuy_count.text=obj?.count.toString()
+        holder.giftbuy_count.text=obj.count.toString()
 
         holder.giftbuy_price.text="青木球:${obj?.price}"
 
+        //选择背景
+        holder.giftbuy_img.background = mContext.getDrawable(if (obj.select) R.drawable.bg_acc_rectangle_0 else R.drawable.bg_line_rectangle_lastpage_noradius)
 
         holder.giftbuy_img.setOnClickListener {
 
+            //只显示当前选择
+
+            if (index!=-1)
+
+                 mTotalList[index].select =false
+
+            obj.select = true
+
+            index = position
+
+            notifyDataSetChanged()
+
+
             //检查是否超出购买力
-            if (checkEnough(obj!!.price)) {
+            if (checkEnough(obj.price)) {
 
-                obj?.count = obj?.count!!+1
+                obj.count = obj.count+1
 
-                holder.giftbuy_count.text=obj?.count.toString()
+                holder.giftbuy_count.text=obj.count.toString()
 
                 sendCash()
 
             }else{
 
-                UiUtils.showToast(context!!.getString(R.string.coin_notenough))
+                UiUtils.showToast(mContext.getString(R.string.coin_notenough))
 
             }
 
@@ -63,12 +72,12 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
         holder.giftbuy_delete.setOnClickListener {
 
-            obj?.count = obj?.count!!-1
+            obj.count = obj.count-1
 
             if (obj.count<0)
                 obj.count=0
 
-            holder.giftbuy_count.text=obj?.count.toString()
+            holder.giftbuy_count.text=obj.count.toString()
 
             sendCash()
         }
@@ -94,7 +103,7 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
         var count = 0
 
-        mTotalList?.forEach { giftInfo ->
+        mTotalList.forEach { giftInfo ->
 
             count += giftInfo.price * giftInfo.count
 
@@ -105,34 +114,34 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
      fun getGiftCount():String{
 
-        return mTotalList!![0].count.toString().plus("*${mTotalList!![1].count}*${mTotalList!![2].count}*${mTotalList!![3].count}")
+        return mTotalList[0].count.toString().plus("*${mTotalList[1].count}*${mTotalList[2].count}*${mTotalList[3].count}")
 
     }
      fun getPriceCount():String{
 
-        return mTotalList!![0].price.toString().plus("*${mTotalList!![1].price}*${mTotalList!![2].price}*${mTotalList!![3].price}")
+        return mTotalList[0].price.toString().plus("*${mTotalList[1].price}*${mTotalList[2].price}*${mTotalList[3].price}")
 
     }
 
 
     private fun sendCash() {
 
-        if (listen != null) {
+        if (mGiftBuyClickListen != null) {
 
-            listen?.giftBuyClick(getCount())
+            mGiftBuyClickListen?.giftBuyClick(getCount())
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        var itemView=inflater?.inflate(R.layout.item_giftbuy, parent, false)
+        var itemView=mInflater.inflate(R.layout.item_giftbuy, parent, false)
 
-        return ListViewHolder(itemView!!, context!!)
+        return ListViewHolder(itemView!!, mContext)
     }
 
     override fun getItemCount(): Int {
 
-        return mTotalList?.size ?: 0
+        return mTotalList.size
     }
 
     class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

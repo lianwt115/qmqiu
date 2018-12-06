@@ -266,10 +266,4 @@
 
     </RelativeLayout>
 
-    <com.opensource.svgaplayer.SVGAImageView
-        android:id="@+id/svgaPlayer"
-        android:layout_height="500dp"
-        android:layout_width="match_parent"
-        />
-
 </RelativeLayout>

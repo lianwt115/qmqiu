@@ -23,11 +23,7 @@ class UserInfoModel(context: Context) : BaseModel(context) {
 
     }
 
-    fun giftSend(name:String, to:String, giftIndex:Int,giftCount:Int): Observable<BaseUser>?{
 
-        return apiService?.giftSend(name,to,giftIndex,giftCount)?.map(HttpResultFunc())
-
-    }
     fun refuseUser(name:String, to: String, refuse:Boolean): Observable<RefuseLog>?{
 
         return apiService?.refuseUser(name,to,refuse)?.map(HttpResultFunc())

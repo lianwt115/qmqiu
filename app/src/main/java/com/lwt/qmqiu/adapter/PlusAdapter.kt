@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.GiftInfo
 import com.lwt.qmqiu.bean.PlusInfo
@@ -26,8 +27,6 @@ class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListe
     private var listen: PlusClickListen? = listen
     private var index = -1
 
-
-
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
         val obj= mTotalList[position]
@@ -38,23 +37,36 @@ class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListe
 
         Glide.with(mContext).load(obj.img).into(holder.plus_iv)
 
+        holder.gift_number.text = obj.giftNum
+
+        holder.gift_number.visibility = if (position>=4 ) View.VISIBLE else View.GONE
+
         holder.plus_iv.setOnClickListener {
 
-            if (position>=4 && position!=index){
+            if (position>=4 ){
 
-                if (index>=4)
-                    mTotalList[index].select =false
+                //切换选择
+                if (position!=index){
 
-                obj.select = true
+                    if (index>=4)
+                        mTotalList[index].select =false
 
-                index = position
+                    obj.select = true
+
+                    index = position
+                }else{
+
+                    //选择取消
+                    obj.select = !obj.select
+
+                }
 
                 notifyDataSetChanged()
             }
 
 
             if (listen!=null)
-                listen?.plusClick(position)
+                listen?.plusClick(position,obj)
 
         }
 
@@ -76,11 +88,28 @@ class PlusAdapter(context: Context, list: List<PlusInfo>, listen: PlusClickListe
 
         var plus_iv: ImageView = itemView.findViewById(R.id.plus_iv) as ImageView
         var plus_tv: TextView = itemView.findViewById(R.id.plus_tv) as TextView
+        var gift_number: TextView = itemView.findViewById(R.id.gift_number) as TextView
+
+    }
+
+    fun changeGiftNum(){
+
+        if (mTotalList.size>=8 ){
+
+            var gift =App.instanceApp().getLocalUser()!!.gift.split("*")
+
+            mTotalList[4].giftNum = gift[0]
+            mTotalList[5].giftNum = gift[1]
+            mTotalList[6].giftNum = gift[2]
+            mTotalList[7].giftNum = gift[3]
+
+            notifyDataSetChanged()
+        }
 
     }
 
  interface PlusClickListen{
-        fun plusClick(position: Int)
+        fun plusClick(position: Int,obj:PlusInfo)
     }
 
 

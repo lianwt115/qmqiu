@@ -1,6 +1,7 @@
 package com.lwt.qmqiu.mvp.present
 
 import android.content.Context
+import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.bean.UploadLog
@@ -153,6 +154,32 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
 
             }else{
                 mView?.err(-1,it.message,5)
+            }
+
+        }
+
+        )
+    }
+
+    override fun giftSend(name: String, to: String, giftIndex: Int, giftCount: Int, bindToLifecycle: LifecycleTransformer<BaseUser>) {
+        val observable : Observable<BaseUser>? = mContext?.let {
+            mModel.giftSend(name,to,giftIndex,giftCount) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setGiftSend(it,giftIndex)
+                }, {
+
+            Logger.e(it.message?:"错误消息为空")
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,6)
+
+            }else{
+                mView?.err(-1,it.message,6)
             }
 
         }

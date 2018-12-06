@@ -2,7 +2,6 @@ package com.lwt.qmqiu.activity
 
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Html
@@ -11,11 +10,7 @@ import android.view.KeyEvent
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.QMMessage
-import com.lwt.qmqiu.bean.WSErr
 import com.lwt.qmqiu.network.QMWebsocket
-import com.lwt.qmqiu.utils.RxBus
-import com.lwt.qmqiu.utils.UiUtils
-import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.GiftDialog
 import com.lwt.qmqiu.widget.NoticeDialog
 import com.orhanobut.logger.Logger
@@ -25,16 +20,19 @@ import com.trello.rxlifecycle2.RxLifecycle
 import com.trello.rxlifecycle2.android.ActivityEvent
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import android.view.WindowManager
 import android.os.Build
-
-
-
+import com.lwt.qmqiu.utils.SPHelper
 
 
 open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, QMWebsocket.QMMessageListen {
+
+
+    protected val giftUnitList = listOf("个","朵","台","顶")
+    protected val giftNameList = listOf("天使宝贝","挚爱玫瑰","激情跑车","女王皇冠")
+    protected val giftPathList = listOf("angel.svga","rose.svga","posche.svga","kingset.svga")
+    private  var mLocalUserName:String = SPHelper.getInstance().get("loginName","") as String
 
 
     override fun qmMessage(qmMessage: QMMessage) {
@@ -47,10 +45,11 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
                 //礼物
                 2 -> {
 
+                    //这个是全局通知收到的  只有可能是接受者
                     val infoList = qmMessage.message.split("*") //数量-单位-名称-动画名称
 
 
-                    val info = Html.fromHtml("${qmMessage.from}  赠送: <font color='#FF4081'>"+infoList[0]+"</font>\t"+"${infoList[1]}"+"<font color='#FF4081'>\t${infoList[2]}</font>" +"给<font color='#FF4081'> ${qmMessage.to}</font>")
+                    val info = Html.fromHtml("${qmMessage.from}  赠送: <font color='#FF4081'>"+infoList[0]+"</font>\t"+"${infoList[1]}"+"<font color='#FF4081'>\t ${infoList[2]}</font>" +"\n给<font color='#FF4081'> ${if(mLocalUserName == qmMessage.to)"${qmMessage.to}(我)" else qmMessage.to}</font>")
 
 
                     showGiftDialog(info,infoList[3])

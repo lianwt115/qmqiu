@@ -3,14 +3,19 @@ package com.lwt.qmqiu.widget
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Point
 import android.text.Spanned
 import android.view.*
+import android.widget.RelativeLayout
 import android.widget.TextView
-import com.hanks.htextview.line.LineTextView
 import com.lwt.qmqiu.R
 import com.opensource.svgaplayer.*
 import com.orhanobut.logger.Logger
 import org.jetbrains.annotations.NotNull
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+
+
 
 /**
  * Created by Administrator on 2018\2\1 0001.
@@ -29,7 +34,7 @@ class GiftDialog : Dialog {
 
         private var mGiftDialog: GiftDialog? = null
         private var layout: View? = null
-        private var mTvGiftInfo: LineTextView? = null
+        private var mTvGiftInfo: TextView? = null
         private var mSVGAImageView: SVGAImageView? = null
         private  lateinit var mSVGAParser:SVGAParser
 
@@ -41,8 +46,14 @@ class GiftDialog : Dialog {
             mGiftDialog = GiftDialog(mContext, R.style.GiftDialog)
             mGiftDialog!!.setCanceledOnTouchOutside(false)
             layout = inflater.inflate(R.layout.dialog_giftnotice, null)
+
+            val display = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            var point = Point()
+            display.defaultDisplay.getSize(point)
+
+            //对话框全屏显示
             mGiftDialog!!.addContentView(layout!!, ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                    point.x , point.y))
 
             initView()
 
@@ -51,7 +62,7 @@ class GiftDialog : Dialog {
 
         private fun initView() {
 
-            mTvGiftInfo = layout!!.findViewById(R.id.gift_info) as LineTextView
+            mTvGiftInfo = layout!!.findViewById(R.id.gift_info) as TextView
             mSVGAImageView = layout!!.findViewById(R.id.svgaPlayer_dialog) as SVGAImageView
 
             mSVGAImageView!!.clearsAfterStop =true
@@ -86,7 +97,7 @@ class GiftDialog : Dialog {
 
         fun start(info: Spanned, path:String){
 
-            mTvGiftInfo!!.animateText(info)
+            mTvGiftInfo!!.text = info
 
             //播放动画
             mSVGAParser.parse(path, object : SVGAParser.ParseCompletion {

@@ -13,51 +13,62 @@ import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.GiftInfo
 
 
-class GiftShowAdapter(context: Context, list: List<GiftInfo>, listen: GiftClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftShowAdapter.ListViewHolder>() {
+class GiftShowAdapter(context: Context, list: List<GiftInfo>, listen: GiftClickListen?,change:Boolean=false) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftShowAdapter.ListViewHolder>() {
 
 
-    var context: Context? = null
-    var mTotalList: List<GiftInfo>? = null
-    var inflater: LayoutInflater? = null
-    var listen: GiftClickListen? = null
+    private var mContext: Context = context
+    private var mTotalList: List<GiftInfo> = list
+    private var mInflater: LayoutInflater = LayoutInflater.from(mContext)
+    private var mGiftClickListen: GiftClickListen? = listen
+    private var mChange: Boolean = change
+    private var index = -1
 
-
-    init {
-        this.context = context
-        this.mTotalList = list
-        this.listen = listen
-        this.inflater = LayoutInflater.from(context)
-
-    }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
-        val obj=mTotalList?.get(position)
+        val obj= mTotalList[position]
 
 
-        Glide.with(context!!).load(obj?.imgPath).into(holder.gift_img)
+        Glide.with(mContext).load(obj.imgPath).into(holder.gift_img)
 
 
-        holder.gift_count.text=obj?.count.toString()
+        holder.gift_count.text=obj.count.toString()
 
+        //选择背景
+        holder.gift_img.background = mContext.getDrawable(if (obj.select) R.drawable.bg_acc_rectangle_0 else R.drawable.bg_line_rectangle_lastpage_noradius)
 
         holder.gift_root.setOnClickListener {
-            if (listen!=null)
-                listen?.giftClick(obj!!,position)
+
+            //只显示当前选择
+
+            if (mChange){
+                if (index!=-1)
+
+                    mTotalList[index].select =false
+
+                obj.select = true
+
+                index = position
+
+                notifyDataSetChanged()
+            }
+
+            if (mGiftClickListen!=null)
+                mGiftClickListen?.giftClick(obj,position)
         }
 
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        var itemView=inflater?.inflate(R.layout.item_giftshow, parent, false)
+        var itemView=mInflater.inflate(R.layout.item_giftshow, parent, false)
 
-        return ListViewHolder(itemView!!, context!!)
+        return ListViewHolder(itemView!!, mContext)
     }
 
     override fun getItemCount(): Int {
 
-        return mTotalList?.size ?: 0
+        return mTotalList.size
     }
 
     class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

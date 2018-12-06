@@ -3,14 +3,12 @@ package com.lwt.qmqiu.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.text.ClipboardManager
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
+import android.text.*
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -41,9 +39,11 @@ import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
+import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.voice.VoiceManager
 import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.ReporterDialog
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.layout_send_message_bar.*
 import okhttp3.MediaType
@@ -52,9 +52,11 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.IOException
 import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 
 class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener,IShareElements {
+
 
 
     private lateinit var mIMChatRoom:IMChatRoom
@@ -70,6 +72,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     private  var refuse = false
     private  var voice = true
+    private  var giftIndex = -1
     private  var mSeleteView:View? = null
     private  var mSeleteData:PhotoViewData? = null
     companion object {
@@ -271,10 +274,18 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         if (mIMChatRoom.roomType == 3){
 
-            mPlusList.add(PlusInfo("天使", R.mipmap.angel))
-            mPlusList.add(PlusInfo("玫瑰", R.mipmap.rose))
-            mPlusList.add(PlusInfo("跑车", R.mipmap.paoche))
-            mPlusList.add(PlusInfo("王冠", R.mipmap.kingset))
+            var gift =App.instanceApp().getLocalUser()!!.gift.split("*")
+
+            if (gift.size>=4){
+
+                mPlusList.add(PlusInfo("天使", R.mipmap.angel,gift[0]))
+                mPlusList.add(PlusInfo("玫瑰", R.mipmap.rose,gift[1]))
+                mPlusList.add(PlusInfo("跑车", R.mipmap.paoche,gift[2]))
+                mPlusList.add(PlusInfo("王冠", R.mipmap.kingset,gift[3]))
+
+                gift_send.visibility = View.VISIBLE
+            }
+
         }
 
         mPlusAdapter.notifyDataSetChanged()
@@ -287,7 +298,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     }
 
-    override fun plusClick(position: Int) {
+    override fun plusClick(position: Int, obj: PlusInfo) {
 
 
         when (position) {
@@ -375,10 +386,53 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             4,5,6,7 -> {
 
-                UiUtils.showToast("礼物赠送$position")
+                if(obj.select)
+                    this.giftIndex = position
+                else
+                    this.giftIndex = -1
 
             }
         }
+
+    }
+
+    //赠送礼物成功
+    override fun setGiftSend(baseUser: BaseUser, giftIndex: Int) {
+
+        App.instanceApp().setLocalUser(baseUser)
+
+        mPlusAdapter.changeGiftNum()
+
+        gift_send.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
+
+        //动画
+        showSuccessGift(giftIndex)
+
+        Observable.timer(500, TimeUnit.MILLISECONDS).applySchedulers().subscribe({
+
+            gift_send.revertAnimation()
+
+        },{
+            Logger.e("按钮复原异常")
+        })
+
+
+    }
+
+
+    private fun showSuccessGift(giftIndex: Int) {
+
+        var infoName = mIMChatRoom.roomName.split("ALWTA")
+
+        var toName = if (infoName[0] == mLocalUserName)infoName[1] else infoName[0]
+
+
+        //数量-单位-名称-动画名称
+
+        val info = Html.fromHtml("$mLocalUserName(我)  赠送: <font color='#FF4081'>"+1+"</font>\t"+"${giftUnitList[giftIndex]}"+"<font color='#FF4081'>\t ${giftNameList[giftIndex]}</font>" +"\n给<font color='#FF4081'> $toName</font>")
+
+
+        showGiftDialog(info,giftPathList[giftIndex])
 
     }
 
@@ -457,7 +511,26 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             R.id.gift_send ->{
 
-                gift_send.startAnimation()
+                 var info = mIMChatRoom.roomName.split("ALWTA")
+
+                if (mIMChatRoom.roomType == 3 && info.size==2){
+
+                    if (giftIndex!=-1){
+
+                        gift_send.startAnimation()
+
+                        var toName = if (info[0] == mLocalUserName)info[1] else info[0]
+
+                        //送给谁
+                        present.giftSend(mLocalUserName,toName,giftIndex-4,1,bindToLifecycle())
+
+                    }else{
+
+                        UiUtils.showToast("请选择礼物")
+                    }
+
+
+                }
 
             }
 
@@ -1071,6 +1144,23 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             5 -> {
 
                 UiUtils.showToast(if (code == 206)"用户不在线" else "发送视频聊天失败")
+
+            }
+
+            6 -> {
+
+                gift_send!!.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.error))
+
+                Observable.timer(500,TimeUnit.MILLISECONDS).applySchedulers().subscribe({
+
+                    gift_send.revertAnimation()
+
+                },{
+                    Logger.e("按钮复原异常")
+                })
+
+                Logger.e("礼物赠送失败")
+                UiUtils.showToast("礼物赠送失败")
 
             }
 

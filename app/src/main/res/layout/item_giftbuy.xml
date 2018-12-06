@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/bg_line_rectangle_lastpage_noradius"
         android:id="@+id/giftbuy_img"
-        android:padding="2px"
+        android:padding="4px"
         android:scaleType="fitXY"
         android:src="@mipmap/posche"
         android:layout_width="56dp"

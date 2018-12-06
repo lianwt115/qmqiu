@@ -24,10 +24,6 @@ import com.lwt.qmqiu.mvp.present.UserInfoPresent
 import com.lwt.qmqiu.network.ApiService
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_userinfo.*
-import com.opensource.svgaplayer.SVGADrawable
-import com.opensource.svgaplayer.SVGAVideoEntity
-import com.opensource.svgaplayer.SVGAParser
-import org.jetbrains.annotations.NotNull
 import android.text.style.ForegroundColorSpan
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.IMChatRoom
@@ -51,7 +47,6 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     private  var mGiftInfoListBuy = ArrayList<GiftInfo>()
     private  var mIsMySelf = false
     private  var mLocalRefuseOther = false
-    private  lateinit var mSVGAParser:SVGAParser
     private  var mSendGiftIndex = -1
     private  var mSendGiftCount = 0
     private  var mSendGiftList = listOf<String>("天使宝贝","挚爱玫瑰","激情跑车","女王皇冠")
@@ -75,8 +70,6 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         userinfo_barview.showMore(mIsMySelf)
 
         initRecycleView()
-
-        initSvga()
 
         if (mIsMySelf){
 
@@ -332,16 +325,6 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
     }
 
-    private fun initSvga() {
-
-        svgaPlayer.clearsAfterStop =true
-
-        svgaPlayer.loops = 1
-        mSVGAParser = SVGAParser(this)
-
-
-    }
-
     private fun initGift(gift:String,buy:Boolean=false) {
 
         if (buy)
@@ -432,7 +415,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         }
         recycleview_gift.layoutManager=linearLayoutManager
 
-        mGiftShowAdapter= GiftShowAdapter(this,mGiftInfoList,this)
+        mGiftShowAdapter= GiftShowAdapter(this,mGiftInfoList,this,!mIsMySelf)
 
         recycleview_gift.adapter = mGiftShowAdapter
 
@@ -501,29 +484,12 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         gift_send.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.ic_done))
 
-        Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
+        Observable.timer(500,TimeUnit.MILLISECONDS).applySchedulers().subscribe({
 
             gift_send.revertAnimation()
-
-            //播放动画
-            mSVGAParser.parse(mGiftInfoList[mSendGiftIndex].savgPath, object : SVGAParser.ParseCompletion {
-                override fun onComplete(@NotNull videoItem: SVGAVideoEntity) {
-                    var drawable:SVGADrawable
-                    if (mSendGiftIndex == 3)
-                        drawable= SVGADrawable(videoItem,requestDynamicItemWithSpannableText())
-                    else
-                        drawable= SVGADrawable(videoItem)
-                    svgaPlayer.setImageDrawable(drawable)
-                    svgaPlayer.startAnimation()
-                }
-
-                override fun onError() {
-
-                    Logger.e("动画异常")
-                }
-            })
-
-
+            //mGiftInfoList[mSendGiftIndex].savgPath
+            //mSendGiftIndex
+            showSuccessGift(mSendGiftIndex)
 
         },{
             Logger.e("按钮复原异常")
@@ -531,6 +497,19 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
 
     }
+
+    private fun showSuccessGift(giftIndex: Int) {
+
+
+        //数量-单位-名称-动画名称
+
+        val info = Html.fromHtml("$mLocalUserName(我)  赠送: <font color='#FF4081'>"+mSendGiftCount+"</font>\t"+"${giftUnitList[giftIndex]}"+"<font color='#FF4081'>\t ${giftNameList[giftIndex]}</font>" +"\n给<font color='#FF4081'> $mUserName</font>")
+
+
+        showGiftDialog(info,giftPathList[giftIndex])
+
+    }
+
     override fun err(code: Int, errMessage: String?, type: Int) {
 
         when (type) {
@@ -600,26 +579,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
     override fun giftClick(gift: GiftInfo, position: Int) {
 
-        if (mIsMySelf){
-
-            mSVGAParser.parse(gift.savgPath, object : SVGAParser.ParseCompletion {
-                override fun onComplete(@NotNull videoItem: SVGAVideoEntity) {
-                    var drawable:SVGADrawable
-                    if (position == 3)
-                        drawable= SVGADrawable(videoItem,requestDynamicItemWithSpannableText())
-                    else
-                        drawable= SVGADrawable(videoItem)
-                    svgaPlayer.setImageDrawable(drawable)
-                    svgaPlayer.startAnimation()
-                }
-
-                override fun onError() {
-
-                    Logger.e("动画异常")
-                }
-            })
-
-        }else{
+        if (!mIsMySelf){
 
             if (mSendGiftIndex == position)
 

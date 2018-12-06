@@ -95,8 +95,6 @@ dependencies {
     implementation 'com.joooonho:selectableroundedimageview:1.0.1'
     //svga动画
     implementation 'com.github.yyued:SVGAPlayer-Android:2.1.9'
-    //文字特效
-    implementation 'com.hanks:htextview-line:0.1.6'
     //键盘处理方案
     implementation 'cn.dreamtobe.kpswitch:library:1.6.1'
     //greendao
