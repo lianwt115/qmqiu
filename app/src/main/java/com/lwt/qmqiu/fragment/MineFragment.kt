@@ -2,11 +2,12 @@ package com.lwt.qmqiu.fragment
 
 import android.content.Intent
 import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.activity.RoomSettingActivity
-import com.lwt.qmqiu.activity.UserInfoActivity
+import com.lwt.qmqiu.activity.*
+import com.lwt.qmqiu.bean.GiftInfo
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.widget.ItemView
 import com.orhanobut.logger.Logger
@@ -26,9 +27,13 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
 
         setUser()
 
-        userinfo_root.setOnClickListener(this)
+        user_img.setOnClickListener(this)
 
         itemview_room.setBarOnClickListener(this,R.id.itemview_room)
+        itemview_gift.setBarOnClickListener(this,R.id.itemview_gift)
+        itemview_charge.setBarOnClickListener(this,R.id.itemview_charge)
+        itemview_exchange.setBarOnClickListener(this,R.id.itemview_exchange)
+        itemview_setting.setBarOnClickListener(this,R.id.itemview_setting)
     }
 
     private fun setUser() {
@@ -58,7 +63,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
 
         when (v?.id) {
 
-            R.id.userinfo_root -> {
+            R.id.user_img -> {
 
                 var baseUser = App.instanceApp().getLocalUser()
 
@@ -73,9 +78,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
 
             }
 
-            else -> {
 
-            }
         }
     }
 
@@ -88,6 +91,35 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
                 val intent = Intent(activity, RoomSettingActivity::class.java)
 
                 startActivity(intent)
+            }
+
+            R.id.itemview_gift -> {
+
+                val intent = Intent(activity, GiftInfoActivity::class.java)
+
+                startActivity(intent)
+
+            }
+            R.id.itemview_charge -> {
+
+                val intent = Intent(activity, ChargeActivity::class.java)
+
+                startActivity(intent)
+
+            }
+            R.id.itemview_exchange -> {
+
+                val intent = Intent(activity, ExchangeActivity::class.java)
+
+                startActivity(intent)
+
+            }
+            R.id.itemview_setting -> {
+
+                val intent = Intent(activity, SettingActivity::class.java)
+
+                startActivity(intent)
+
             }
 
         }

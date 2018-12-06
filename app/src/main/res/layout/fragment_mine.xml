@@ -83,16 +83,16 @@
 
     <com.lwt.qmqiu.widget.ItemView
         app:show_bottom_line="true"
-        app:show_img="@mipmap/cash_itemview"
+        app:show_img="@mipmap/charge_itemview"
         app:show_name="充值"
-        android:id="@+id/itemview_cash"
+        android:id="@+id/itemview_charge"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
 
     <com.lwt.qmqiu.widget.ItemView
-        app:show_img="@mipmap/change_itemview"
+        app:show_img="@mipmap/exchange_itemview"
         app:show_name="兑换"
-        android:id="@+id/itemview_change"
+        android:id="@+id/itemview_exchange"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
 
