@@ -22,7 +22,6 @@ interface RoomMessageContract {
         fun setUpload(uploadLog: UploadLog)
         fun setVideoRequest(videoChannel: QMMessage)
         fun setGiftSend(baseUser: BaseUser,giftIndex: Int)
-        fun err(code:Int,errMessage:String?,type:Int)
 
     }
     interface Presenter : BasePresent {

@@ -20,18 +20,15 @@ import okhttp3.MultipartBody
 class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : RoomMessageContract.Presenter{
 
 
-    var mContext : Context? = null
-    var mView : RoomMessageContract.View? = null
-    val mModel : RoomMessageModel by lazy {
+    private var mContext : Context = context
+    private var mView : RoomMessageContract.View = view
+    private val mModel : RoomMessageModel by lazy {
         RoomMessageModel(context)
     }
-    init {
-        mView = view
-        mContext = context
-    }
+
 
     override fun getRoomMessage(name: String, roomNumber: String, bindToLifecycle: LifecycleTransformer<List<QMMessage>>) {
-        val observable : Observable<List<QMMessage>>? = mContext?.let {
+        val observable : Observable<List<QMMessage>>? = mContext.let {
             mModel.getRoomMessage(name,roomNumber) }
 
 
@@ -57,7 +54,7 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
     }
 
     override fun refuseCheck(name: String, to: String, bindToLifecycle: LifecycleTransformer<Boolean>) {
-        val observable : Observable<Boolean>? = mContext?.let {
+        val observable : Observable<Boolean>? = mContext.let {
             mModel.refuseCheck(name,to) }
 
 
@@ -84,7 +81,7 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
     }
 
     override fun reportUser(name: String, to: String, why: Int, roomNumber: String, messageContent: String, messageId: Long, bindToLifecycle: LifecycleTransformer<Boolean>) {
-        val observable : Observable<Boolean>? = mContext?.let {
+        val observable : Observable<Boolean>? = mContext.let {
             mModel.reportUser(name,to,why,roomNumber,messageContent,messageId) }
 
 
@@ -110,7 +107,7 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
     }
 
     override fun upload(from: String, type: Int, where: String, length: Int, file: MultipartBody.Part, bindToLifecycle: LifecycleTransformer<UploadLog>) {
-        val observable : Observable<UploadLog>? = mContext?.let {
+        val observable : Observable<UploadLog>? = mContext.let {
             mModel.upload(from,type,where,length,file) }
 
 
@@ -136,7 +133,7 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
     }
 
     override fun videoRequest(from: String, to: String, message: String, bindToLifecycle: LifecycleTransformer<QMMessage>) {
-        val observable : Observable<QMMessage>? = mContext?.let {
+        val observable : Observable<QMMessage>? = mContext.let {
             mModel.videoRequest(from,to,message) }
 
 
@@ -162,7 +159,7 @@ class RoomMessagePresent(context: Context, view: RoomMessageContract.View) : Roo
     }
 
     override fun giftSend(name: String, to: String, giftIndex: Int, giftCount: Int, bindToLifecycle: LifecycleTransformer<BaseUser>) {
-        val observable : Observable<BaseUser>? = mContext?.let {
+        val observable : Observable<BaseUser>? = mContext.let {
             mModel.giftSend(name,to,giftIndex,giftCount) }
 
 

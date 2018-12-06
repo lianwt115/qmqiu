@@ -13,6 +13,14 @@
 
     </declare-styleable>
 
+    <declare-styleable name="ItemView">
+
+        <attr name="show_bottom_line" format="boolean" />
+        <attr name="show_img" format="reference" />
+        <attr name="show_name" format="string" />
+
+    </declare-styleable>
+
     <declare-styleable name="ShowListView">
 
         <attr name="show_line" format="boolean" />

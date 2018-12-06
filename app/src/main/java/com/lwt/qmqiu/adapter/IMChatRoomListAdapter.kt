@@ -101,11 +101,11 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
         }
 
 
-        holder.room_time.text = timeData(obj?.lastContentTime!!)
+        holder.room_time.text = timeData(if (mType == 4) obj?.creatTime!! else obj?.lastContentTime!!)
 
         roomFirstBg(obj.roomNumber,holder.room_first)
 
-        if (mType == 3)
+        if (mType == 3 || mType == 4)
             roonType(obj.roomType,holder.room_type)
 
         holder.root_contain.setOnClickListener {

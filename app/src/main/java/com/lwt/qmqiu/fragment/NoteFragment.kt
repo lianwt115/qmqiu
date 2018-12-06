@@ -18,49 +18,12 @@ class NoteFragment: BaseFragment(){
     override fun initView() {
 
 
-        startBtn.setOnClickListener{
-
-
-            voice_view.startRecord("test",object :VoiceManager.VoiceRecordListen{
-
-                override fun finished(file: File, time: Int) {
-                    Logger.e(file.absolutePath)
-                }
-
-                override fun err(errMessage: String) {
-                    Logger.e(errMessage)
-                }
-
-                override fun start() {
-                    Logger.e("开始")
-                }
-
-            })
-
-
-        }
-
-        stopBtn.setOnClickListener {
-
-            voice_view.stopRecord(true)
-
-        }
-        outside.setOnClickListener {
-
-            voice_view.setCancle(true)
-
-        }
-        inside.setOnClickListener {
-
-            voice_view.setCancle(false)
-
-        }
 
     }
 
     override fun onStop() {
         super.onStop()
-        voice_view.stopRecord()
+
     }
 
 

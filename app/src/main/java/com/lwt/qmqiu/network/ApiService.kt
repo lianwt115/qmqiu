@@ -80,5 +80,8 @@ interface ApiService {
     @POST(ApiConst.IMChat_RoomMessageVideoRequestExit)
     fun videoRequestExit(@Query("channelName") channelName:String,@Query("name") name:String,@Query("time") time:Int):Observable<HttpResult<Boolean>>
 
+    @GET(ApiConst.IMChat_RoomCreatByMe)
+    fun getRoomCreatByMe(@Query("name") name:String,@Query("sys") sys:String = "sys"):Observable<HttpResult<List<IMChatRoom>>>
+
 
 }

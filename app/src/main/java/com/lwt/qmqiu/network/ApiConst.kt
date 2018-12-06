@@ -11,6 +11,7 @@ class ApiConst {
 
         const val IMChat_RoomGet = "chat/getroom"
         const val IMChat_RoomCreat = "chat/creatroom"
+        const val IMChat_RoomCreatByMe = "chat/getmycreatroom"
 
         const val IMChat_RoomMessageGet = "message/getmessage"
         const val IMChat_RoomMessageVideoRequest = "message/sendVideoRequest"

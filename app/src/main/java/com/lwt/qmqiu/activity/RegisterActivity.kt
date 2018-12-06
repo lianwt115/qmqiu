@@ -219,7 +219,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
     }
 
 
-    override fun err(code: Int, errMessage: String?) {
+    override fun err(code: Int, errMessage: String?, type: Int) {
 
         bt_go.revertAnimation()
 

@@ -18,19 +18,16 @@ class IMChatRoomPresent(context: Context, view: IMChatRoomContract.View) : IMCha
 
 
 
-    var mContext : Context? = null
-    var mView : IMChatRoomContract.View? = null
-    val mModel : IMChatRoomModel by lazy {
+    private var mContext : Context = context
+    private var mView : IMChatRoomContract.View = view
+    private val mModel : IMChatRoomModel by lazy {
         IMChatRoomModel(context)
     }
-    init {
-        mView = view
-        mContext = context
-    }
+
 
     override fun getIMChatRoom(name: String, latitude: Double, longitude: Double, type: Int, bindToLifecycle: LifecycleTransformer<List<IMChatRoom>>) {
 
-        val observable : Observable<List<IMChatRoom>>? = mContext?.let {
+        val observable : Observable<List<IMChatRoom>>? = mContext.let {
             mModel.getIMChatRoom(name,latitude,longitude,type) }
 
 
@@ -56,7 +53,7 @@ class IMChatRoomPresent(context: Context, view: IMChatRoomContract.View) : IMCha
 
     }
     override fun creatIMChatRoom(name: String, latitude: Double, longitude: Double, type: Int, roomName: String, bindToLifecycle: LifecycleTransformer<IMChatRoom>) {
-        val observable : Observable<IMChatRoom>? = mContext?.let {
+        val observable : Observable<IMChatRoom>? = mContext.let {
             mModel.creatIMChatRoom(name,latitude,longitude,type,roomName) }
 
 

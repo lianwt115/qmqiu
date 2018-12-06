@@ -22,7 +22,6 @@ interface UserInfoContract {
         fun setGiftBuy(baseUser: BaseUser)
         fun setGiftSend(baseUser: BaseUser)
         fun creatIMChatRoomSuccess(room:IMChatRoom)
-        fun err(code:Int,errMessage:String?,type:Int)
 
     }
 

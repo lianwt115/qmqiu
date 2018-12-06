@@ -16,7 +16,6 @@ interface IMChatRoomContract {
         fun setIMChatRoom(roomList:List<IMChatRoom>)
         fun creatIMChatRoomSuccess(room:IMChatRoom)
 
-        fun err(code:Int,errMessage:String?,type:Int)
 
     }
     interface Presenter : BasePresent {

@@ -17,18 +17,14 @@ import io.reactivex.Observable
 class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoContract.Presenter{
 
 
-    var mContext : Context? = null
-    var mView : UserInfoContract.View? = null
-    val mModel : UserInfoModel by lazy {
+    private var mContext : Context = context
+    private var mView : UserInfoContract.View = view
+    private val mModel : UserInfoModel by lazy {
         UserInfoModel(context)
-    }
-    init {
-        mView = view
-        mContext = context
     }
 
     override fun userFind(name: String, bindToLifecycle: LifecycleTransformer<BaseUser>) {
-        val observable : Observable<BaseUser>? = mContext?.let {
+        val observable : Observable<BaseUser>? = mContext.let {
             mModel.userFind(name) }
 
 
@@ -55,7 +51,7 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
 
 
     override fun giftBuy(name: String, cashCount: Int, giftCount: String, priceCount: String, bindToLifecycle: LifecycleTransformer<BaseUser>) {
-        val observable : Observable<BaseUser>? = mContext?.let {
+        val observable : Observable<BaseUser>? = mContext.let {
             mModel.giftBuy(name,cashCount,giftCount,priceCount) }
 
 
@@ -81,7 +77,7 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
     }
 
     override fun giftSend(name: String, to: String, giftIndex: Int, giftCount: Int, bindToLifecycle: LifecycleTransformer<BaseUser>) {
-        val observable : Observable<BaseUser>? = mContext?.let {
+        val observable : Observable<BaseUser>? = mContext.let {
             mModel.giftSend(name,to,giftIndex,giftCount) }
 
 
@@ -107,7 +103,7 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
     }
 
     override fun creatIMChatRoom(name: String, latitude: Double, longitude: Double, type: Int, roomName: String, bindToLifecycle: LifecycleTransformer<IMChatRoom>) {
-        val observable : Observable<IMChatRoom>? = mContext?.let {
+        val observable : Observable<IMChatRoom>? = mContext.let {
             mModel.creatIMChatRoom(name,latitude,longitude,type,roomName) }
 
 
@@ -133,7 +129,7 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
     }
 
     override fun refuseUser(name: String, to: String, refuse: Boolean, bindToLifecycle: LifecycleTransformer<RefuseLog>) {
-        val observable : Observable<RefuseLog>? = mContext?.let {
+        val observable : Observable<RefuseLog>? = mContext.let {
             mModel.refuseUser(name,to,refuse) }
 
 
@@ -159,7 +155,7 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
     }
 
     override fun refuseCheck(name: String, to: String, bindToLifecycle: LifecycleTransformer<Boolean>) {
-        val observable : Observable<Boolean>? = mContext?.let {
+        val observable : Observable<Boolean>? = mContext.let {
             mModel.refuseCheck(name,to) }
 
 

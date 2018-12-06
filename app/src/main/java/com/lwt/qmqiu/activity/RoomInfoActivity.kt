@@ -151,6 +151,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
 
 
     }
+
     private fun initRecycleView() {
 
 

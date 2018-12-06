@@ -15,20 +15,14 @@ class RoomInfoPresent(context: Context, view: RoomInfoContract.View) : RoomInfoC
 
 
 
-    var mContext : Context? = null
-    var mView : RoomInfoContract.View? = null
-    val mModel : RoomInfoModel by lazy {
+    private var mContext : Context = context
+    private var mView : RoomInfoContract.View = view
+    private val mModel : RoomInfoModel by lazy {
         RoomInfoModel(context)
     }
-    init {
-        mView = view
-        mContext = context
-    }
-
-
 
     override fun getActiveUser(name: String, roomNumber: String, bindToLifecycle: LifecycleTransformer<List<BaseUser>>) {
-        val observable : Observable<List<BaseUser>>? = mContext?.let {
+        val observable : Observable<List<BaseUser>>? = mContext.let {
             mModel.getRoomActiveUser(name,roomNumber) }
 
 
@@ -54,7 +48,7 @@ class RoomInfoPresent(context: Context, view: RoomInfoContract.View) : RoomInfoC
     }
 
     override fun exitAndDelete(name: String, roomNumber: String, bindToLifecycle: LifecycleTransformer<Boolean>) {
-        val observable : Observable<Boolean>? = mContext?.let {
+        val observable : Observable<Boolean>? = mContext.let {
             mModel.getRoomExitAndDelete(name,roomNumber) }
 
 

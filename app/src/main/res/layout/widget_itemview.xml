@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@color/white"
+    android:id="@+id/itemview_root"
+    >
+
+    <ImageView
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/im_room"
+        android:id="@+id/show_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="房间"
+        android:layout_marginLeft="10dp"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_toRightOf="@id/show_img"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black"
+        android:id="@+id/show_name"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp" />
+    <View
+        android:layout_alignParentBottom="true"
+        android:id="@+id/line"
+        android:background="@color/bg_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+
+</RelativeLayout>

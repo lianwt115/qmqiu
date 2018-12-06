@@ -319,7 +319,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         App.instanceApp().setLocalUser(baseUser)
     }
 
-    override fun err(code: Int, errMessage: String?) {
+    override fun err(code: Int, errMessage: String?, type: Int) {
 
         //登录
         gotoLogin()

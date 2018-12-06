@@ -18,9 +18,9 @@ interface RoomInfoContract {
         fun setActiveUser(activeList:List<BaseUser>)
         fun setExitAndDelete(success:Boolean)
 
-        fun err(code:Int,errMessage:String?,type:Int)
 
     }
+
     interface Presenter : BasePresent {
 
         fun getActiveUser(name:String, roomNumber:String,bindToLifecycle: LifecycleTransformer<List<BaseUser>>)

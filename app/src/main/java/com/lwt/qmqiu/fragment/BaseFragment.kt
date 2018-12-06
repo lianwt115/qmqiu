@@ -160,7 +160,7 @@ abstract class BaseFragment : androidx.fragment.app.Fragment(),LifecycleProvider
 
     protected fun showProgressDialogSuccess(boolean: Boolean){
 
-        if (!mDestroy && mNoticeDialog != null && mNoticeDialogBuilder != null) {
+        if (mNoticeDialog != null && mNoticeDialogBuilder != null) {
             mNoticeDialogBuilder!!.btFinish(boolean)
         }
     }

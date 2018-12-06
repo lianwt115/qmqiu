@@ -16,8 +16,6 @@ interface UserLoginContract {
 
         fun successRegistOrLogin(baseUser: BaseUser,regist:Boolean)
 
-        fun err(code:Int,errMessage:String?)
-
     }
     interface Presenter : BasePresent {
 

@@ -40,10 +40,10 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
 
             if (it is ApiException){
 
-                mView?.err(it.getResultCode()!!,it.message)
+                mView?.err(it.getResultCode()!!,it.message,0)
 
             }else{
-                mView?.err(-1,it.message)
+                mView?.err(-1,it.message,0)
             }
 
         }
@@ -66,10 +66,10 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
 
             if (it is ApiException){
 
-                mView?.err(it.getResultCode()!!,it.message)
+                mView?.err(it.getResultCode()!!,it.message,1)
 
             }else{
-                mView?.err(-1,it.message)
+                mView?.err(-1,it.message,1)
             }
 
         }
@@ -93,10 +93,10 @@ class UserLoginPresent(context: Context, view: UserLoginContract.View) : UserLog
 
             if (it is ApiException){
 
-                mView?.err(it.getResultCode()!!,it.message)
+                mView?.err(it.getResultCode()!!,it.message,2)
 
             }else{
-                mView?.err(-1,it.message)
+                mView?.err(-1,it.message,2)
             }
 
         }

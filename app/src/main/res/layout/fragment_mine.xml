@@ -1,28 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mine_rootview"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
 
-        android:layout_centerInParent="true"
-        android:paddingLeft="16dp"
-        android:gravity="center"
-        android:textColor="#494157"
-        android:textSize="20sp"
-        android:id="@+id/message_title"
-        android:text="我的"
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/userinfo_root"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
-    <com.opensource.svgaplayer.SVGAImageView
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.joooonho.SelectableRoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/user_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_launcher_round"
+            android:scaleType="centerCrop"
+            app:sriv_oval="true" />
+
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_name"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/user_img"
+
+            />
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_gender"
+            android:layout_below="@id/user_name"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/user_img"
+
+            />
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_age"
+            android:layout_below="@id/user_gender"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/user_img"
+
+            />
+
+    </RelativeLayout>
+
+    <com.lwt.qmqiu.widget.ItemView
+        android:layout_marginTop="20dp"
+        app:show_img="@mipmap/im_room"
+        app:show_name="房间"
+        android:id="@+id/itemview_room"
         android:layout_width="match_parent"
-        android:scaleType="fitCenter"
-        app:source="posche.svga"
-        app:antiAlias="true"/>
+        android:layout_height="40dp"/>
 
 
-</RelativeLayout>
+    <com.lwt.qmqiu.widget.ItemView
+        app:show_bottom_line="true"
+        android:layout_marginTop="20dp"
+        app:show_img="@mipmap/gift_itemview"
+        app:show_name="礼物"
+        android:id="@+id/itemview_gift"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <com.lwt.qmqiu.widget.ItemView
+        app:show_bottom_line="true"
+        app:show_img="@mipmap/cash_itemview"
+        app:show_name="充值"
+        android:id="@+id/itemview_cash"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <com.lwt.qmqiu.widget.ItemView
+        app:show_img="@mipmap/change_itemview"
+        app:show_name="兑换"
+        android:id="@+id/itemview_change"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <com.lwt.qmqiu.widget.ItemView
+        android:layout_marginTop="20dp"
+        app:show_img="@mipmap/setting_itemview"
+        app:show_name="设置"
+        android:id="@+id/itemview_setting"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+
+</LinearLayout>
