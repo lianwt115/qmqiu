@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <com.lwt.qmqiu.widget.BarView
+        android:id="@+id/coininfo_barview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </com.lwt.qmqiu.widget.BarView>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_below="@id/coininfo_barview"
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:tabBackground="@color/white"
+        app:tabTextColor="@color/main_bottom_text"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabIndicatorColor="@color/colorAccent">
+    </com.google.android.material.tabs.TabLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_below="@id/tabs"
+        android:background="@color/bg_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+    <androidx.viewpager.widget.ViewPager
+        android:layout_below="@id/line"
+        android:overScrollMode="never"
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.viewpager.widget.ViewPager>
+
+
+</RelativeLayout>

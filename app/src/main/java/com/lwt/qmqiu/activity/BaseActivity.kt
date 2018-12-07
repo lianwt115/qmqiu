@@ -23,7 +23,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import android.view.WindowManager
 import android.os.Build
-import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.StaticValues
 
 

@@ -86,5 +86,15 @@ interface ApiService {
     @GET(ApiConst.Gift_LogGet)
     fun getGiftLog(@Query("name") name:String,@Query("type") type:Int):Observable<HttpResult<List<GiftLog>>>
 
+    @GET(ApiConst.Coin_CoinRecord)
+    fun coinRecord(@Query("name") name:String,@Query("type") type:Int,@Query("all") all:Boolean):Observable<HttpResult<List<CoinLog>>>
+
+
+    @POST(ApiConst.Coin_CreatChargeNumber)
+    fun creatChargeNum(@Query("name") name:String,@Query("type") type:Int,@Query("publickey") publickey:String,@Query("count") count:Int):Observable<HttpResult<String>>
+
+    @POST(ApiConst.Coin_Charge)
+    fun coinCharge(@Query("name") name:String,@Query("chargenum") chargenum:String):Observable<HttpResult<BaseUser>>
+
 
 }

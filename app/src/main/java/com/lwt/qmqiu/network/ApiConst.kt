@@ -37,6 +37,12 @@ class ApiConst {
         const val Download = "upload/download"
 
 
+        //货币
+        const val Coin_CoinRecord = "coin/coinrecord"
+
+        const val Coin_CreatChargeNumber = "coin/creatchargenumber"
+
+        const val Coin_Charge = "coin/charge"
 
 
     }

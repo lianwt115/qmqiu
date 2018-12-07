@@ -105,6 +105,7 @@
         <activity android:name=".activity.ChargeActivity" />
         <activity android:name=".activity.ExchangeActivity" />
         <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.CoinInfoActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

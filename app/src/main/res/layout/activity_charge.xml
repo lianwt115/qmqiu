@@ -15,6 +15,130 @@
 
     </com.lwt.qmqiu.widget.BarView>
 
+    <RelativeLayout
+        android:id="@+id/userinfo_root"
+        android:layout_below="@id/userinfo_barview"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.joooonho.SelectableRoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/user_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            app:sriv_oval="true" />
+
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_name"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/user_img"
+
+            />
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_basecoin"
+            android:layout_below="@id/user_name"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/user_img"
+
+            />
+
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_coin"
+            android:layout_below="@id/user_basecoin"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/user_img"
+            android:layout_marginBottom="20dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/creatchargenum_root"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/creatcharge_num"
+            android:gravity="center"
+            android:hint="长按此处,复制充值码"
+            android:padding="5dp"
+            android:background="@color/white"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp" />
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:layout_below="@id/creatcharge_num"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/coin_num"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="@color/white"
+            app:spinning_bar_padding="6dp" >
+
+        </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
+
+        <EditText
+            android:layout_marginBottom="10dp"
+            android:maxLength="4"
+            android:inputType="number"
+            android:background="@drawable/bg_line_rectangle_lastpage_noradius"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/charge_count"
+            android:gravity="center"
+            android:hint="金额"
+            android:layout_below="@id/creatcharge_num"
+            android:layout_marginTop="20dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/charge_num"
+        android:gravity="center"
+        android:hint="长按此处,并粘贴充值码到此处"
+        android:padding="5dp"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp" />
+
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/coin_charge"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:spinning_bar_width="4dp"
+        app:spinning_bar_color="@color/white"
+        app:spinning_bar_padding="6dp" >
+
+    </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
 
 
 </LinearLayout>
