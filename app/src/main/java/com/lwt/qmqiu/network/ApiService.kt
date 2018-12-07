@@ -83,5 +83,8 @@ interface ApiService {
     @GET(ApiConst.IMChat_RoomCreatByMe)
     fun getRoomCreatByMe(@Query("name") name:String,@Query("sys") sys:String = "sys"):Observable<HttpResult<List<IMChatRoom>>>
 
+    @GET(ApiConst.Gift_LogGet)
+    fun getGiftLog(@Query("name") name:String,@Query("type") type:Int):Observable<HttpResult<List<GiftLog>>>
+
 
 }

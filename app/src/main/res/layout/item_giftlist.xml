@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:id="@+id/root_contain"
+    tools:context=".activity.MainActivity">
+
+    <ImageView
+        android:padding="10dp"
+        android:src="@mipmap/giftplus"
+        android:id="@+id/gift_type"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/bubble_8dp_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@id/gift_type"
+        android:orientation="vertical"
+        android:layout_width="220dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="lwt520赠送"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/bt_bg1"
+            android:id="@+id/from_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="天使宝贝*99 激情跑车*99"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/content_color"
+            android:id="@+id/gift_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentRight="true"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="09:51"
+        android:textColor="@color/content_color"
+        android:id="@+id/gift_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:visibility="gone"
+        android:layout_marginBottom="12sp"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="附近"
+        android:textColor="@color/bt_bg1"
+        android:id="@+id/gift_cash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+
+</RelativeLayout>

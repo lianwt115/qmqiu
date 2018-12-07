@@ -15,6 +15,63 @@
 
     </com.lwt.qmqiu.widget.BarView>
 
+    <RelativeLayout
+        android:id="@+id/gift_root"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/gift_name"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginBottom="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/gift_name"
+            android:layout_marginTop="20dp"
+            android:id="@+id/recycleview_gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:tabBackground="@color/white"
+            app:tabTextColor="@color/main_bottom_text"
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabIndicatorColor="@color/colorAccent">
+        </com.google.android.material.tabs.TabLayout>
+
+    </LinearLayout>
+
+    <View
+        android:background="@color/bg_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+    <androidx.viewpager.widget.ViewPager
+        android:overScrollMode="never"
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.viewpager.widget.ViewPager>
 
 
 </LinearLayout>

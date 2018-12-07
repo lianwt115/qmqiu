@@ -399,7 +399,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     //赠送礼物成功
     override fun setGiftSend(baseUser: BaseUser, giftIndex: Int) {
 
-        App.instanceApp().setLocalUser(baseUser)
+        App.instanceApp().updataLocalUser(baseUser,true)
 
         mPlusAdapter.changeGiftNum()
 

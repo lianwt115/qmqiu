@@ -463,7 +463,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         })
 
         //刷新本地用户信息
-        App.instanceApp().setLocalUser(baseUser)
+        App.instanceApp().updataLocalUser(baseUser,true,true)
         //更新金币和礼物
         user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())
         //更新礼物
@@ -478,7 +478,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     override fun setGiftSend(baseUser: BaseUser) {
         //播放动画,设置本地用户信息
         //刷新本地用户信息
-        App.instanceApp().setLocalUser(baseUser)
+        App.instanceApp().updataLocalUser(baseUser,true)
         //刷新当前页信息
         present.userFind(mUserName,bindToLifecycle())
 

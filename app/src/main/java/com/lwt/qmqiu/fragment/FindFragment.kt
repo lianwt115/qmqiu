@@ -2,13 +2,11 @@ package com.lwt.qmqiu.fragment
 
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-
 
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.ChatAdatpter
-import com.orhanobut.logger.Logger
+
 
 import kotlinx.android.synthetic.main.fragment_find.*
 
@@ -23,8 +21,6 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
     lateinit var mFragments: ArrayList<androidx.fragment.app.Fragment>
 
     val STRATEGY = arrayOf(1,2,3)//接口路徑路由
-
-    var index=STRATEGY[0]
 
     override fun getLayoutResources(): Int {
 

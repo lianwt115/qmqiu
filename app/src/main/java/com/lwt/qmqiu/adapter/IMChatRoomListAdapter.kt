@@ -290,6 +290,9 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
         var time = formatter.format(currentTime)
 
+        if (mType == 4)
+            return time.replace("*"," ")
+
         return if (today.split("*")[0] == time.split("*")[0]){
 
             formatter2.format(currentTime)

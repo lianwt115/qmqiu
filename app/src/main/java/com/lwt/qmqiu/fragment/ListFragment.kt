@@ -2,8 +2,6 @@ package com.lwt.qmqiu.fragment
 
 import android.content.Intent
 import android.graphics.Rect
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Base64
 import android.view.View
@@ -25,15 +23,12 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_list.*
 
 
-class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMChatRoomContract.View, IMChatRoomListAdapter.RoomClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
+class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, IMChatRoomListAdapter.RoomClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
 
 
-
-    private var mDisposable: Disposable? = null
 
     private lateinit var mPresenter: IMChatRoomPresent
     private var mStrategy: Int=0
@@ -81,11 +76,10 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
         })
 
 
-
+        smartrefreshlayout.isEnableLoadmore =false
 
         //刷新和加载更多
         smartrefreshlayout.setOnRefreshListener(this)
-        smartrefreshlayout.setOnLoadmoreListener(this)
 
         var head= MaterialHeader(context)
 
@@ -107,13 +101,6 @@ class ListFragment: BaseFragment(), OnRefreshListener, OnLoadmoreListener, IMCha
 
         if (mStrategy == 3)
             room_fab.hide()
-    }
-
-    override fun onLoadmore(refreshlayout: RefreshLayout?) {
-
-        refreshlayout?.finishLoadmore(1000)
-
-
     }
 
     override fun onRefresh(refreshlayout: RefreshLayout?) {

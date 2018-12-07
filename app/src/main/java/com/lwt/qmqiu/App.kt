@@ -223,6 +223,18 @@ class App : Application() {
             initWebsocket()
 
     }
+    fun updataLocalUser(baseUser: BaseUser,gift:Boolean=false,coin:Boolean=false){
+
+        if (gift)
+            this.mLocalUser?.gift = baseUser.gift
+
+        if (coin){
+
+            this.mLocalUser?.coin = baseUser.coin
+            this.mLocalUser?.coinbase = baseUser.coinbase
+        }
+
+    }
 
     fun getLocalUser():BaseUser?{
 

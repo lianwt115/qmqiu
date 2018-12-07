@@ -24,15 +24,16 @@ import io.reactivex.subjects.BehaviorSubject
 import android.view.WindowManager
 import android.os.Build
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.StaticValues
 
 
 open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, QMWebsocket.QMMessageListen {
 
 
-    protected val giftUnitList = listOf("个","朵","台","顶")
-    protected val giftNameList = listOf("天使宝贝","挚爱玫瑰","激情跑车","女王皇冠")
-    protected val giftPathList = listOf("angel.svga","rose.svga","posche.svga","kingset.svga")
-    private  var mLocalUserName:String = SPHelper.getInstance().get("loginName","") as String
+    protected val giftUnitList = StaticValues.giftUnitList
+    protected val giftNameList = StaticValues.giftNameList
+    protected val giftPathList = StaticValues.giftPathList
+    private  var mLocalUserName:String = StaticValues.mLocalUserName
 
 
     override fun qmMessage(qmMessage: QMMessage) {
