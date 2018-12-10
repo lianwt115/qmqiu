@@ -725,7 +725,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                                 val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                                 // 将文本内容放到系统剪贴板里。
-                                                cm.text = content.message
+                                                cm.text = App.instanceApp().getShowMessage(content.message)
 
                                                 UiUtils.showToast("复制成功",false)
                                             }else{
@@ -734,6 +734,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                             }
 
 
+                                            mReporterDialog.dismiss()
                                         }
 
                                         1 -> {
@@ -767,6 +768,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                     present.reportUser(mLocalUserName,content.from,index,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
 
+                                    mReporterDialog.dismiss()
+                                    
                                     return true
                                 }
 
