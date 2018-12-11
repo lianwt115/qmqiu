@@ -243,7 +243,8 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
             //图像
             Glide.with(this).load(ApiService.BASE_URL_Api.plus(baseUser.imgPath)).into(user_img)
 
-            user_name.changeTitleAndContent(baseUser.name,"")
+            //修改为showname
+            user_name.changeTitleAndContent(baseUser.showName,"")
 
             user_basecoin.changeTitleAndContent("青木",baseUser.coinbase.toString())
             user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())

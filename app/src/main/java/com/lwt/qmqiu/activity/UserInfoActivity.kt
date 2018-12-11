@@ -64,7 +64,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         present = UserInfoPresent(this,this)
 
-        present.userFind(mUserName,bindToLifecycle())
+
 
         mIsMySelf = mLocalUserName == mUserName
 
@@ -82,6 +82,8 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             //检测 我有没有阻止他
             present.refuseCheck(mLocalUserName,mUserName,bindToLifecycle())
         }
+
+        gift_buy_tv.text = if (mExchange) getString(R.string.gift_exchange) else getString(R.string.gift_buy)
 
         gift_buy.text = if (mExchange) "兑换" else "购买礼物"
 
@@ -104,6 +106,11 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         message_refuse.setFinalCornerRadius(20F)
         message_refuse.setOnClickListener(this)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        present.userFind(mUserName,bindToLifecycle())
     }
 
     //礼物购买
@@ -421,7 +428,9 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
                 }else{
 
-                    UiUtils.showToast("可以编辑")
+                    val intent = Intent(this, EditActivity::class.java)
+
+                    startActivity(intent)
 
                 }
 
@@ -468,7 +477,8 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         //图像
         Glide.with(this).load(ApiService.BASE_URL_Api.plus(baseUser.imgPath)).into(user_img)
 
-        user_name.changeTitleAndContent(baseUser.name,"")
+        //修改为showName
+        user_name.changeTitleAndContent(baseUser.showName,"")
 
         if (!mExchange){
 

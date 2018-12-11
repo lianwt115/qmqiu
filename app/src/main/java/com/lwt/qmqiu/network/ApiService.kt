@@ -21,7 +21,6 @@ interface ApiService {
             get() = "ws://$IP/api/websocket/"
     }
 
-
     @POST(ApiConst.USER_REGIST)
     fun userRegist(@Query("name") name:String,@Query("password") password:String):Observable<HttpResult<BaseUser>>
 
@@ -33,6 +32,9 @@ interface ApiService {
 
     @GET(ApiConst.USER_Find)
     fun userFind(@Query("name") name:String):Observable<HttpResult<BaseUser>>
+
+    @POST(ApiConst.USER_Updata)
+    fun userUpdata(@Query("name") name: String,@Query("showname") showname: String,@Query("age") age: Int,@Query("male") male: Boolean,@Query("imgpath") imgpath: String):Observable<HttpResult<BaseUser>>
 
     @GET(ApiConst.IMChat_RoomGet)
     fun getIMChatRoom(@Query("name") name:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("type") type:Int):Observable<HttpResult<List<IMChatRoom>>>

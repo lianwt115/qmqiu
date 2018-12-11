@@ -16,6 +16,7 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.bumptech.glide.Glide
 import com.guoxiaoxing.phoenix.picker.Phoenix
+import com.lwt.qmqiu.R.string.gift
 import com.lwt.qmqiu.activity.BaseActivity
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
@@ -223,7 +224,7 @@ class App : Application() {
             initWebsocket()
 
     }
-    fun updataLocalUser(baseUser: BaseUser,gift:Boolean=false,coin:Boolean=false){
+    fun updataLocalUser(baseUser: BaseUser,gift:Boolean=false,coin:Boolean=false,base:Boolean =false){
 
         if (gift)
             this.mLocalUser?.gift = baseUser.gift
@@ -232,6 +233,15 @@ class App : Application() {
 
             this.mLocalUser?.coin = baseUser.coin
             this.mLocalUser?.coinbase = baseUser.coinbase
+        }
+
+        if (base){
+
+            this.mLocalUser?.showName = baseUser.showName
+            this.mLocalUser?.age = baseUser.age
+            this.mLocalUser?.male = baseUser.male
+            this.mLocalUser?.imgPath = baseUser.imgPath
+
         }
 
     }

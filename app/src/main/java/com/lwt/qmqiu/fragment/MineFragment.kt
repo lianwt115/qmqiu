@@ -22,8 +22,6 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
 
     override fun initView() {
 
-        setUser()
-
         user_img.setOnClickListener(this)
 
         itemview_room.setBarOnClickListener(this,R.id.itemview_room)
@@ -42,7 +40,8 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
             //图像
             Glide.with(activity!!).load(ApiService.BASE_URL_Api.plus(baseUser.imgPath)).into(user_img)
 
-            user_name.changeTitleAndContent(baseUser.name,"")
+            //修改为showName
+            user_name.changeTitleAndContent(baseUser.showName,"")
             user_gender.changeTitleAndContent("性别",if(baseUser.male)"男" else "女")
             user_age.changeTitleAndContent("年龄",baseUser.age.toString())
 
@@ -54,6 +53,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
     override fun onResume() {
         super.onResume()
 
+        setUser()
     }
 
     override fun onClick(v: View?) {

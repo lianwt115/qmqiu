@@ -103,7 +103,7 @@
         <activity android:name=".activity.RoomSettingActivity" />
         <activity android:name=".activity.GiftInfoActivity" />
         <activity android:name=".activity.ChargeActivity" />
-        <activity android:name=".activity.ExchangeActivity" />
+        <activity android:name=".activity.EditActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.CoinInfoActivity" />
 

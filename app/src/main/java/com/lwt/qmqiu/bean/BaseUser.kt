@@ -22,6 +22,7 @@ data class BaseUser(
         var coinExchange:Int = 0,
         var gift:String ="0*0*0*0",
         //被举报次数
-        var reported:Int = 0
+        var reported:Int = 0,
+        var showName:String = ""
 
 )

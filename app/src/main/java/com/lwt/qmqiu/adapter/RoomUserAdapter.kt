@@ -39,7 +39,8 @@ class RoomUserAdapter(context: Context, list: List<BaseUser>, listen:UserClickLi
         Glide.with(context!!).load(ApiService.BASE_URL_Api.plus(obj?.imgPath)).into(holder.user_img)
 
 
-        holder.user_name.text=obj?.name
+        //修改为showName
+        holder.user_name.text=obj?.showName
 
 
         holder.user_root.setOnClickListener {
