@@ -3,6 +3,7 @@ package com.lwt.qmqiu.network
 import com.google.gson.Gson
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.QMMessage
+import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
@@ -142,6 +143,14 @@ class QMWebsocket {
 
         if (webSocket == null)
             return
+
+        if (!App.instanceApp().isLogin()){
+
+            UiUtils.showToast("发送失败,请登录")
+
+            return
+        }
+
 
         content.from = App.instanceApp().getLocalUser()?.name?:"xxx"
 

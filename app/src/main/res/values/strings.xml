@@ -27,10 +27,12 @@
     <string name="gift">礼物</string>
     <string name="gift_buy">礼物购买</string>
     <string name="coin_notenough">无法购买更多</string>
+    <string name="ex_notenough">无法兑换更多</string>
     <string name="roomget_err">获取房间失败</string>
     <string name="sendgift_notice">请点击礼物</string>
     <string name="error_gif">长宽尺寸至少 %1$dpx 且 文件大小不能超过 %2$sM</string>
     <string name="roomtype_video_notice">群聊不支持视频聊天</string>
+    <string name="gift_exchange">礼物兑换</string>
 
 
 

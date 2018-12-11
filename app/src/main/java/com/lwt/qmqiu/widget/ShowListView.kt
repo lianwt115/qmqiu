@@ -1,12 +1,9 @@
 package com.lwt.qmqiu.widget
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.lwt.qmqiu.R
@@ -30,6 +27,8 @@ import com.lwt.qmqiu.R
 
     private var mShowListOnClickListener: ShowListOnClickListener? = null
 
+    private var mViewId = -1
+
 
 
     constructor(context: Context,attrs: AttributeSet): this(context,attrs,0) {
@@ -40,7 +39,8 @@ import com.lwt.qmqiu.R
     constructor(context: Context): this(context,null,0)
 
 
-    fun setBarOnClickListener(mBarOnClickListener: ShowListOnClickListener) {
+    fun setBarOnClickListener(mBarOnClickListener: ShowListOnClickListener, id: Int) {
+        this.mViewId = id
         this.mShowListOnClickListener = mBarOnClickListener
     }
 
@@ -85,7 +85,7 @@ import com.lwt.qmqiu.R
 
             R.id.showlist_root  -> {
 
-                mShowListOnClickListener!!.showListViewClick(false,mTextViewContent?.text.toString())
+                mShowListOnClickListener!!.showListViewClick(false,mTextViewContent?.text.toString(),this.mViewId)
 
             }
 
@@ -105,7 +105,7 @@ import com.lwt.qmqiu.R
 
             R.id.showlist_root  -> {
 
-                mShowListOnClickListener!!.showListViewClick(true,mTextViewContent?.text.toString())
+                mShowListOnClickListener!!.showListViewClick(true,mTextViewContent?.text.toString(),this.mViewId)
 
             }
 
@@ -116,16 +116,18 @@ import com.lwt.qmqiu.R
     }
 
 
-    fun changeTitleAndContent(title: String,content:String) {
+    fun changeTitleAndContent(title: String,content:String?=null) {
 
-        mTextViewContent?.text = content
+        if (!TextUtils.isEmpty(content))
+            mTextViewContent?.text = content
+
         mTextViewTitle?.text = title
     }
 
 
     interface ShowListOnClickListener {
 
-        fun showListViewClick(long:Boolean,content:String)
+        fun showListViewClick(long:Boolean,content:String,id: Int)
 
     }
 

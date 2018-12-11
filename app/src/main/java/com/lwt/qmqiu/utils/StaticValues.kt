@@ -9,6 +9,8 @@ class StaticValues {
          val giftPathList = listOf("angel.svga","rose.svga","posche.svga","kingset.svga")
          val mLocalUserName:String = SPHelper.getInstance().get("loginName","") as String
          val AdminName:String = "lwt520"
+         val AdminIMEI:String = "862400046671037"
+         val AdminPHONE:String = "+8613264736041"
 
     }
 }

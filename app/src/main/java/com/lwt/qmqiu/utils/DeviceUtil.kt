@@ -10,10 +10,12 @@ import androidx.core.content.FileProvider
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import com.baidu.android.bbalbs.common.a.b
 import com.lwt.qmqiu.App
 import com.orhanobut.logger.Logger
 import java.io.File
-
+import java.net.NetworkInterface
+import java.net.SocketException
 
 
 /**
@@ -28,6 +30,12 @@ class DeviceUtil {
 
         fun getAndroidId(context: Context): String {
             return Settings.System.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        }
+
+        @SuppressLint("MissingPermission")
+        fun getPhoneNum(context: Context): String {
+
+            return (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).line1Number?:""
         }
 
         fun getVersionCode(context: Context): Int {
@@ -172,5 +180,6 @@ class DeviceUtil {
 
             return versionCode
         }
+
     }
 }

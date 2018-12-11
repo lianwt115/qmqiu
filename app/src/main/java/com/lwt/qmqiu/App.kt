@@ -241,6 +241,15 @@ class App : Application() {
         return this.mLocalUser
 
     }
+    fun userExit(){
+
+        SPHelper.getInstance().put("loginName","")
+        SPHelper.getInstance().get("loginPassword","")
+
+        closeWs()
+
+        this.mLocalUser = null
+    }
     fun isLogin():Boolean{
 
         return this.mLocalUser != null

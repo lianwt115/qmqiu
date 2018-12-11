@@ -1,18 +1,17 @@
 package com.lwt.qmqiu.network
 
 
+import com.lwt.qmqiu.BuildConfig
 import com.lwt.qmqiu.bean.*
-import com.lwt.qmqiu.network.ApiConst
 import io.reactivex.Observable
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface ApiService {
     companion object{
 
-        val IP = "192.168.2.10:9898"
+        val IP =if(BuildConfig.DEBUG)"192.168.2.10:9898" else "www.imlwt.com:9898"
 
         val BASE_URL_Api : String
             get() = "http://$IP/api/"
@@ -95,6 +94,9 @@ interface ApiService {
 
     @POST(ApiConst.Coin_Charge)
     fun coinCharge(@Query("name") name:String,@Query("chargenum") chargenum:String):Observable<HttpResult<BaseUser>>
+
+    @POST(ApiConst.Coin_Exchange)
+    fun coinExchange(@Query("name") name:String,@Query("giftIndex") giftIndex:String):Observable<HttpResult<BaseUser>>
 
 
 }

@@ -29,6 +29,7 @@ interface UserInfoContract {
 
         fun userFind(name:String,bindToLifecycle: LifecycleTransformer<BaseUser>)
         fun giftBuy(name:String,cashCount:Int,giftCount:String,priceCount:String,bindToLifecycle: LifecycleTransformer<BaseUser>)
+        fun coinExchange(name:String,giftIndex:String,bindToLifecycle: LifecycleTransformer<BaseUser>)
         fun giftSend( name:String, to:String, giftIndex:Int,giftCount:Int,bindToLifecycle: LifecycleTransformer<BaseUser>)
         fun creatIMChatRoom(name:String, latitude:Double, longitude:Double,type:Int,roomName:String,bindToLifecycle: LifecycleTransformer<IMChatRoom>)
         fun refuseUser(name:String, to: String, refuse:Boolean,bindToLifecycle: LifecycleTransformer<RefuseLog>)

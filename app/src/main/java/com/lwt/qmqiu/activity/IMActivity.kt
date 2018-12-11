@@ -488,12 +488,14 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         message.type = 0
                         message.message = im_et.text.toString()
 
-                       /* mIMMessageList.add(message)
+                        //优化自己发的text文本显示熟读
+                        mIMMessageList.add(message)
 
                         mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
 
-                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)*/
+                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
 
+                        //------------------------
                         im_et.setText("")
 
                         mWebSocket.sendText(message,mIMChatRoom.roomNumber)
@@ -694,11 +696,19 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             //头像点击
             IMListAdapter.WHOCLICK-> {
 
-                val intent = Intent(this, UserInfoActivity::class.java)
+                if (App.instanceApp().isLogin()){
 
-                intent.putExtra("name",content.from)
+                    val intent = Intent(this, UserInfoActivity::class.java)
 
-                startActivity(intent)
+                    intent.putExtra("name",content.from)
+                    intent.putExtra("exchange",false)
+
+                    startActivity(intent)
+                }else{
+
+                    UiUtils.showToast("登陆后查看个人信息")
+
+                }
 
             }
 
@@ -769,7 +779,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                     present.reportUser(mLocalUserName,content.from,index,mIMChatRoom.roomNumber,content.message,content.time,bindToLifecycle())
 
                                     mReporterDialog.dismiss()
-                                    
+
                                     return true
                                 }
 
@@ -898,6 +908,12 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     im_barview.changeTitle(mIMChatRoom.roomName.plus("(${message.currentCount})"))
 
+
+                    if (message.type == 0 && message.from == mLocalUserName )
+
+                        return@runOnUiThread
+
+
                     mIMMessageList.add(message)
 
                     mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
@@ -935,12 +951,21 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             }
 
             false -> {
+                if (App.instanceApp().isLogin()){
 
-                val intent = Intent(this, RoomInfoActivity::class.java)
+                    val intent = Intent(this, RoomInfoActivity::class.java)
 
-                intent.putExtra("imChatRoom",mIMChatRoom)
+                    intent.putExtra("imChatRoom",mIMChatRoom)
 
-                startActivityForResult(intent,EXITFORRESULT)
+                    startActivityForResult(intent,EXITFORRESULT)
+
+                }else{
+
+                    UiUtils.showToast("登陆后查看房间信息")
+
+                }
+
+
             }
         }
     }

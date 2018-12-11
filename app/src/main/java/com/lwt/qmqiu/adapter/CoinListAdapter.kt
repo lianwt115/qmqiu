@@ -42,11 +42,25 @@ class CoinListAdapter(context: Context, list: ArrayList<CoinLog>, mStrategy: Int
 
         when (mType) {
 
-            0,1-> {
+            //2兑换记录
+            0,1,2-> {
 
-                holder.coin_type.setImageDrawable(mContext.getDrawable(if (mType == 0) R.mipmap.giftplus else R.mipmap.giftminus))
+                holder.coin_type.setImageDrawable(mContext.getDrawable(if (mType == 0 || mType == 2) R.mipmap.giftplus else R.mipmap.giftminus))
 
-                holder.coin_name.text = if (mType == 0) "充值" else "消费"
+                holder.coin_name.text = when (mType) {
+                    0 -> {
+                      "充值"
+                    }
+                    1 -> {
+                       "消费"
+                    }
+                    2 -> {
+                        "兑换"
+                    }
+                    else->{
+                        "其他"
+                    }
+                }
                 //如果是消费 则记录用途 0 开附近房 1开公共房 2购买礼物 3视频聊天 4开私人房
                 if (mType==1){
 
@@ -75,7 +89,7 @@ class CoinListAdapter(context: Context, list: ArrayList<CoinLog>, mStrategy: Int
 
             }
 
-            2 -> {
+            3 -> {
 
                 holder.coin_type.setImageDrawable(mContext.getDrawable(if (obj.used) R.mipmap.used else R.mipmap.notuser))
                 holder.coin_name.text ="充值码"

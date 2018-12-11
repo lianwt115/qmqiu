@@ -23,12 +23,12 @@ class GiftInfoActivity : BaseActivity(),BarView.BarOnClickListener, GiftShowAdap
 
 
 
-    private var mTabs = listOf<String>("收入", "支出").toMutableList()
+    private var mTabs = listOf<String>("收入", "支出","兑换").toMutableList()
 
     private lateinit var mFragments: ArrayList<androidx.fragment.app.Fragment>
 
     //1收入  二是支出
-    private val STRATEGY = arrayOf(1,2)//接口路徑路由
+    private val STRATEGY = arrayOf(1,2,3)//接口路徑路由
 
 
 
@@ -137,11 +137,17 @@ class GiftInfoActivity : BaseActivity(),BarView.BarOnClickListener, GiftShowAdap
         payBundle.putInt("type", STRATEGY[1])
         payFragment.arguments = payBundle
 
+        var exchangeFragment: GiftListFragment = GiftListFragment()
+        var exchangeBundle = Bundle()
+        exchangeBundle.putInt("type", STRATEGY[2])
+        exchangeFragment.arguments = exchangeBundle
+
 
 
         mFragments = ArrayList()
         mFragments.add(incoomFragment as androidx.fragment.app.Fragment)
         mFragments.add(payFragment as androidx.fragment.app.Fragment)
+        mFragments.add(exchangeFragment as androidx.fragment.app.Fragment)
 
 
 

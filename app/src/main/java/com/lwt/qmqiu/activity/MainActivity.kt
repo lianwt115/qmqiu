@@ -24,6 +24,7 @@ import com.lwt.qmqiu.fragment.MineFragment
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
+import com.lwt.qmqiu.utils.DeviceUtil
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.tencent.bugly.beta.Beta
@@ -60,7 +61,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         //startService(Intent(this, RomoteService::class.java))
 
         present = UserLoginPresent(this,this)
-
 
         //登录
         gotoLogin()
@@ -197,7 +197,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 
             var per: RxPermissions?= RxPermissions(this)
-            per?.request( Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_EXTERNAL_STORAGE)
+            per?.request( Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE)
                     ?.subscribe {
                         if (it) {
 
@@ -298,6 +298,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
             rg_root.visibility = View.VISIBLE
 
+        }else{
+
+            onClick(find_parente)
+
+            fab.show()
+
+            rg_root.visibility = View.INVISIBLE
+
         }
 
         fab.setOnClickListener(this)
@@ -317,6 +325,8 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         MapLocationUtils.getInstance().setListen(null)
         //Logger.e("自动登录成功")
         App.instanceApp().setLocalUser(baseUser)
+
+        bottomShow()
     }
 
     override fun err(code: Int, errMessage: String?, type: Int) {

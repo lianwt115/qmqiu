@@ -39,8 +39,6 @@ class CoinListFragment: BaseFragment(), CoinLogContract.View, OnRefreshListener 
 
         mAdapter.notifyDataSetChanged()
 
-        if (mList.isEmpty())
-            showProgressDialog("您还没有相关记录")
 
         smartrefreshlayout.finishRefresh()
     }
@@ -133,7 +131,7 @@ class CoinListFragment: BaseFragment(), CoinLogContract.View, OnRefreshListener 
         var localUaser = App.instanceApp().getLocalUser()
 
         if (localUaser != null)
-            mPresenter.coinRecord(localUaser.name, if (mStrategy == 1) 1 else 0,mStrategy != 0, bindToLifecycle())
+            mPresenter.coinRecord(localUaser.name, if (mStrategy == 3) 0 else mStrategy,mStrategy != 0, bindToLifecycle())
     }
 
 

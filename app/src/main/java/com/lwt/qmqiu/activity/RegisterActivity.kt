@@ -18,6 +18,8 @@ import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.network.QMWebsocket
+import com.lwt.qmqiu.utils.DeviceUtil
+import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
@@ -157,6 +159,21 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
                     return
 
                 }
+
+                //防止管理员账号非法登录  ,android 客户端校验  服务器也要检验
+                if (et_username.text.toString() == StaticValues.AdminName) {
+
+                    if (DeviceUtil.getPhoneNum(this) != StaticValues.AdminPHONE || DeviceUtil.getDeviceImei(this) != StaticValues.AdminIMEI){
+
+
+                        UiUtils.showToast("非法登录")
+
+                        return
+                    }
+
+                }
+
+
 
 
                 if (isLogin){

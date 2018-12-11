@@ -18,12 +18,12 @@ class CoinInfoActivity : BaseActivity(), BarView.BarOnClickListener, TabLayout.O
 
 
 
-    private var mTabs = listOf<String>("充值", "消费","充值码").toMutableList()
+    private var mTabs = listOf<String>("充值", "消费","兑换","充值码").toMutableList()
 
     private lateinit var mFragments: ArrayList<androidx.fragment.app.Fragment>
 
     //0 充值 1消费
-    private val STRATEGY = arrayOf(0,1,2)//接口路徑路由
+    private val STRATEGY = arrayOf(0,1,2,3)//接口路徑路由
 
 
     override fun barViewClick(left: Boolean) {
@@ -64,9 +64,19 @@ class CoinInfoActivity : BaseActivity(), BarView.BarOnClickListener, TabLayout.O
         payBundle.putInt("type", STRATEGY[1])
         payFragment.arguments = payBundle
 
+        var exchangeFragment: CoinListFragment = CoinListFragment()
+        var exchangeBundle = Bundle()
+        exchangeBundle.putInt("type", STRATEGY[2])
+        exchangeFragment.arguments = exchangeBundle
+
 
         mFragments.add(incoomFragment as androidx.fragment.app.Fragment)
         mFragments.add(payFragment as androidx.fragment.app.Fragment)
+        mFragments.add(exchangeFragment as androidx.fragment.app.Fragment)
+
+
+
+
 
         var localUser = App.instanceApp().getLocalUser()
 
@@ -74,7 +84,7 @@ class CoinInfoActivity : BaseActivity(), BarView.BarOnClickListener, TabLayout.O
 
             var chargeFragment: CoinListFragment = CoinListFragment()
             var chargeBundle = Bundle()
-            chargeBundle.putInt("type", STRATEGY[2])
+            chargeBundle.putInt("type", STRATEGY[3])
             chargeFragment.arguments = chargeBundle
 
             mFragments.add(chargeFragment as androidx.fragment.app.Fragment)

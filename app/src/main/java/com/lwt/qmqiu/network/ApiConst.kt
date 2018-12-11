@@ -44,6 +44,8 @@ class ApiConst {
 
         const val Coin_Charge = "coin/charge"
 
+        const val Coin_Exchange = "coin/exchange"
+
 
     }
 }

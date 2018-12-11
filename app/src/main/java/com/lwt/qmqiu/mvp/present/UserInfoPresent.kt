@@ -17,6 +17,7 @@ import io.reactivex.Observable
 class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoContract.Presenter{
 
 
+
     private var mContext : Context = context
     private var mView : UserInfoContract.View = view
     private val mModel : UserInfoModel by lazy {
@@ -175,6 +176,32 @@ class UserInfoPresent(context: Context, view: UserInfoContract.View) : UserInfoC
 
                 mView?.err(-1,it.message,6)
 
+            }
+
+        }
+
+        )
+    }
+
+    override fun coinExchange(name: String, giftIndex: String, bindToLifecycle: LifecycleTransformer<BaseUser>) {
+        val observable : Observable<BaseUser>? = mContext.let {
+            mModel.coinEcchange(name,giftIndex) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setGiftBuy(it)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,7)
+
+            }else{
+                mView?.err(-1,it.message,7)
             }
 
         }

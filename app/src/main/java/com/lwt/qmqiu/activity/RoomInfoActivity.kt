@@ -6,8 +6,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
@@ -120,7 +118,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
         room_creat.changeTitleAndContent("创建人",mIMChatRoom.creatName)
 
         room_number.setBarOnClickListener(object :ShowListView.ShowListOnClickListener{
-            override fun showListViewClick(long: Boolean, content: String) {
+            override fun showListViewClick(long: Boolean, content: String, id: Int) {
                 when (long) {
 
                     true -> {
@@ -140,7 +138,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
                 }
             }
 
-        })
+        }, room_number.id)
 
         room_exit.setFinalCornerRadius(20f)
 
@@ -196,7 +194,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
         val intent = Intent(this, UserInfoActivity::class.java)
 
         intent.putExtra("name",user.name)
-
+        intent.putExtra("exchange",false)
         startActivity(intent)
 
     }

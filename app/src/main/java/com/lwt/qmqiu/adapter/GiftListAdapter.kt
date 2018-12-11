@@ -32,11 +32,12 @@ class GiftListAdapter(context: Context, list: ArrayList<GiftLog>, mStrategy: Int
 
         val obj= mTotalList[position]
 
-        holder.gift_type.setImageDrawable(mContext.getDrawable(if (mType == 1) R.mipmap.giftplus else R.mipmap.giftminus))
+        holder.gift_type.setImageDrawable(mContext.getDrawable(if (mType == 1 || mType == 3) R.mipmap.giftplus else R.mipmap.giftminus))
 
         holder.gift_time.text = timeData(obj.happenTime)
 
-        holder.gift_cash.visibility = if (mType == 1 && obj.type == 0) View.VISIBLE else View.GONE
+        holder.gift_cash.visibility = if ((mType == 1 && obj.type == 0) || (mType == 3 && obj.type == 2)) View.VISIBLE else View.GONE
+
         when (mType) {
 
             1 -> {
@@ -53,6 +54,18 @@ class GiftListAdapter(context: Context, list: ArrayList<GiftLog>, mStrategy: Int
 
             2 -> {
                 holder.from_name.text = "赠送给:${obj.to}"
+            }
+
+            3 -> {
+
+                holder.from_name.text = "兑换"
+
+                if (obj.type == 2){
+
+                    holder.gift_cash.text = "兑换收入:${obj.cash}青木球"
+
+                }
+
             }
         }
 

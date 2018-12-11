@@ -113,8 +113,6 @@ class GiftListFragment: BaseFragment(), GiftLogContract.View, OnRefreshListener{
         }
         mAdapter.notifyDataSetChanged()
 
-        if (mList.isEmpty())
-            showProgressDialog("您还没有相关记录")
 
         smartrefreshlayout.finishRefresh()
     }

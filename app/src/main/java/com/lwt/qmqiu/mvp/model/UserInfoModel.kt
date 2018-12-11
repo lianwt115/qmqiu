@@ -29,6 +29,11 @@ class UserInfoModel(context: Context) : BaseModel(context) {
         return apiService?.refuseUser(name,to,refuse)?.map(HttpResultFunc())
 
     }
+    fun coinEcchange(name:String, giftIndex: String): Observable<BaseUser>?{
+
+        return apiService?.coinExchange(name,giftIndex)?.map(HttpResultFunc())
+
+    }
 
 
 

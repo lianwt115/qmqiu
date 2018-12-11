@@ -1,7 +1,6 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.lwt.qmqiu.bean.GiftInfo
 import com.lwt.qmqiu.utils.UiUtils
 
 
-class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickListen) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftBuyAdapter.ListViewHolder>() {
+class GiftBuyAdapter(context: Context, list: List<GiftInfo>, listen: GiftBuyClickListen, mExchange: Boolean) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftBuyAdapter.ListViewHolder>() {
 
 
     private var mContext: Context = context
@@ -22,6 +21,9 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
     private var mInflater: LayoutInflater =  LayoutInflater.from(mContext)
     private var mGiftBuyClickListen: GiftBuyClickListen? = listen
     private var index = -1
+
+    private var mExchange = mExchange
+
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
         val obj= mTotalList[position]
@@ -52,18 +54,39 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
             notifyDataSetChanged()
 
 
-            //检查是否超出购买力
-            if (checkEnough(obj.price)) {
+            if (mExchange) {
 
-                obj.count = obj.count+1
+                //检查是否超出兑换
+                if (checkEnoughEx(position,obj.count)) {
 
-                holder.giftbuy_count.text=obj.count.toString()
+                    obj.count += 1
 
-                sendCash()
+                    holder.giftbuy_count.text=obj.count.toString()
+
+                    sendCash()
+
+                }else{
+
+                    UiUtils.showToast(mContext.getString(R.string.ex_notenough))
+
+                }
 
             }else{
 
-                UiUtils.showToast(mContext.getString(R.string.coin_notenough))
+                //检查是否超出购买力
+                if (checkEnough(obj.price)) {
+
+                    obj.count += 1
+
+                    holder.giftbuy_count.text=obj.count.toString()
+
+                    sendCash()
+
+                }else{
+
+                    UiUtils.showToast(mContext.getString(R.string.coin_notenough))
+
+                }
 
             }
 
@@ -85,8 +108,24 @@ class GiftBuyAdapter(context: Context, list: List<GiftInfo>,listen:GiftBuyClickL
 
     }
 
-    private fun checkEnough(price: Int):Boolean {
+    private fun checkEnoughEx(index: Int,count:Int):Boolean {
 
+
+        var user =App.instanceApp().getLocalUser()
+
+        if (user!=null){
+
+            var giftLocal = user.gift.split("*")
+
+            if (index<giftLocal.size)
+
+                return  count < giftLocal[index].toInt()
+
+        }
+
+        return false
+    }
+    private fun checkEnough(price: Int):Boolean {
 
         var user =App.instanceApp().getLocalUser()
 

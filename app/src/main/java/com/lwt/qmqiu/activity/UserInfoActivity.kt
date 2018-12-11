@@ -4,8 +4,6 @@ package com.lwt.qmqiu.activity
 
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.*
@@ -24,13 +22,11 @@ import com.lwt.qmqiu.mvp.present.UserInfoPresent
 import com.lwt.qmqiu.network.ApiService
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_userinfo.*
-import android.text.style.ForegroundColorSpan
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.RefuseLog
 import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.widget.NoticeDialog
-import com.opensource.svgaplayer.SVGADynamicEntity
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +35,8 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
 
     private lateinit var mUserName:String
+    //是否兑换
+    private  var mExchange:Boolean = false
     private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
     private lateinit var present: UserInfoPresent
     private lateinit var mGiftShowAdapter:GiftShowAdapter
@@ -58,8 +56,11 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         //房间信息
         mUserName=intent.getStringExtra("name")
 
+        mExchange=intent.getBooleanExtra("exchange",false)
+
         userinfo_barview.setBarOnClickListener(this)
-        userinfo_barview.changeTitle(getString(R.string.user_info))
+
+        userinfo_barview.changeTitle(if (mExchange)getString(R.string.gift_exchange) else getString(R.string.user_info))
 
         present = UserInfoPresent(this,this)
 
@@ -82,7 +83,8 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             present.refuseCheck(mLocalUserName,mUserName,bindToLifecycle())
         }
 
-        gift_buy.text = "购买礼物"
+        gift_buy.text = if (mExchange) "兑换" else "购买礼物"
+
         gift_buy.background = getDrawable(R.drawable.bg_20dp_13)
         gift_buy.setFinalCornerRadius(20F)
         gift_buy.setOnClickListener(this)
@@ -111,17 +113,35 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
             R.id.gift_buy -> {
 
-                if (mGiftBuyAdapter.getCount() > 0){
+               if (mExchange){
 
-                    gift_buy.startAnimation()
 
-                    present.giftBuy(mUserName,mGiftBuyAdapter.getCount(),mGiftBuyAdapter.getGiftCount(),mGiftBuyAdapter.getPriceCount(),bindToLifecycle())
+                   if (mGiftBuyAdapter.getCount() > 0){
 
-                }else{
+                       gift_buy.startAnimation()
 
-                    UiUtils.showToast("请选择礼物数量")
+                       present.coinExchange(mUserName,mGiftBuyAdapter.getGiftCount(),bindToLifecycle())
 
-                }
+                   }else{
+
+                       UiUtils.showToast("请选择礼物数量")
+
+                   }
+
+               }else{
+
+                   if (mGiftBuyAdapter.getCount() > 0){
+
+                       gift_buy.startAnimation()
+
+                       present.giftBuy(mUserName,mGiftBuyAdapter.getCount(),mGiftBuyAdapter.getGiftCount(),mGiftBuyAdapter.getPriceCount(),bindToLifecycle())
+
+                   }else{
+
+                       UiUtils.showToast("请选择礼物数量")
+
+                   }
+               }
 
             }
             R.id.gift_send -> {
@@ -303,7 +323,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         }
         recycleview_giftbuy.layoutManager=linearLayoutManager
 
-        mGiftBuyAdapter= GiftBuyAdapter(this,mGiftInfoListBuy,this)
+        mGiftBuyAdapter= GiftBuyAdapter(this,mGiftInfoListBuy,this,mExchange)
 
         recycleview_giftbuy.adapter = mGiftBuyAdapter
 
@@ -393,7 +413,19 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
             false -> {
 
-                UiUtils.showToast("可以编辑")
+                if (mExchange){
+
+                    val intent = Intent(this, CoinInfoActivity::class.java)
+
+                    startActivity(intent)
+
+                }else{
+
+                    UiUtils.showToast("可以编辑")
+
+                }
+
+
 
             }
 
@@ -437,8 +469,16 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
         Glide.with(this).load(ApiService.BASE_URL_Api.plus(baseUser.imgPath)).into(user_img)
 
         user_name.changeTitleAndContent(baseUser.name,"")
-        user_gender.changeTitleAndContent("性别",if(baseUser.male)"男" else "女")
-        user_age.changeTitleAndContent("年龄",baseUser.age.toString())
+
+        if (!mExchange){
+
+            user_gender.visibility = View.VISIBLE
+            user_age.visibility = View.VISIBLE
+
+            user_gender.changeTitleAndContent("性别",if(baseUser.male)"男" else "女")
+            user_age.changeTitleAndContent("年龄",baseUser.age.toString())
+        }
+
         user_basecoin.changeTitleAndContent("青木",baseUser.coinbase.toString())
         user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())
 
@@ -520,7 +560,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
             }
 
-            2 -> {
+            2,7 -> {
 
                 gift_buy!!.doneLoadingAnimation(resources.getColor(R.color.bt_bg9), BitmapFactory.decodeResource(resources,R.mipmap.error))
 
@@ -601,37 +641,15 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
     override fun giftBuyClick(cash: Int) {
 
-        gift_buy_cash.text = if (cash<=0)"" else "总花费: $cash 青木球"
+
+        var showCash = if (mExchange) (cash*0.7).toInt() else cash
+
+        var showNotice = if (mExchange) "可兑换" else "总花费"
+
+        gift_buy_cash.text = if (cash<=0)"" else "$showNotice : $showCash 青木球"
 
     }
 
-
-    private fun requestDynamicItemWithSpannableText(): SVGADynamicEntity {
-        val dynamicEntity = SVGADynamicEntity()
-        val spannableStringBuilder = SpannableStringBuilder(mLocalUserName.plus("送了 $mSendGiftCount ${mSendGiftList[mSendGiftIndex]} 给 $mUserName"))
-        spannableStringBuilder.setSpan(ForegroundColorSpan(Color.YELLOW), 0, mLocalUserName.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        val textPaint = TextPaint()
-        textPaint.color = Color.WHITE
-        textPaint.textSize = 28f
-        dynamicEntity.setDynamicText(StaticLayout(
-                spannableStringBuilder,
-                0,
-                spannableStringBuilder.length,
-                textPaint,
-                0,
-                Layout.Alignment.ALIGN_CENTER,
-                1.0f,
-                0.0f,
-                false
-        ), "banner")
-        dynamicEntity.setDynamicDrawer({ canvas, frameIndex ->
-            val aPaint = Paint()
-            aPaint.color = Color.WHITE
-            canvas.drawCircle(50f, 54f, (frameIndex % 5).toFloat(), aPaint)
-            false
-        }, "banner")
-        return dynamicEntity
-    }
 
     override fun onDestroy() {
         super.onDestroy()

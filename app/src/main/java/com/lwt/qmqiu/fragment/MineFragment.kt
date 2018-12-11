@@ -2,15 +2,12 @@ package com.lwt.qmqiu.fragment
 
 import android.content.Intent
 import android.view.View
-import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.activity.*
-import com.lwt.qmqiu.bean.GiftInfo
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.widget.ItemView
-import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 
@@ -65,20 +62,24 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
 
             R.id.user_img -> {
 
-                var baseUser = App.instanceApp().getLocalUser()
-
-                if(baseUser!=null){
-
-                    val intent = Intent(activity, UserInfoActivity::class.java)
-
-                    intent.putExtra("name",baseUser.name)
-
-                    startActivity(intent)
-                }
+                toUserInfoActivity(false)
 
             }
 
 
+        }
+    }
+
+    private fun toUserInfoActivity(exchange: Boolean) {
+        var baseUser = App.instanceApp().getLocalUser()
+
+        if (baseUser != null) {
+
+            val intent = Intent(activity, UserInfoActivity::class.java)
+
+            intent.putExtra("name", baseUser.name)
+            intent.putExtra("exchange", exchange)
+            startActivity(intent)
         }
     }
 
@@ -109,9 +110,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
             }
             R.id.itemview_exchange -> {
 
-                val intent = Intent(activity, ExchangeActivity::class.java)
-
-                startActivity(intent)
+                toUserInfoActivity(true)
 
             }
             R.id.itemview_setting -> {
