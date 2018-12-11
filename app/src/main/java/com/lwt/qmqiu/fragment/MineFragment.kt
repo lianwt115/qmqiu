@@ -29,6 +29,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
         itemview_charge.setBarOnClickListener(this,R.id.itemview_charge)
         itemview_exchange.setBarOnClickListener(this,R.id.itemview_exchange)
         itemview_setting.setBarOnClickListener(this,R.id.itemview_setting)
+        itemview_cashout.setBarOnClickListener(this,R.id.itemview_cashout)
     }
 
     private fun setUser() {
@@ -111,6 +112,13 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
             R.id.itemview_exchange -> {
 
                 toUserInfoActivity(true)
+
+            }
+            R.id.itemview_cashout -> {
+
+                val intent = Intent(activity, CashoutActivity::class.java)
+
+                startActivity(intent)
 
             }
             R.id.itemview_setting -> {

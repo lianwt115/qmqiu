@@ -153,7 +153,7 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
         mList.addAll(roomList)
         mAdapter.notifyDataSetChanged()
 
-        smartrefreshlayout.finishRefresh()
+        smartrefreshlayout?.finishRefresh()
 
     }
 
@@ -163,7 +163,7 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
 
             //获取房间失败
             1 -> {
-                smartrefreshlayout.finishRefresh()
+                smartrefreshlayout?.finishRefresh()
 
                 showProgressDialog(getString(R.string.roomget_err))
             }

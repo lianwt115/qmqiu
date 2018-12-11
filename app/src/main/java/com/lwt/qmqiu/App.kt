@@ -233,6 +233,7 @@ class App : Application() {
 
             this.mLocalUser?.coin = baseUser.coin
             this.mLocalUser?.coinbase = baseUser.coinbase
+            this.mLocalUser?.coinExchange = baseUser.coinExchange
         }
 
         if (base){

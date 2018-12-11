@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mine_rootview"
+    android:background="@color/roominfo_bg"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".activity.RoomInfoActivity">
 
+    <com.lwt.qmqiu.widget.BarView
+        android:id="@+id/cashout_barview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
 
+    </com.lwt.qmqiu.widget.BarView>
 
     <RelativeLayout
         android:layout_marginTop="20dp"
         android:id="@+id/userinfo_root"
+        android:layout_below="@id/userinfo_barview"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,7 +31,6 @@
             android:id="@+id/user_img"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@mipmap/ic_launcher_round"
             android:scaleType="centerCrop"
             app:sriv_oval="true" />
 
@@ -43,73 +49,36 @@
             app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
-            android:id="@+id/user_gender"
+            android:id="@+id/user_basecoin"
             android:layout_below="@id/user_name"
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@id/user_img"
 
+            />
+
+        <com.lwt.qmqiu.widget.ShowListView
+            android:layout_marginLeft="20dp"
+            app:show_line="false"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:id="@+id/user_coin"
+            android:layout_below="@id/user_basecoin"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/user_img"
             />
         <com.lwt.qmqiu.widget.ShowListView
             android:layout_marginLeft="20dp"
             app:show_line="false"
             android:layout_width="200dp"
             android:layout_height="20dp"
-            android:id="@+id/user_age"
-            android:layout_below="@id/user_gender"
+            android:id="@+id/user_coinexchange"
+            android:layout_below="@id/user_coin"
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@id/user_img"
-
+            android:layout_marginBottom="20dp"
             />
 
     </RelativeLayout>
-
-    <com.lwt.qmqiu.widget.ItemView
-        android:layout_marginTop="20dp"
-        app:show_img="@mipmap/im_room"
-        app:show_name="房间"
-        android:id="@+id/itemview_room"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-
-
-    <com.lwt.qmqiu.widget.ItemView
-        app:show_bottom_line="true"
-        android:layout_marginTop="20dp"
-        app:show_img="@mipmap/gift_itemview"
-        app:show_name="礼物"
-        android:id="@+id/itemview_gift"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-
-    <com.lwt.qmqiu.widget.ItemView
-        app:show_bottom_line="true"
-        app:show_img="@mipmap/charge_itemview"
-        app:show_name="充值"
-        android:id="@+id/itemview_charge"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-
-    <com.lwt.qmqiu.widget.ItemView
-        app:show_bottom_line="true"
-        app:show_img="@mipmap/exchange_itemview"
-        app:show_name="兑换"
-        android:id="@+id/itemview_exchange"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-    <com.lwt.qmqiu.widget.ItemView
-        app:show_img="@mipmap/cashout"
-        app:show_name="提现"
-        android:id="@+id/itemview_cashout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-
-    <com.lwt.qmqiu.widget.ItemView
-        android:layout_marginTop="20dp"
-        app:show_img="@mipmap/setting_itemview"
-        app:show_name="设置"
-        android:id="@+id/itemview_setting"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
 
 
 </LinearLayout>

@@ -106,6 +106,7 @@
         <activity android:name=".activity.EditActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.CoinInfoActivity" />
+        <activity android:name=".activity.CashoutActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
