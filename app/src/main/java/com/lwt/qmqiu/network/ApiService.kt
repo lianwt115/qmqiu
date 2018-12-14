@@ -10,7 +10,7 @@ import retrofit2.http.*
 interface ApiService {
     companion object{
 
-        val IP =if(true)"192.168.2.10:9898" else "www.imlwt.com:9898"
+        val IP = "192.168.2.10:9898"
 
         val BASE_URL_Api : String
             get() = "http://$IP/api/"
