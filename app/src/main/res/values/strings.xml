@@ -33,7 +33,9 @@
     <string name="error_gif">长宽尺寸至少 %1$dpx 且 文件大小不能超过 %2$sM</string>
     <string name="roomtype_video_notice">群聊不支持视频聊天</string>
     <string name="gift_exchange">礼物兑换</string>
-
+    <string name="list4_name">日常</string>
+    <string name="list5_name">二手</string>
+    <string name="list6_name">租赁</string>
 
 
 

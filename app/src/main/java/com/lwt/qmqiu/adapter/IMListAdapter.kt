@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.ThumbnailUtils
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,10 +87,10 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
         when (obj.type) {
 
-            //普通文字消息
-            0 -> {
+            //普通文字消息 9 为未加密信息
+            0-> {
 
-                holder.message_content.text = data
+                holder.message_content.text = if (TextUtils.isEmpty(data)) obj.message else data
 
                 holder.message_voice_time.visibility = View.GONE
 

@@ -1,11 +1,14 @@
 package com.lwt.qmqiu.fragment
 
 import android.os.Bundle
+import android.text.TextUtils
 import com.google.android.material.tabs.TabLayout
 
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.ChatAdatpter
+import com.lwt.qmqiu.utils.UiUtils
+import com.orhanobut.logger.Logger
 
 
 import kotlinx.android.synthetic.main.fragment_find.*
@@ -21,6 +24,8 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
     lateinit var mFragments: ArrayList<androidx.fragment.app.Fragment>
 
     val STRATEGY = arrayOf(1,2,3)//接口路徑路由
+
+    private var selectIndex = 0
 
     override fun getLayoutResources(): Int {
 
@@ -63,6 +68,17 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
 
         tabs.addOnTabSelectedListener(this)
 
+        //搜索到房间直接进入
+        search_tv.setOnClickListener {
+            if (TextUtils.isEmpty(search_et.text)){
+                UiUtils.showToast("请输入房间名")
+            }else{
+                (mFragments[selectIndex] as ListFragment).show("搜索房间:${search_et.text}")
+                //UiUtils.showToast("搜索:${search_et.text}--$selectIndex")
+            }
+        }
+
+
        }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -75,6 +91,10 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
 
+        selectIndex = tab!!.position
+
+        Logger.e(tab.text.toString())
+        Logger.e("index:${tab.position}")
 
     }
 }

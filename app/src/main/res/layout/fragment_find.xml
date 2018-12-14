@@ -6,6 +6,38 @@
               android:layout_height="match_parent">
 
     <LinearLayout
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:background="@drawable/bg_0dp_search"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <EditText
+            android:id="@+id/search_et"
+            android:drawablePadding="6dp"
+            android:textSize="14sp"
+            android:hint="请输入房间名"
+            android:paddingLeft="6dp"
+            android:drawableLeft="@mipmap/search"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_white_4"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="6dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:text="搜索"
+            android:id="@+id/search_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -14,7 +46,7 @@
             android:id="@+id/tabs"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="40dp"
             app:tabBackground="@color/white"
             app:tabTextColor="@color/main_bottom_text"
             app:tabSelectedTextColor="@color/colorAccent"
@@ -28,6 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"></View>
     <androidx.viewpager.widget.ViewPager
+        android:overScrollMode="never"
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -1,7 +1,6 @@
 package com.lwt.qmqiu.network
 
 
-import com.lwt.qmqiu.BuildConfig
 import com.lwt.qmqiu.bean.*
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -11,7 +10,7 @@ import retrofit2.http.*
 interface ApiService {
     companion object{
 
-        val IP =if(BuildConfig.DEBUG)"192.168.2.10:9898" else "www.imlwt.com:9898"
+        val IP =if(true)"192.168.2.10:9898" else "www.imlwt.com:9898"
 
         val BASE_URL_Api : String
             get() = "http://$IP/api/"

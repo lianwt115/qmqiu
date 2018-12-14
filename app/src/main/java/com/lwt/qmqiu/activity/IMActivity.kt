@@ -12,6 +12,9 @@ import android.text.*
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
 import cn.dreamtobe.kpswitch.util.KeyboardUtil
 import com.google.gson.Gson
@@ -27,6 +30,12 @@ import com.hw.ycshareelement.transition.IShareElements
 import com.hw.ycshareelement.transition.ShareElementInfo
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.R.id.*
+import com.lwt.qmqiu.activity.IMActivity.Companion.EXITFORRESULT
+import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_CODE_CHOOSE_SELECT
+import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_CODE_CHOOSE_TAKE
+import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_CONTENT
+import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_MAP
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.PlusAdapter
 import com.lwt.qmqiu.bean.*
@@ -38,6 +47,7 @@ import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.StaticValues.Companion.mLocalUserName
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.voice.VoiceManager
@@ -488,7 +498,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         message.type = 0
                         message.message = im_et.text.toString()
 
-                        //优化自己发的text文本显示熟读
+                        //优化自己发的text文本显示速度  不加密的添加qmqiu前缀
                         mIMMessageList.add(message)
 
                         mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
@@ -496,6 +506,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
 
                         //------------------------
+
                         im_et.setText("")
 
                         mWebSocket.sendText(message,mIMChatRoom.roomNumber)

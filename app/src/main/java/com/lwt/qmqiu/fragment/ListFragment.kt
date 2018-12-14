@@ -157,6 +157,10 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
 
     }
 
+    fun show(text:String){
+        UiUtils.showToast(text.plus("---$mStrategy"))
+    }
+
     override fun err(code: Int, errMessage: String?, type: Int) {
 
         when (type) {
