@@ -14,6 +14,7 @@ interface IMChatRoomContract {
 
 
         fun setIMChatRoom(roomList:List<IMChatRoom>)
+        fun setIMChatRoomSearch(room:IMChatRoom)
         fun creatIMChatRoomSuccess(room:IMChatRoom)
 
 
@@ -22,6 +23,7 @@ interface IMChatRoomContract {
 
         fun getIMChatRoom(name:String, latitude:Double, longitude:Double,type:Int,bindToLifecycle: LifecycleTransformer<List<IMChatRoom>>)
         fun creatIMChatRoom(name:String, latitude:Double, longitude:Double,type:Int,roomName:String,bindToLifecycle: LifecycleTransformer<IMChatRoom>)
+        fun getIMChatRoomSearch(name:String,roomName:String,latitude:Double, longitude:Double,type:Int,bindToLifecycle: LifecycleTransformer<IMChatRoom>)
 
     }
 }

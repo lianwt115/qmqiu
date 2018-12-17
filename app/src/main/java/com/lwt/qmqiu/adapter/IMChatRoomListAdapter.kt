@@ -1,14 +1,13 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.R.id.room_type
 import com.lwt.qmqiu.bean.IMChatRoom
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
@@ -17,37 +16,31 @@ import java.util.regex.Pattern
 class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, listen: RoomClickListen?, mStrategy: Int) : androidx.recyclerview.widget.RecyclerView.Adapter<IMChatRoomListAdapter.ListViewHolder>() {
 
 
-    var context: Context? = null
-    var mTotalList: ArrayList<IMChatRoom>? = null
-    var inflater: LayoutInflater? = null
-    var listen: RoomClickListen? = null
+    private var mContext: Context = context
+    private var mTotalList: ArrayList<IMChatRoom> = list
+    private var mSearchList: ArrayList<IMChatRoom> = ArrayList<IMChatRoom>()
+    private var inflater: LayoutInflater =  LayoutInflater.from(mContext)
+    private var mRoomClickListen: RoomClickListen? = listen
     private val formatter = SimpleDateFormat("yyyy-MM-dd*HH:mm:ss")
     private val formatter1 = SimpleDateFormat("MM月dd日")
     private val formatter2 = SimpleDateFormat("HH:mm")
     private val today = formatter.format(System.currentTimeMillis())
     private val mType = mStrategy
-    init {
-        this.context = context
-        this.mTotalList = list
-        this.listen = listen
-        this.inflater = LayoutInflater.from(context)
-
-    }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
-        val obj=mTotalList?.get(position)
+        val obj=mTotalList.get(position)
 
-        checkRoom(holder.room_first,obj?.roomName?.substring(0,1))
+        checkRoom(holder.room_first,obj.roomName.substring(0,1))
 
-        holder.room_name.text = if (obj?.roomType == 3)obj.roomName.replace("ALWTA","&") else obj?.roomName
+        holder.room_name.text = if (obj.roomType == 3)obj.roomName.replace("ALWTA","&") else obj.roomName
 
-        var data = obj?.lastContent?.split("_ALWTA_")
+        var data = obj.lastContent.split("_ALWTA_")
 
         holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(null,
                 null, null, null)
 
-        if (data?.size!! >= 2){
+        if (data.size >= 2){
 
                 var text:String
 
@@ -78,7 +71,7 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
                     else -> {
 
-                        var drawableLeft = context!!.getDrawable(
+                        var drawableLeft = mContext.getDrawable(
                                 R.mipmap.voice_type1)
 
                         holder.room_lastcontent.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
@@ -96,29 +89,39 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
         }else{
 
-            holder.room_lastcontent.text = obj?.lastContent
+            holder.room_lastcontent.text = obj.lastContent
 
         }
 
 
-        holder.room_time.text = timeData(if (mType == 4) obj?.creatTime!! else obj?.lastContentTime!!)
+        holder.room_time.text = timeData(if (mType == 4) obj.creatTime else obj.lastContentTime)
 
         roomFirstBg(obj.roomNumber,holder.room_first)
 
         if (mType == 3 || mType == 4)
-            roonType(obj.roomType,holder.room_type)
+            roomType(obj.roomType,holder.room_type)
 
-        holder.root_contain.setOnClickListener {
-            if (listen!= null)
-                listen!!.roomClick(obj,position)
+
+        if (mSearchList.size>0 && position<=mSearchList.size-1){
+
+            holder.room_type.visibility = View.VISIBLE
+
+            holder.room_type.text = "搜索"
+
+            holder.room_type.setTextColor(mContext.resources.getColor(R.color.colorAccent))
+
         }
 
 
+        holder.root_contain.setOnClickListener {
+            if (mRoomClickListen!= null)
+                mRoomClickListen!!.roomClick(obj,position)
+        }
 
 
     }
 
-    private fun roonType(roomType: Int, room_type: TextView) {
+    private fun roomType(roomType: Int, room_type: TextView) {
 
         room_type.visibility = View.VISIBLE
         //1 附近 2公共 3私人
@@ -132,17 +135,55 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
             2 -> {
 
                 room_type.text = "推荐"
-                room_type.setTextColor(context!!.resources.getColor(R.color.bg_start_color))
+                room_type.setTextColor(mContext.resources.getColor(R.color.bg_start_color))
             }
 
             3 -> {
 
                 room_type.text = "私密"
 
-                room_type.setTextColor(context!!.resources.getColor(R.color.colorAccent))
+                room_type.setTextColor(mContext.resources.getColor(R.color.colorAccent))
             }
         }
     }
+
+    fun  addSearchRoom(room:IMChatRoom){
+
+        checkSearchCointain(room.roomName)
+
+        mSearchList.add(0,room)
+
+        mTotalList.addAll(0,mSearchList)
+
+        notifyDataSetChanged()
+    }
+
+    fun refreshList(roomList: List<IMChatRoom>){
+
+        mTotalList.clear()
+
+        mTotalList.addAll(0,mSearchList)
+
+        mTotalList.addAll(roomList)
+
+        notifyDataSetChanged()
+    }
+
+    private fun  checkSearchCointain(name:String){
+
+        mSearchList.forEach {
+
+            if (it.roomName == name){
+
+                mSearchList.remove(it)
+
+                return@forEach
+            }
+
+        }
+
+    }
+
 
     private fun checkRoom(text: TextView, roomName: String?) {
 
@@ -164,7 +205,7 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
 
     private fun roomFirstBg(roomName: String, text: TextView) {
 
-        var bg = context?.getDrawable(R.drawable.bubble_8dp)
+        var bg = mContext.getDrawable(R.drawable.bubble_8dp)
 
         try {
 
@@ -173,76 +214,76 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
             when(num%24) {
 
                 1 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_1)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_1)
                 }
                 2 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_2)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_2)
                 }
                 3 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_3)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_3)
                 }
                 4 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_4)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_4)
                 }
                 5 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_5)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_5)
                 }
                 6 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_6)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_6)
                 }
                 7 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_7)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_7)
                 }
                 8 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_8)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_8)
                 }
                 9 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_9)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_9)
                 }
                 10 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_10)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_10)
                 }
                 11 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_11)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_11)
                 }
                 12 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_12)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_12)
                 }
                 13-> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_13)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_13)
                 }
                 14 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_14)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_14)
                 }
                 15 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_15)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_15)
                 }
                 16 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_16)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_16)
                 }
                 17 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_17)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_17)
                 }
                 18 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_18)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_18)
                 }
                 19 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_19)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_19)
                 }
                 20 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_20)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_20)
                 }
                 21 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_21)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_21)
                 }
                 22 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_22)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_22)
                 }
                 23 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_23)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_23)
                 }
                 0 -> {
-                    bg =  context?.getDrawable(R.drawable.bubble_8dp_24)
+                    bg =  mContext.getDrawable(R.drawable.bubble_8dp_24)
                 }
 
             }
@@ -259,14 +300,14 @@ class IMChatRoomListAdapter(context: Context, list: ArrayList<IMChatRoom>, liste
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        var itemView=inflater?.inflate(R.layout.item_imchatroom, parent, false)
+        var itemView=inflater.inflate(R.layout.item_imchatroom, parent, false)
 
-        return ListViewHolder(itemView!!, context!!)
+        return ListViewHolder(itemView!!, mContext)
     }
 
     override fun getItemCount(): Int {
 
-        return mTotalList?.size ?: 0
+        return mTotalList.size
     }
 
     class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {

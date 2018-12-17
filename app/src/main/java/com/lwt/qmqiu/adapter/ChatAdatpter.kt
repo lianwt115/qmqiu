@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 
 
 class ChatAdatpter(fm: androidx.fragment.app.FragmentManager, list: ArrayList<androidx.fragment.app.Fragment>, titles : MutableList<String>) : androidx.fragment.app.FragmentPagerAdapter(fm) {
-    var mFm : androidx.fragment.app.FragmentManager = fm!!
+    var mFm : androidx.fragment.app.FragmentManager = fm
     var mList : ArrayList<androidx.fragment.app.Fragment> = list
     var mTitles : MutableList<String> = titles
     override fun getItem(position: Int): androidx.fragment.app.Fragment {
@@ -20,5 +20,6 @@ class ChatAdatpter(fm: androidx.fragment.app.FragmentManager, list: ArrayList<an
     override fun getPageTitle(position: Int): CharSequence {
         return mTitles[position]
     }
+
 
 }

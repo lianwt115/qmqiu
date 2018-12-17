@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_list.*
 class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, IMChatRoomListAdapter.RoomClickListen, View.OnClickListener, NoticeDialog.Builder.BtClickListen {
 
 
-
     private lateinit var mPresenter: IMChatRoomPresent
     private var mStrategy: Int=0
     lateinit var mAdapter: IMChatRoomListAdapter
@@ -149,16 +148,46 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
             UiUtils.showToast(getString(R.string.see_clear))
         }
 
-        mList.clear()
-        mList.addAll(roomList)
-        mAdapter.notifyDataSetChanged()
+
+        mAdapter.refreshList(roomList)
 
         smartrefreshlayout?.finishRefresh()
 
     }
 
-    fun show(text:String){
-        UiUtils.showToast(text.plus("---$mStrategy"))
+    fun searchRoom(roomName:String){
+
+        if (mStrategy == 3){
+
+            UiUtils.showToast("我的列表无需搜索")
+
+            return
+        }
+
+        val name = SPHelper.getInstance().get("loginName","") as String
+        var location = App.instanceApp().getBDLocation()
+
+        if (!TextUtils.isEmpty(name))
+
+            mPresenter.getIMChatRoomSearch(name,roomName,location?.latitude ?: 0.000000, location?.longitude
+                    ?: 0.000000, mStrategy, bindToLifecycle())
+
+    }
+
+    override fun setIMChatRoomSearch(room: IMChatRoom) {
+
+        var user =App.instanceApp().getLocalUser()
+
+        if (user != null){
+
+                room.lastContent = String(RSAUtils.decryptData(Base64.decode(room.lastContent,0), RSAUtils.loadPrivateKey(user.privateKey))!!)
+
+        }else{
+            UiUtils.showToast(getString(R.string.see_clear))
+        }
+
+
+        mAdapter.addSearchRoom(room)
     }
 
     override fun err(code: Int, errMessage: String?, type: Int) {
@@ -174,6 +203,9 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
             //创建房间失败
             2 -> {
                 showProgressDialogSuccess(false)
+            }
+            3 -> {
+                showProgressDialog(errMessage?:getString(R.string.roomget_err))
             }
         }
 

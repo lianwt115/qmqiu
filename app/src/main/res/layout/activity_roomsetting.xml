@@ -17,6 +17,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:overScrollMode="never"
         android:id="@+id/recycleview_roomsetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

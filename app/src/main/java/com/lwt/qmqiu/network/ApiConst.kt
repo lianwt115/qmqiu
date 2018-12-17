@@ -12,6 +12,7 @@ class ApiConst {
         const val USER_Updata = "user/updatauser"
 
         const val IMChat_RoomGet = "chat/getroom"
+        const val IMChat_RoomGetSearch = "chat/search"
         const val IMChat_RoomCreat = "chat/creatroom"
         const val IMChat_RoomCreatByMe = "chat/getmycreatroom"
 

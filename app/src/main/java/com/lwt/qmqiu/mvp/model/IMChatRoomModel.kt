@@ -16,4 +16,10 @@ class IMChatRoomModel(context: Context) : BaseModel(context) {
 
     }
 
+    fun getIMChatRoomSearch(name:String,roomName:String, latitude:Double, longitude:Double,type:Int): Observable<IMChatRoom>?{
+
+        return apiService?.getIMChatRoomSearch(name,roomName, latitude,longitude,type)?.map(HttpResultFunc())
+
+    }
+
 }

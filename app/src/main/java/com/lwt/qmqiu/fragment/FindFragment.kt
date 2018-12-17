@@ -73,8 +73,7 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
             if (TextUtils.isEmpty(search_et.text)){
                 UiUtils.showToast("请输入房间名")
             }else{
-                (mFragments[selectIndex] as ListFragment).show("搜索房间:${search_et.text}")
-                //UiUtils.showToast("搜索:${search_et.text}--$selectIndex")
+                (mFragments[selectIndex] as ListFragment).searchRoom(search_et.text.toString())
             }
         }
 

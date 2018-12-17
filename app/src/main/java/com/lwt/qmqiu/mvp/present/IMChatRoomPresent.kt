@@ -78,4 +78,30 @@ class IMChatRoomPresent(context: Context, view: IMChatRoomContract.View) : IMCha
         )
     }
 
+    override fun getIMChatRoomSearch(name: String, roomName: String, latitude: Double, longitude: Double, type: Int, bindToLifecycle: LifecycleTransformer<IMChatRoom>) {
+        val observable : Observable<IMChatRoom>? = mContext.let {
+            mModel.getIMChatRoomSearch(name,roomName,latitude,longitude,type) }
+
+
+        observable?.applySchedulers()?.compose(bindToLifecycle)?.subscribe(
+
+                {
+                    mView?.setIMChatRoomSearch(it)
+                }, {
+
+            Logger.e(it.message?:"错误为空")
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,3)
+
+            }else{
+                mView?.err(-1,it.message,3)
+            }
+
+        }
+
+        )
+    }
+
 }

@@ -38,6 +38,9 @@ interface ApiService {
     @GET(ApiConst.IMChat_RoomGet)
     fun getIMChatRoom(@Query("name") name:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("type") type:Int):Observable<HttpResult<List<IMChatRoom>>>
 
+    @GET(ApiConst.IMChat_RoomGetSearch)
+    fun getIMChatRoomSearch(@Query("name") name:String,@Query("roomName") roomName:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("type") type:Int):Observable<HttpResult<IMChatRoom>>
+
     @POST(ApiConst.IMChat_RoomCreat)
     fun creatIMChatRoom(@Query("name") name:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("type") type:Int,@Query("roomname") loginWhere:String ):Observable<HttpResult<IMChatRoom>>
 

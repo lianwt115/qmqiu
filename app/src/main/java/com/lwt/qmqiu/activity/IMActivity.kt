@@ -138,7 +138,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         //键盘监听
         KeyboardUtil.attach(this, panel_root
                 // Add keyboard showing state callback, do like this when you want to listen in the
-                // keyboard's show/hide change.
+                // keyboard's searchRoom/hide change.
         ) { isShowing ->
 
             Logger.e("Keyboard is $isShowing")
