@@ -52,7 +52,7 @@ class VideoPlayActivity:BaseActivity(), IShareElements {
 
             }
 
-            override fun onFinishDownload(path: String) {
+            override fun onFinishDownload(path: String, type: Int) {
 
                 //进行播放
                 preview_video.register(this@VideoPlayActivity)

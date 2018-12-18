@@ -14,12 +14,14 @@ import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.orhanobut.logger.Logger
 
-class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:PhotoSingleClick?=null): PagerAdapter() {
+class PhotoViewPageAdapter(context: Context, list: List<PhotoViewData>, var listen: PhotoSingleClick? = null, real: Boolean): PagerAdapter() {
 
     private var mList  = list
     private var mViewList  = ArrayList<ViewData>()
     private var mContext  = context
     private var mListen  = listen
+    //real是否是加密数据
+    private var mReal  = real
 
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -28,7 +30,7 @@ class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:
 
         mViewList.add(ViewData(photoView,position))
 
-        val data = App.instanceApp().getShowMessage(mList[position].content)
+        val data =if (mReal) App.instanceApp().getShowMessage(mList[position].content) else mList[position].content
 
         ViewCompat.setTransitionName(photoView,data)
 
@@ -43,7 +45,7 @@ class PhotoViewPageAdapter(context:Context,list: List<PhotoViewData>,var listen:
 
             }
 
-            override fun onFinishDownload(path: String) {
+            override fun onFinishDownload(path: String, type: Int) {
 
                 Glide.with(mContext).load(path).into(photoView)
 

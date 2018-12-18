@@ -1,20 +1,12 @@
 package com.lwt.qmqiu.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
-import android.view.Window
-import android.view.WindowManager
 import com.hw.ycshareelement.YcShareElement
 import com.hw.ycshareelement.transition.IShareElements
 import com.hw.ycshareelement.transition.ShareElementInfo
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.PhotoViewPageAdapter
 import com.lwt.qmqiu.bean.PhotoViewData
-import com.lwt.qmqiu.shareelement.ShareContentInfo
-import com.orhanobut.logger.Logger
-import kotlinx.android.synthetic.main.activity_im.*
 import kotlinx.android.synthetic.main.activity_photoview.*
 import java.util.ArrayList
 
@@ -37,8 +29,10 @@ class PhotoViewActivity:BaseActivity(), PhotoViewPageAdapter.PhotoSingleClick , 
         var list =intent.getParcelableArrayListExtra<PhotoViewData>("photoViewData")
 
         var index =intent.getIntExtra("index",0)
+        //是否加密
+        var real =intent.getBooleanExtra("real",true)
 
-        mAdapter = PhotoViewPageAdapter(this,list,this)
+        mAdapter = PhotoViewPageAdapter(this,list,this,real)
 
         view_pager.adapter = mAdapter
 

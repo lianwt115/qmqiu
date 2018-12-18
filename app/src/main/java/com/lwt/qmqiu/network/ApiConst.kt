@@ -49,6 +49,12 @@ class ApiConst {
 
         const val Coin_Exchange = "coin/exchange"
 
+        //帖子
+        const val Note_Get = "note/getNote"
+        const val Note_Create = "note/createNote"
+        const val Note_Delete = "note/deleteNote"
+        const val Note_Report = "note/report"
+        const val Note_Good = "note/good"
 
     }
 }

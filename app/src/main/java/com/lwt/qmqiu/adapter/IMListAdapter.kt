@@ -130,14 +130,14 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                         }
 
-                        override fun onFinishDownload(path: String) {
+                        override fun onFinishDownload(path: String, type: Int) {
 
                         }
 
                         override fun onFail(errorInfo: String) {
                             Logger.e("onFail:$errorInfo")
                         }
-                    },dataAll[0],3)
+                    },dataAll[0],obj.type)
 
 
                 }else{
@@ -168,7 +168,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
                         holder.img_progress_text.text = "$progress %"
                     }
 
-                    override fun onFinishDownload(path: String) {
+                    override fun onFinishDownload(path: String, type: Int) {
 
                         holder.img_progress_text.visibility =View.GONE
                         holder.img_progress.visibility =View.GONE
@@ -443,17 +443,17 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
     class ListViewHolder(itemView: View, context: Context) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
-        var message_who: SelectableRoundedImageView = itemView?.findViewById(R.id.message_who) as SelectableRoundedImageView
-        var message_content: TextView = itemView?.findViewById(R.id.message_content) as TextView
-        var message_time: TextView = itemView?.findViewById(R.id.message_time) as TextView
-        var message_voice_time: TextView = itemView?.findViewById(R.id.message_voice_time) as TextView
-        var text_root: RelativeLayout = itemView?.findViewById(R.id.text_root) as RelativeLayout
-        var img_root: RelativeLayout = itemView?.findViewById(R.id.img_root) as RelativeLayout
-        var photo_view: ImageView = itemView?.findViewById(R.id.photo_view) as ImageView
-        var videoplay_bg: ImageView = itemView?.findViewById(R.id.videoplay_bg) as ImageView
-        var img_progress: ProgressBar = itemView?.findViewById(R.id.img_progress) as ProgressBar
-        var img_progress_text: TextView = itemView?.findViewById(R.id.img_progress_text) as TextView
-        var map_root: LocationView = itemView?.findViewById(R.id.map_root) as LocationView
+        var message_who: SelectableRoundedImageView = itemView.findViewById(R.id.message_who) as SelectableRoundedImageView
+        var message_content: TextView = itemView.findViewById(R.id.message_content) as TextView
+        var message_time: TextView = itemView.findViewById(R.id.message_time) as TextView
+        var message_voice_time: TextView = itemView.findViewById(R.id.message_voice_time) as TextView
+        var text_root: RelativeLayout = itemView.findViewById(R.id.text_root) as RelativeLayout
+        var img_root: RelativeLayout = itemView.findViewById(R.id.img_root) as RelativeLayout
+        var photo_view: ImageView = itemView.findViewById(R.id.photo_view) as ImageView
+        var videoplay_bg: ImageView = itemView.findViewById(R.id.videoplay_bg) as ImageView
+        var img_progress: ProgressBar = itemView.findViewById(R.id.img_progress) as ProgressBar
+        var img_progress_text: TextView = itemView.findViewById(R.id.img_progress_text) as TextView
+        var map_root: LocationView = itemView.findViewById(R.id.map_root) as LocationView
 
     }
 

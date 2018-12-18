@@ -2,6 +2,7 @@ package com.lwt.qmqiu.widget
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageButton
@@ -26,6 +27,7 @@ import com.lwt.qmqiu.R
 
 
     private lateinit var mTextViewName: TextView
+    private lateinit var mTextViewContent: TextView
     private lateinit var mImageView: ImageView
     private lateinit var mLine: View
     private lateinit var mRootView: RelativeLayout
@@ -57,6 +59,7 @@ import com.lwt.qmqiu.R
 
         //输入标题
         mTextViewName = view.findViewById(R.id.show_name) as TextView
+        mTextViewContent = view.findViewById(R.id.show_content) as TextView
         mImageView = view.findViewById(R.id.show_img) as ImageView
         mLine = view.findViewById(R.id.line) as View
         mRootView = view.findViewById(R.id.itemview_root) as RelativeLayout
@@ -109,6 +112,21 @@ import com.lwt.qmqiu.R
 
         }
 
+
+    }
+
+    fun setShowContent(content:String){
+
+        mTextViewContent.text = content
+
+        mTextViewContent.visibility = if (TextUtils.isEmpty(content)) View.GONE else View.VISIBLE
+
+
+    }
+
+    fun getShowContent():String{
+
+        return mTextViewContent.text.toString()
 
     }
 

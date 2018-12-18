@@ -39,7 +39,7 @@ class DownloadManager {
 
         if (path!=null) {
 
-            listener.onFinishDownload(path)
+            listener.onFinishDownload(path,type)
 
         }else{
 
@@ -111,7 +111,7 @@ class DownloadManager {
 
             DownloadFileDbUtils.insertOrReplace(DownloadFileDb(null,mInterceptor.fileName,id,System.currentTimeMillis(),type,filePath))
 
-            listener.onFinishDownload(filePath)
+            listener.onFinishDownload(filePath,type)
 
         },{
 

@@ -28,6 +28,20 @@
         android:id="@+id/show_name"
         android:layout_width="wrap_content"
         android:layout_height="28dp" />
+    <TextView
+        android:visibility="gone"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/show_name"
+        android:ellipsize="end"
+        android:gravity="right|center_vertical"
+        android:layout_alignParentRight="true"
+        android:text="房范格的风格是间"
+        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black"
+        android:id="@+id/show_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <View
         android:layout_alignParentBottom="true"
         android:id="@+id/line"

@@ -14,7 +14,7 @@
             android:id="@+id/search_et"
             android:drawablePadding="6dp"
             android:textSize="14sp"
-            android:hint="请输入搜索关键字"
+            android:hint="请输入帖子话题"
             android:paddingLeft="6dp"
             android:drawableLeft="@mipmap/search"
             android:layout_margin="8dp"

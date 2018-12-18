@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/roominfo_bg"
+    android:orientation="vertical"
+    tools:context=".activity.RoomInfoActivity">
+
+    <com.lwt.qmqiu.widget.BarView
+        android:id="@+id/creatnote_barview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </com.lwt.qmqiu.widget.BarView>
+    <EditText
+        android:padding="20dp"
+        android:textSize="14sp"
+        android:gravity="left"
+        android:hint="这一刻的想法"
+        android:id="@+id/note_text"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="160dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:overScrollMode="never"
+        android:background="@color/white"
+        android:padding="20dp"
+        android:id="@+id/rv_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.lwt.qmqiu.widget.ItemView
+        android:layout_marginTop="40dp"
+        android:id="@+id/location"
+        app:show_img="@mipmap/location_1"
+        app:show_name="所在位置"
+        app:show_bottom_line="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+    </com.lwt.qmqiu.widget.ItemView>
+
+    <com.lwt.qmqiu.widget.ItemView
+        android:id="@+id/who_see"
+        app:show_img="@mipmap/who_see"
+        app:show_name="谁可以看"
+        app:show_bottom_line="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+    </com.lwt.qmqiu.widget.ItemView>
+
+
+
+</LinearLayout>

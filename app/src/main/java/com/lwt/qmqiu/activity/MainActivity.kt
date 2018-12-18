@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import android.text.TextUtils
 import android.view.KeyEvent
+import com.hw.ycshareelement.YcShareElement
 import com.lwt.qmqiu.fragment.NoteFragment
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.BuildConfig
@@ -44,7 +45,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
     private  var autoLoginCountMax = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        YcShareElement.enableContentTransition(application)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

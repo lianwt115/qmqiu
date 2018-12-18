@@ -41,6 +41,7 @@ class NoticeDialog : Dialog {
         private var mLoginDialog: NoticeDialog? = null
         private var mLayout: View? = null
         private var mNoticeTVNotice: TextView? = null
+        private var mProgressBar: ProgressBar? = null
         private var mRoomName: EditText? = null
         private var mLine: View? = null
         private var mType  = 0
@@ -68,6 +69,7 @@ class NoticeDialog : Dialog {
             mRoomName = mLayout!!.findViewById(R.id.room_name) as EditText
             mBtNext = mLayout!!.findViewById(R.id.bt_go) as CircularProgressButton
             mLine = mLayout!!.findViewById(R.id.line) as View
+            mProgressBar = mLayout!!.findViewById(R.id.progress_bar) as ProgressBar
 
 
             mBtNext?.setFinalCornerRadius(6F)
@@ -117,6 +119,9 @@ class NoticeDialog : Dialog {
 
                     mRoomName!!.visibility =  View.GONE
 
+                    mProgressBar!!.visibility =  View.GONE
+
+
                 }
                 //标题和按钮
 
@@ -125,16 +130,31 @@ class NoticeDialog : Dialog {
 
                     mLine!!.visibility = View.VISIBLE
                     mRoomName!!.visibility =  View.GONE
+                    mProgressBar!!.visibility =  View.GONE
 
                 }
                 //标题 按钮 和et
                 3 -> {
+
                     mBtNext!!.visibility = View.VISIBLE
 
                     mLine!!.visibility = View.VISIBLE
 
                     mRoomName!!.visibility =  View.VISIBLE
 
+                    mProgressBar!!.visibility =  View.GONE
+
+                }
+                //标题 按钮 和et
+                4 -> {
+
+                    mBtNext!!.visibility = View.GONE
+
+                    mLine!!.visibility = View.VISIBLE
+
+                    mRoomName!!.visibility =  View.GONE
+
+                    mProgressBar!!.visibility =  View.VISIBLE
                 }
 
             }

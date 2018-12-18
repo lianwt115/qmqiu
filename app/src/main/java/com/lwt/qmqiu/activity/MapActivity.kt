@@ -24,6 +24,11 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
         when (left) {
 
             true -> {
+                val intent = Intent()
+                //把返回数据存入Intent
+                intent.putExtra("success", false)
+                //设置返回数据
+                this@MapActivity.setResult(Activity.RESULT_OK, intent)
 
                 finish()
 
@@ -33,6 +38,7 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
                 val intent = Intent()
                 //把返回数据存入Intent
+                intent.putExtra("success", true)
                 intent.putExtra("locationinfo", mLocationInfo)
                 //设置返回数据
                 this@MapActivity.setResult(Activity.RESULT_OK, intent)

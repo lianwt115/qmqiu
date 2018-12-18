@@ -27,6 +27,7 @@
 
     <EditText
 
+        android:visibility="gone"
         android:textColorHint="@color/province_line_border"
         android:layout_marginTop="6dp"
         android:theme="@style/MyEditText"
@@ -38,6 +39,7 @@
         android:layout_height="wrap_content" />
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:visibility="gone"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
         android:id="@+id/bt_go"
@@ -50,6 +52,12 @@
 
     </br.com.simplepass.loading_button_lib.customViews.CircularProgressButton>
 
-
+    <ProgressBar
+        android:indeterminateTint="@color/white"
+        android:layout_margin="20dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/progress_bar"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 
 </LinearLayout>

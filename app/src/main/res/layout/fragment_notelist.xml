@@ -4,16 +4,19 @@
     android:orientation="vertical"
     android:background="@color/room_list_back"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="50dp"
+    >
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/smartrefreshlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>

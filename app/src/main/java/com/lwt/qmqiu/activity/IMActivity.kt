@@ -326,7 +326,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         .enableAnimation(true)// 选择界面图片点击效果
                         .enableCompress(true)// 是否开启压缩
                         .compressPictureFilterSize(1024)//多少kb以下的图片不压缩
-                        .compressVideoFilterSize(1024*10)//多少kb以下的视频不压缩
+                        .compressVideoFilterSize(1024*5)//多少kb以下的视频不压缩
                         .thumbnailHeight(160)// 选择界面图片高度
                         .thumbnailWidth(160)// 选择界面图片宽度
                         .enableClickSound(false)// 是否开启点击声音
@@ -831,7 +831,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                         Logger.e("onProgress:$progress")
                                     }
 
-                                    override fun onFinishDownload(path: String) {
+                                    override fun onFinishDownload(path: String, type: Int) {
 
                                         voice_play.setVideoPath(path)
                                         voice_play.start()

@@ -59,7 +59,7 @@ class NoteFragment: BaseFragment(), TabLayout.OnTabSelectedListener {
         //搜索到帖子显示
         search_tv.setOnClickListener {
             if (TextUtils.isEmpty(search_et.text)){
-                UiUtils.showToast("请输入帖子标签关键字")
+                UiUtils.showToast("请输入帖子标签")
             }else{
                 (mFragments[selectIndex] as NoteListFragment).show("搜索帖子:${search_et.text}")
                 //UiUtils.showToast("搜索:${search_et.text}--$selectIndex")

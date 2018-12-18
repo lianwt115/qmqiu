@@ -6,7 +6,7 @@ interface DownloadListen {
 
     fun onProgress(progress: Int)
 
-    fun onFinishDownload(path:String)
+    fun onFinishDownload(path:String,type:Int)
 
     fun onFail(errorInfo: String)
 }

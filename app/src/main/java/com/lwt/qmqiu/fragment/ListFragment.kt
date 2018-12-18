@@ -31,8 +31,8 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
 
     private lateinit var mPresenter: IMChatRoomPresent
     private var mStrategy: Int=0
-    lateinit var mAdapter: IMChatRoomListAdapter
-    var mList: ArrayList<IMChatRoom> = ArrayList()
+    private lateinit var mAdapter: IMChatRoomListAdapter
+    private var mList: ArrayList<IMChatRoom> = ArrayList()
 
     override fun getLayoutResources(): Int {
 

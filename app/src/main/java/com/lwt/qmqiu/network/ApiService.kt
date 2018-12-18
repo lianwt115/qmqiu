@@ -102,5 +102,19 @@ interface ApiService {
     @POST(ApiConst.Coin_Exchange)
     fun coinExchange(@Query("name") name:String,@Query("giftIndex") giftIndex:String):Observable<HttpResult<BaseUser>>
 
+    @POST(ApiConst.Note_Get)
+    fun noteGet(@Query("name") name:String,@Query("noteType") noteType:Int,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double):Observable<HttpResult<List<NoteLog>>>
+
+    @POST(ApiConst.Note_Create)
+    fun noteCreate(@Query("name") name:String,@Query("noteType") noteType:Int,@Query("seeType") seeType:Int,@Query("topic") topic:String,@Query("textContent") textContent:String,@Query("imgList") imgList:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("where") where:String):Observable<HttpResult<Boolean>>
+
+    @POST(ApiConst.Note_Report)
+    fun noteReport(@Query("name") name:String,@Query("id") id:String,@Query("why") why:Int):Observable<HttpResult<Boolean>>
+
+    @POST(ApiConst.Note_Delete)
+    fun noteDelete(@Query("name") name:String,@Query("id") id:String):Observable<HttpResult<Boolean>>
+
+    @POST(ApiConst.Note_Good)
+    fun noteGood(@Query("name") name:String,@Query("id") id:String):Observable<HttpResult<Boolean>>
 
 }
