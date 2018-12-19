@@ -69,6 +69,13 @@
         app:show_name="房间"
         android:id="@+id/itemview_room"
         android:layout_width="match_parent"
+        app:show_bottom_line="true"
+        android:layout_height="40dp"/>
+    <com.lwt.qmqiu.widget.ItemView
+        app:show_img="@mipmap/note"
+        app:show_name="帖子"
+        android:id="@+id/itemview_note"
+        android:layout_width="match_parent"
         android:layout_height="40dp"/>
 
 

@@ -55,6 +55,14 @@ class ApiConst {
         const val Note_Delete = "note/deleteNote"
         const val Note_Report = "note/report"
         const val Note_Good = "note/good"
+        const val Note_My = "note/getMyNote"
+
+        //评论
+        const val Comment_Get = "noteComment/getComment"
+        const val Comment_Creat = "noteComment/createComment"
+        const val Comment_Delete = "noteComment/deleteComment"
+
+
 
     }
 }

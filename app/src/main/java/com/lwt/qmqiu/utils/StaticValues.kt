@@ -1,5 +1,8 @@
 package com.lwt.qmqiu.utils
 
+import com.lwt.qmqiu.App
+import com.lwt.qmqiu.R
+
 class StaticValues {
 
     companion object {
@@ -11,6 +14,9 @@ class StaticValues {
          val AdminName:String = "lwt520"
          val AdminIMEI:String = "862400046671037"
          val AdminPHONE:String = "+8613264736041"
+         val app= App.instanceApp()
+         var mNoteTabs = listOf<String>(app.getString(R.string.list4_name), app.getString(R.string.list5_name),
+                app.getString(R.string.list6_name)).toMutableList()
 
     }
 }

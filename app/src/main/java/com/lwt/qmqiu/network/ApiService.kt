@@ -105,6 +105,9 @@ interface ApiService {
     @POST(ApiConst.Note_Get)
     fun noteGet(@Query("name") name:String,@Query("noteType") noteType:Int,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double):Observable<HttpResult<List<NoteLog>>>
 
+    @POST(ApiConst.Note_My)
+    fun noteGetMine(@Query("name") name:String):Observable<HttpResult<List<NoteLog>>>
+
     @POST(ApiConst.Note_Create)
     fun noteCreate(@Query("name") name:String,@Query("noteType") noteType:Int,@Query("seeType") seeType:Int,@Query("topic") topic:String,@Query("textContent") textContent:String,@Query("imgList") imgList:String,@Query("latitude") latitude:Double,@Query("longitude") longitude:Double,@Query("where") where:String):Observable<HttpResult<Boolean>>
 
@@ -116,5 +119,14 @@ interface ApiService {
 
     @POST(ApiConst.Note_Good)
     fun noteGood(@Query("name") name:String,@Query("id") id:String):Observable<HttpResult<Boolean>>
+
+    @GET(ApiConst.Comment_Get)
+    fun commentGet(@Query("name") name:String,@Query("id") id:String):Observable<HttpResult<List<NoteCommentLog>>>
+
+    @POST(ApiConst.Comment_Creat)
+    fun commentCreate(@Query("name") name:String,@Query("id") id:String,@Query("commentContent") commentContent:String):Observable<HttpResult<NoteCommentLog>>
+
+    @POST(ApiConst.Comment_Delete)
+    fun commentDelete(@Query("name") name:String,@Query("id") id:String):Observable<HttpResult<Boolean>>
 
 }

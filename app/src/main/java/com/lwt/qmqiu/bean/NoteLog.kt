@@ -32,6 +32,7 @@ data class NoteLog(
         var longitude:Double=0.00 ,
         var where:String="" ,
         var deleteStatus:Boolean = false,
+        var hasGood:Boolean = false,
         var creatTime:Long = System.currentTimeMillis(),
         var deleteTime:Long = 0
 

@@ -47,7 +47,7 @@ class NotePhotoAdapter(context: Context, list: ArrayList<NoteMediaType>, listen:
         holder.notephoto.setOnClickListener {
 
             if (this.mPhotoClickListen!=null)
-                this.mPhotoClickListen?.photoClick(position,position==mTotalList.size-1)
+                this.mPhotoClickListen?.photoClick(position,TextUtils.isEmpty(obj.path))
 
 
         }

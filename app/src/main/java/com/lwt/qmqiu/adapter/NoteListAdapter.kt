@@ -1,6 +1,10 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.media.ThumbnailUtils
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +19,24 @@ import com.lwt.qmqiu.bean.NoteLog
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.network.ApiService
+import com.lwt.qmqiu.utils.StaticValues
 import com.orhanobut.logger.Logger
 import java.text.SimpleDateFormat
 
 
-class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<NoteListAdapter.ListViewHolder>() {
+class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickListen?,showType:Boolean=false) : androidx.recyclerview.widget.RecyclerView.Adapter<NoteListAdapter.ListViewHolder>() {
 
+    var mTabs = StaticValues.mNoteTabs
     private var mContext: Context = context
     private var mTotalList: List<NoteLog> = list
+    private var mVideoImg = HashMap<String,Bitmap>()
     private var inflater: LayoutInflater = LayoutInflater.from(mContext)
     private var mNoteClickListen: NoteClickListen? = listen
     private val formatter = SimpleDateFormat("yyyy-MM-dd*HH:mm:ss")
     private val formatter1 = SimpleDateFormat("MM月dd日")
     private val formatter2 = SimpleDateFormat("HH:mm")
     private val today = formatter.format(System.currentTimeMillis())
+    private val showType = showType
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
         val obj= mTotalList[position]
@@ -43,38 +51,64 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
 
         var  dataAll = obj.imgList.split("LWT")
 
-        DownloadManager(object : DownloadListen {
-            override fun onStartDownload() {
-                Logger.e("onStartDownload")
-            }
+        //0只有文字  1 图片 2视频
+        if (obj.topic == "0"){
 
-            override fun onProgress(progress: Int) {
+            holder.note_img.visibility = View.GONE
 
-                //Logger.e("onProgress:$progress")
-            }
+        }else{
 
-            override fun onFinishDownload(path: String, type: Int) {
+            //4图片  5视频
+            DownloadManager(object : DownloadListen {
+                override fun onStartDownload() {
+                    Logger.e("onStartDownload")
+                }
 
-                Glide.with(mContext).load(path).into(holder.note_img)
+                override fun onProgress(progress: Int) {
 
-               /* holder.img_progress_text.visibility =View.GONE
-                holder.img_progress.visibility =View.GONE
-                Glide.with(context!!).load(if (obj.type == 4) path else getVideoThumbnail(path)).into(holder.photo_view)
-                holder.videoplay_bg.visibility =if (obj.type == 4) View.GONE else View.VISIBLE*/
+                    //Logger.e("onProgress:$progress")
+                }
 
-            }
+                override fun onFinishDownload(path: String, type: Int) {
 
-            override fun onFail(errorInfo: String) {
-                Logger.e("onFail:$errorInfo")
-            }
-        },dataAll[0],4)
 
+
+                    Glide.with(mContext).load(if (type == 4) path else getVideoThumbnail(path)).into(holder.note_img)
+                    holder.videoplay_bg.visibility =if (type == 4) View.GONE else View.VISIBLE
+
+                }
+
+                override fun onFail(errorInfo: String) {
+                    Logger.e("onFail:$errorInfo")
+                }
+            },dataAll[0],if (obj.topic == "1") 4 else 5)
+
+        }
+
+        holder.location.text = "${obj.where}(附近)"
+
+        holder.location.visibility = if (obj.seeType == 1) View.VISIBLE else View.GONE
+
+        holder.note_type.text = mTabs[obj.noteType-1]
+        holder.note_type.visibility = if (showType) View.VISIBLE else View.GONE
+
+        holder.delete.visibility = if (showType) View.VISIBLE else View.GONE
+        holder.report.visibility = if (showType) View.GONE else View.VISIBLE
+
+
+        holder.location.visibility = if (obj.seeType == 1) View.VISIBLE else View.GONE
 
         holder.text_content.text = obj.textContent
 
         holder.comment.text = "评论(${obj.commentNum})"
 
         holder.good.text = "点赞(${obj.goodNum})"
+
+       /* if (obj.hasGood){
+            var draw = mContext.getDrawable(R.mipmap.good_active)
+            draw.setBounds(0,0,draw.minimumWidth,draw.minimumHeight)
+            holder.good.setCompoundDrawables(draw,null,null,null)
+        }*/
 
         holder.time.text = timeData(obj.creatTime)
 
@@ -109,6 +143,10 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
             if (this.mNoteClickListen!=null)
                 mNoteClickListen?.noteClick(obj,position,5)
         }
+        holder.delete.setOnClickListener{
+            if (this.mNoteClickListen!=null)
+                mNoteClickListen?.noteClick(obj,position,6)
+        }
         //绑定
         ViewCompat.setTransitionName(holder.note_img, dataAll[0])
     }
@@ -132,11 +170,15 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
 
         var text_content: TextView = itemView.findViewById(R.id.text_content) as TextView
         var note_img: ImageView = itemView.findViewById(R.id.note_img) as ImageView
+        var videoplay_bg: ImageView = itemView.findViewById(R.id.videoplay_bg) as ImageView
 
         var comment: TextView = itemView.findViewById(R.id.comment) as TextView
         var good: TextView = itemView.findViewById(R.id.good) as TextView
         var report: TextView = itemView.findViewById(R.id.report) as TextView
         var time: TextView = itemView.findViewById(R.id.time) as TextView
+        var location: TextView = itemView.findViewById(R.id.location) as TextView
+        var note_type: TextView = itemView.findViewById(R.id.note_type) as TextView
+        var delete: TextView = itemView.findViewById(R.id.delete) as TextView
 
     }
 
@@ -158,4 +200,25 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
 
     }
 
+    //获取视频文件缩略图
+    fun  getVideoThumbnail( videoPath:String,change:Boolean =false,width:Int=0,height:Int=0): Bitmap {
+
+        //缓存  防止视频图片闪
+        if (mVideoImg[videoPath] != null) {
+
+            return mVideoImg[videoPath]!!
+        }
+
+        var bitmap: Bitmap
+        // 获取视频的缩略图
+        bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND) //調用ThumbnailUtils類的靜態方法createVideoThumbnail獲取視頻的截圖；
+        if(bitmap!= null && change){
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT)//調用ThumbnailUtils類的靜態方法extractThumbnail將原圖片（即上方截取的圖片）轉化為指定大小；
+        }
+
+        mVideoImg[videoPath] = bitmap
+
+        return bitmap
+    }
 }

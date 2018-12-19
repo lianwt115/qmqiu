@@ -25,6 +25,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
         user_img.setOnClickListener(this)
 
         itemview_room.setBarOnClickListener(this,R.id.itemview_room)
+        itemview_note.setBarOnClickListener(this,R.id.itemview_note)
         itemview_gift.setBarOnClickListener(this,R.id.itemview_gift)
         itemview_charge.setBarOnClickListener(this,R.id.itemview_charge)
         itemview_exchange.setBarOnClickListener(this,R.id.itemview_exchange)
@@ -91,6 +92,12 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
             R.id.itemview_room -> {
 
                 val intent = Intent(activity, RoomSettingActivity::class.java)
+
+                startActivity(intent)
+            }
+            R.id.itemview_note -> {
+
+                val intent = Intent(activity, NoteSettingActivity::class.java)
 
                 startActivity(intent)
             }

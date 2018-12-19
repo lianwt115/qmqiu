@@ -108,6 +108,7 @@
         <activity android:name=".activity.CoinInfoActivity" />
         <activity android:name=".activity.CashoutActivity" />
         <activity android:name=".activity.CreateNoteActivity" />
+        <activity android:name=".activity.NoteSettingActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

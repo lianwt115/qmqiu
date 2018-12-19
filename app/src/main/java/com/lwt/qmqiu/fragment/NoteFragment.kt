@@ -6,16 +6,14 @@ import com.google.android.material.tabs.TabLayout
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.ChatAdatpter
+import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.utils.UiUtils
 import kotlinx.android.synthetic.main.fragment_note.*
 
 
 class NoteFragment: BaseFragment(), TabLayout.OnTabSelectedListener {
 
-
-    val app= App.instanceApp()
-    var mTabs = listOf<String>(app.getString(R.string.list4_name), app.getString(R.string.list5_name),
-            app.getString(R.string.list6_name)).toMutableList()
+    var mTabs =StaticValues.mNoteTabs
 
     lateinit var mFragments: ArrayList<androidx.fragment.app.Fragment>
 

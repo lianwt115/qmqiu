@@ -6,6 +6,7 @@ package com.lwt.qmqiu.activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.guoxiaoxing.phoenix.core.PhoenixOption
 import com.guoxiaoxing.phoenix.core.model.MimeType
@@ -98,10 +99,11 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
         if (plus){
 
+            //为了流量考虑  只允许添加一个视频或图片
             Phoenix.with()
                     .theme(PhoenixOption.THEME_RED)// 主题
                     .fileType(MimeType.ofAll())//显示的文件类型图片、视频、图片和视频
-                    .maxPickNumber(9)// 最大选择数量
+                    .maxPickNumber(1)// 最大选择数量
                     .minPickNumber(0)// 最小选择数量
                     .spanCount(4)// 每行显示个数
                     .enableCamera(true)
@@ -150,12 +152,35 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
                 //检测文字是否为空
                 showProgressDialog("请稍等",false,4)
 
-                mFileNum = mList.size -1
+                mFileNum = mList.size
 
-                for (i in 0 until mList.size-1){
+                if (TextUtils.isEmpty(mList[0].path)){
 
-                    uploadFile(File(mList[0].path),mList[0].type)
+                    var user = App.instanceApp().getLocalUser()
+
+                    if (user !=null){
+
+                        //type 为文件类型
+                        mPresenter.createNote(user.name,mNoteType,if (who_see.getShowContent() == SEE_TYPE_NEAR) 1 else 2,"0",note_text.text.toString(),"",
+                                if ( this.mLocationInfo == null) 0.00 else this.mLocationInfo!!.latitude,
+                                if ( this.mLocationInfo == null) 0.00 else this.mLocationInfo!!.longitude,
+                                if ( this.mLocationInfo == null) "" else "${this.mLocationInfo!!.locationWhere}-${this.mLocationInfo!!.locationName}",
+
+                                bindToLifecycle())
+
+                    }else{
+
+                        UiUtils.showToast("未登录,无法发送")
+                    }
+
+                }else{
+
+                    for (i in 0 until mList.size){
+
+                        uploadFile(File(mList[0].path),mList[0].type)
+                    }
                 }
+
 
             }
 
@@ -213,7 +238,11 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
                 }
 
-               mList.addAll(0,list)
+                if (list.size>0){
+                    mList.clear()
+                    mList.addAll(0,list)
+
+                }
 
                 mAdapter.notifyDataSetChanged()
 
@@ -286,7 +315,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
             if (user !=null){
 
                 //type 为文件类型
-                mPresenter.createNote(user.name,mNoteType,if (who_see.getShowContent() == SEE_TYPE_NEAR) 1 else 2,"日常",note_text.text.toString(),mStringBuffer.toString(),
+                mPresenter.createNote(user.name,mNoteType,if (who_see.getShowContent() == SEE_TYPE_NEAR) 1 else 2,"${uploadLog.type}",note_text.text.toString(),mStringBuffer.toString(),
                         if ( this.mLocationInfo == null) 0.00 else this.mLocationInfo!!.latitude,
                         if ( this.mLocationInfo == null) 0.00 else this.mLocationInfo!!.longitude,
                         if ( this.mLocationInfo == null) "" else "${this.mLocationInfo!!.locationWhere}-${this.mLocationInfo!!.locationName}",
@@ -303,7 +332,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
         }
 
         else
-            mStringBuffer.append(uploadLog._id).append("LWT")
+            mStringBuffer.append(uploadLog._id).append("_ALWTA_")
 
         Logger.e(uploadLog.toString())
 
