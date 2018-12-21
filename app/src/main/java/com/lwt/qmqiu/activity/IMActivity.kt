@@ -1019,9 +1019,16 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                 //TODO  1图片  2视频
 
                 result.forEach {
+                    //对动图做优化
+                    if(it.fileType == 1 && (it.localPath.endsWith(".gif") || it.localPath.endsWith(".GIG"))){
 
-                    Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
-                    uploadFile(File(it.finalPath),it.fileType)
+                        Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+                        uploadFile(File(it.localPath),it.fileType)
+
+                    }else{
+                        Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+                        uploadFile(File(it.finalPath),it.fileType)
+                    }
 
                 }
 

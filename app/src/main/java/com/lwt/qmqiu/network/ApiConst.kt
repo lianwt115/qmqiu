@@ -61,6 +61,7 @@ class ApiConst {
         const val Comment_Get = "noteComment/getComment"
         const val Comment_Creat = "noteComment/createComment"
         const val Comment_Delete = "noteComment/deleteComment"
+        const val Comment_Report= "noteComment/report"
 
 
 

@@ -40,9 +40,15 @@ class NoteModel(context: Context) : BaseModel(context) {
         return apiService?.commentCreate(name,id,commentText)?.map(HttpResultFunc())
 
     }
+
     fun deleteComment(name:String,id:String): Observable<Boolean>?{
 
         return apiService?.commentDelete(name,id)?.map(HttpResultFunc())
+
+    }
+    fun reportComment(name:String,id:String,why:Int): Observable<Boolean>?{
+
+        return apiService?.commentReport(name,id,why)?.map(HttpResultFunc())
 
     }
 

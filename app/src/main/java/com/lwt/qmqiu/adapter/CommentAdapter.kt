@@ -33,7 +33,7 @@ class CommentAdapter(context: Context, list: List<NoteCommentLog>, listen: Comme
         //头像 人名
         Glide.with(mContext).load(ApiService.BASE_URL_Api.plus(obj.fromImg)).into(holder.user_img)
 
-        holder.user_name.text = obj.from
+        holder.user_name.text = obj.fromShow
 
         holder.text_content.text = obj.commentContent
 
@@ -45,6 +45,13 @@ class CommentAdapter(context: Context, list: List<NoteCommentLog>, listen: Comme
             draw.setBounds(0,0,draw.minimumWidth,draw.minimumHeight)
             holder.comment_report.setCompoundDrawables(draw,null,null,null)
             holder.comment_report.text = "删除"
+        }else{
+
+            var draw = mContext.getDrawable(R.mipmap.report)
+            draw.setBounds(0,0,draw.minimumWidth,draw.minimumHeight)
+            holder.comment_report.setCompoundDrawables(draw,null,null,null)
+            holder.comment_report.text = "举报"
+
         }
 
         holder.time.text = timeData(obj.commentTime)

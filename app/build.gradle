@@ -111,4 +111,6 @@ dependencies {
     implementation 'com.github.guoxiaoxing:phoenix-compress-picture:1.0.15'
     implementation 'com.github.guoxiaoxing:phoenix-compress-video:1.0.15'
     implementation project(':loading-button-android')
+
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
 }

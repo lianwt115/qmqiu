@@ -233,8 +233,21 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
                 result.forEach {
 
-                    list.add(NoteMediaType(it.finalPath,it.fileType))
+
+                    if(it.fileType == 1 && (it.localPath.endsWith(".gif") || it.localPath.endsWith(".GIG"))){
+
+                        Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+                        list.add(NoteMediaType(it.localPath,it.fileType))
+
+                    }else{
+                        Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+                        list.add(NoteMediaType(it.finalPath,it.fileType))
+
+                    }
+
+
                     Logger.e("it.finalPath:${it.finalPath } --- it.fileType:${it.fileType}")
+                    Logger.e("it.localPath:${it.localPath } --- it.fileType:${it.fileType}")
 
                 }
 

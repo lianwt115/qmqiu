@@ -55,8 +55,8 @@
         </RelativeLayout>
         <TextView
             android:layout_marginRight="20dp"
-            android:textSize="12sp"
-            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:layout_marginTop="14dp"
             android:id="@+id/text_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

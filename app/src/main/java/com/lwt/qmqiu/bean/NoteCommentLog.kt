@@ -7,6 +7,7 @@ data class NoteCommentLog(
 
         //谁
         var from:String? = "",
+        var fromShow:String? = "",
         var fromImg:String? = "",
         //评论谁
         var to:String? = "",

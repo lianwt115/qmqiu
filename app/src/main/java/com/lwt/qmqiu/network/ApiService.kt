@@ -129,4 +129,6 @@ interface ApiService {
     @POST(ApiConst.Comment_Delete)
     fun commentDelete(@Query("name") name:String,@Query("id") id:String):Observable<HttpResult<Boolean>>
 
+    @POST(ApiConst.Comment_Report)
+    fun commentReport(@Query("name") name:String,@Query("id") id:String,@Query("why") why:Int):Observable<HttpResult<Boolean>>
 }

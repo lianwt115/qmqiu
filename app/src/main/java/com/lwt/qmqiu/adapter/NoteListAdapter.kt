@@ -21,6 +21,8 @@ import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.utils.StaticValues
 import com.orhanobut.logger.Logger
+import pl.droidsonroids.gif.GifDrawable
+import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
 
 
@@ -70,10 +72,17 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
                 }
 
                 override fun onFinishDownload(path: String, type: Int) {
+                    if (type == 4 && path.toLowerCase().endsWith(".gif")){
 
+                        var gif = GifDrawable(path)
 
+                        holder.note_img.setImageDrawable(gif)
 
-                    Glide.with(mContext).load(if (type == 4) path else getVideoThumbnail(path)).into(holder.note_img)
+                    }else{
+
+                        Glide.with(mContext).load(if (type == 4) path else getVideoThumbnail(path)).into(holder.note_img)
+                    }
+
                     holder.videoplay_bg.visibility =if (type == 4) View.GONE else View.VISIBLE
 
                 }
@@ -85,7 +94,7 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
 
         }
 
-        holder.location.text = "${obj.where}(附近)"
+        holder.location.text = "${obj.whereLocation}(附近)"
 
         holder.location.visibility = if (obj.seeType == 1) View.VISIBLE else View.GONE
 
@@ -169,7 +178,7 @@ class NoteListAdapter(context: Context, list: List<NoteLog>, listen: NoteClickLi
 
 
         var text_content: TextView = itemView.findViewById(R.id.text_content) as TextView
-        var note_img: ImageView = itemView.findViewById(R.id.note_img) as ImageView
+        var note_img: GifImageView = itemView.findViewById(R.id.note_img) as GifImageView
         var videoplay_bg: ImageView = itemView.findViewById(R.id.videoplay_bg) as ImageView
 
         var comment: TextView = itemView.findViewById(R.id.comment) as TextView

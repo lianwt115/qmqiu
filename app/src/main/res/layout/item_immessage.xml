@@ -71,11 +71,8 @@
 
         >
 
-        <com.joooonho.SelectableRoundedImageView
-            app:sriv_left_bottom_corner_radius="5dp"
-            app:sriv_left_top_corner_radius="5dp"
-            app:sriv_right_bottom_corner_radius="5dp"
-            app:sriv_right_top_corner_radius="5dp"
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_centerInParent="true"
             android:id="@+id/photo_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

@@ -30,7 +30,7 @@ data class NoteLog(
         //帖子发表于何处
         var latitude:Double=0.00,
         var longitude:Double=0.00 ,
-        var where:String="" ,
+        var whereLocation:String="" ,
         var deleteStatus:Boolean = false,
         var hasGood:Boolean = false,
         var creatTime:Long = System.currentTimeMillis(),

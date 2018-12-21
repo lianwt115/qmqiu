@@ -55,21 +55,21 @@
        </RelativeLayout>
         <TextView
             android:layout_marginRight="20dp"
-            android:textSize="12sp"
+            android:textSize="20sp"
             android:layout_marginTop="6dp"
             android:id="@+id/text_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="200dp"
+            android:layout_height="200dp">
 
-            <ImageView
+            <pl.droidsonroids.gif.GifImageView
                 android:layout_marginTop="10dp"
                 android:id="@+id/note_img"
-                android:layout_width="120dp"
-                android:layout_height="120dp" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <ImageView
                 android:visibility="gone"
@@ -93,6 +93,7 @@
 
 
         <RelativeLayout
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

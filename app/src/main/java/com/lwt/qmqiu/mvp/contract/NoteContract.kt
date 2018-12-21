@@ -21,6 +21,7 @@ interface NoteContract {
         fun setCreateComment(noteCommentLog:NoteCommentLog)
         fun setGetComment(commentList:List<NoteCommentLog>,id: String)
         fun setDeleteComment(success: Boolean,position: Int)
+        fun setReportComment(success: Boolean)
     }
 
     interface Presenter : BasePresent {
@@ -33,6 +34,7 @@ interface NoteContract {
         fun deleteComment(name:String,id:String,position: Int,bindToLifecycle: LifecycleTransformer<Boolean>)
         fun createComment(name:String,id: String,commemtText:String,bindToLifecycle: LifecycleTransformer<NoteCommentLog>)
         fun getComment(name:String,id:String,bindToLifecycle: LifecycleTransformer<List<NoteCommentLog>>)
+        fun reportComment(name:String,id:String,why:Int,bindToLifecycle: LifecycleTransformer<Boolean>)
 
 
     }

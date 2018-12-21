@@ -13,6 +13,8 @@ import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager
 import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.orhanobut.logger.Logger
+import pl.droidsonroids.gif.GifDrawable
+import pl.droidsonroids.gif.GifImageView
 
 class PhotoViewPageAdapter(context: Context, list: List<PhotoViewData>, var listen: PhotoSingleClick? = null, real: Boolean): PagerAdapter() {
 
@@ -26,7 +28,7 @@ class PhotoViewPageAdapter(context: Context, list: List<PhotoViewData>, var list
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
 
-        val photoView = ImageView(container.context)
+        val photoView = GifImageView(container.context)
 
         mViewList.add(ViewData(photoView,position))
 
@@ -47,7 +49,15 @@ class PhotoViewPageAdapter(context: Context, list: List<PhotoViewData>, var list
 
             override fun onFinishDownload(path: String, type: Int) {
 
-                Glide.with(mContext).load(path).into(photoView)
+                if (path.toLowerCase().endsWith(".gif")){
+
+                    var gif = GifDrawable(path)
+
+                    photoView.setImageDrawable(gif)
+
+                }else{
+                    Glide.with(mContext).load(path).into(photoView)
+                }
 
             }
 

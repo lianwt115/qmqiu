@@ -47,6 +47,33 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
             //举报
             2 -> {
+                //
+                mReporterDialogBuilder =  ReporterDialog.Builder(activity!!,true)
+
+                mReporterDialog = mReporterDialogBuilder.create("举报",object :ReporterDialog.Builder.BtClickListen{
+
+                    override fun btClick(index: Int, type: Int): Boolean {
+
+                        when (type) {
+
+                            1 -> {
+
+                                mPresenter.reportComment(mLocalUserName,data as String,index,bindToLifecycle())
+
+                                mReporterDialog.dismiss()
+
+                                return true
+                            }
+
+                        }
+
+                        return false
+                    }
+
+                },1)
+
+                mReporterDialog.show()
+
 
             }
             //删除
@@ -55,6 +82,12 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
                 mPresenter.deleteComment(mLocalUserName,data as String,position,bindToLifecycle())
             }
         }
+
+    }
+
+    override fun setReportComment(success: Boolean) {
+
+        UiUtils.showToast("${if (success) "举报成功" else "已经举报过了"} ")
 
     }
 
@@ -94,7 +127,7 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
             mList[position].goodNum++
 
-
+            UiUtils.showToast("点赞成功")
         }else{
 
             UiUtils.showToast("已经点过赞了")
@@ -218,6 +251,7 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
         super.onResume()
         getData(null)
     }
+
 
     fun show(text:String){
 

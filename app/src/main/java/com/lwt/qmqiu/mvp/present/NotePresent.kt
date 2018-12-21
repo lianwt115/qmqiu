@@ -16,7 +16,6 @@ import io.reactivex.Observable
 
 class NotePresent(context: Context, view: NoteContract.View) : NoteContract.Presenter{
 
-
     private  var mContext : Context = context
     private var mView : NoteContract.View = view
     private val mModel : NoteModel by lazy {
@@ -180,5 +179,32 @@ class NotePresent(context: Context, view: NoteContract.View) : NoteContract.Pres
 
         )
     }
+
+    override fun reportComment(name: String, id: String, why: Int, bindToLifecycle: LifecycleTransformer<Boolean>) {
+        val observable : Observable<Boolean>? = mContext.let {
+            mModel.reportComment(name,id,why) }
+
+
+        observable?.applySchedulers()?.subscribe(
+
+                {
+                    mView.setReportComment(it)
+                }, {
+
+            Logger.e(it.message)
+
+            if (it is ApiException){
+
+                mView?.err(it.getResultCode()!!,it.message,7)
+
+            }else{
+                mView?.err(-1,it.message,7)
+            }
+
+        }
+
+        )
+    }
+
 
 }

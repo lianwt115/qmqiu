@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import com.joooonho.SelectableRoundedImageView
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
+import com.lwt.qmqiu.R.id.photo_view
 import com.lwt.qmqiu.bean.LocationInfo
 import com.lwt.qmqiu.bean.PhotoViewData
 import com.lwt.qmqiu.bean.QMMessage
@@ -30,6 +31,8 @@ import com.lwt.qmqiu.widget.LocationView
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import pl.droidsonroids.gif.GifDrawable
+import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
@@ -172,7 +175,20 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
 
                         holder.img_progress_text.visibility =View.GONE
                         holder.img_progress.visibility =View.GONE
-                        Glide.with(context!!).load(if (obj.type == 4) path else getVideoThumbnail(path)).into(holder.photo_view)
+
+
+                        if (obj.type == 4 && path.toLowerCase().endsWith(".gif")){
+
+                            var gif = GifDrawable(path)
+
+                            holder.photo_view.setImageDrawable(gif)
+
+                        }else{
+
+                            Glide.with(context!!).load(if (obj.type == 4) path else getVideoThumbnail(path)).into(holder.photo_view)
+                        }
+
+
                         holder.videoplay_bg.visibility =if (obj.type == 4) View.GONE else View.VISIBLE
                     }
 
@@ -449,7 +465,7 @@ class IMListAdapter(context: Context, list: List<QMMessage>, listen:IMClickListe
         var message_voice_time: TextView = itemView.findViewById(R.id.message_voice_time) as TextView
         var text_root: RelativeLayout = itemView.findViewById(R.id.text_root) as RelativeLayout
         var img_root: RelativeLayout = itemView.findViewById(R.id.img_root) as RelativeLayout
-        var photo_view: ImageView = itemView.findViewById(R.id.photo_view) as ImageView
+        var photo_view: GifImageView = itemView.findViewById(R.id.photo_view) as GifImageView
         var videoplay_bg: ImageView = itemView.findViewById(R.id.videoplay_bg) as ImageView
         var img_progress: ProgressBar = itemView.findViewById(R.id.img_progress) as ProgressBar
         var img_progress_text: TextView = itemView.findViewById(R.id.img_progress_text) as TextView
