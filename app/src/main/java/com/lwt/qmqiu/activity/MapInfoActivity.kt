@@ -1,12 +1,9 @@
 package com.lwt.qmqiu.activity
 
-import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.text.ClipboardManager
 import android.view.View
 import com.baidu.location.BDLocation
 import com.lwt.qmqiu.R
@@ -17,12 +14,7 @@ import com.lwt.qmqiu.bean.LocationInfo
 import com.lwt.qmqiu.widget.BarView
 import kotlinx.android.synthetic.main.activity_mapinfo.*
 import com.baidu.mapapi.map.MarkerOptions
-import com.baidu.mapapi.map.OverlayOptions
 import com.baidu.mapapi.map.BitmapDescriptorFactory
-import com.baidu.mapapi.map.BitmapDescriptor
-import com.baidu.mapapi.utils.CoordinateConverter
-import com.baidu.mapsdkplatform.comapi.location.CoordinateType.BD09LL
-import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.widget.ReporterDialog
 
 
@@ -77,7 +69,7 @@ class MapInfoActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClick
 
     private fun initView() {
 
-        map_barview.changeTitle("位置信息")
+        map_barview.changeTitle(getString(R.string.location1))
 
         map_barview.setBarOnClickListener(this)
 
@@ -199,7 +191,7 @@ class MapInfoActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClick
     private fun showSelectDialog(){
         mReporterDialogBuilder =  ReporterDialog.Builder(this,true)
 
-        mReporterDialog = mReporterDialogBuilder.create("选择打开地图",object : ReporterDialog.Builder.BtClickListen{
+        mReporterDialog = mReporterDialogBuilder.create(getString(R.string.select_open_map),object : ReporterDialog.Builder.BtClickListen{
 
             override fun btClick(index: Int, type: Int): Boolean {
 
@@ -209,6 +201,7 @@ class MapInfoActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClick
 
                         when (index) {
 
+                            //百度地图
                             0 -> {
 
                                 if (checkApkExist("com.baidu.BaiduMap")) {
@@ -220,12 +213,13 @@ class MapInfoActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClick
                                     startActivity(i1)
                                 }else{
 
-                                    showProgressDialog("没有检测到百度地图APP")
+                                    showProgressDialog(getString(R.string.no_baidu_map))
                                 }
 
 
                             }
 
+                            //高德地图
                             1 -> {
 
                                 if (checkApkExist("com.autonavi.minimap")) {
@@ -239,13 +233,14 @@ class MapInfoActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClick
                                     startActivity(i1)
                                 }else{
 
-                                    showProgressDialog("没有检测到高德地图APP")
+                                    showProgressDialog(getString(R.string.no_gaode_map))
 
                                 }
 
 
                             }
 
+                            //腾讯地图
                             2 -> {
 
                                 if (checkApkExist("com.tencent.map")) {
@@ -256,7 +251,7 @@ class MapInfoActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClick
 
                                     startActivity(i1)
                                 }else{
-                                    showProgressDialog("没有检测到腾讯地图APP")
+                                    showProgressDialog(getString(R.string.no_tencent_map))
                                 }
 
 

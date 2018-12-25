@@ -14,6 +14,38 @@ import java.util.concurrent.TimeUnit
 class QMWebsocket {
 
 
+    companion object {
+        const val QM_TYPE_GIFT = 2
+        const val QM_TYPE_VIDEO_CALL = 6
+        const val QM_TYPE_VIDEO_EXIT = 7
+
+
+
+    }
+
+    enum class QMConnect(val type: Int,val message: String){
+        QM_CONNECT_OPEN(2,"连接成功"),
+        QM_CONNECT_FAILURE(1,"连接失败"),
+        QM_CONNECT_CLOSE(0,"连接已关闭"),
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private  var webSocket: WebSocket? = null
     private  var client: OkHttpClient = OkHttpClient()
@@ -57,7 +89,7 @@ class QMWebsocket {
             this@QMWebsocket.connectStatus = true
 
             if (this@QMWebsocket.listen != null)
-                this@QMWebsocket.listen!!.errorWS(2,"连接成功")
+                this@QMWebsocket.listen!!.errorWS(QMConnect.QM_CONNECT_OPEN)
 
             Logger.e("onOpen:$response")
         }
@@ -68,7 +100,7 @@ class QMWebsocket {
             this@QMWebsocket.connectStatus = false
 
             if (this@QMWebsocket.listen != null)
-                this@QMWebsocket.listen!!.errorWS(1,"连接失败")
+                this@QMWebsocket.listen!!.errorWS(QMConnect.QM_CONNECT_FAILURE)
 
 
             if (connectcount<connectcountMax)
@@ -107,7 +139,7 @@ class QMWebsocket {
             super.onClosed(webSocket, code, reason)
             //Logger.e("onClosed:$reason")
             if (this@QMWebsocket.listen != null)
-                this@QMWebsocket.listen!!.errorWS(0,"连接已关闭")
+                this@QMWebsocket.listen!!.errorWS(QMConnect.QM_CONNECT_CLOSE)
         }
     }
 
@@ -178,7 +210,7 @@ class QMWebsocket {
     interface QMMessageListen{
 
         fun qmMessage(message:QMMessage)
-        fun errorWS(type:Int,message:String)
+        fun errorWS(qmConnect:QMConnect)
     }
 
 

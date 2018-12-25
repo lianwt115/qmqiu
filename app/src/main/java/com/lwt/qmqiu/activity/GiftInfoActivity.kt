@@ -40,7 +40,7 @@ class GiftInfoActivity : BaseActivity(),BarView.BarOnClickListener, GiftShowAdap
         setContentView(R.layout.activity_giftinfo)
 
         giftinfo_barview.setBarOnClickListener(this)
-        giftinfo_barview.changeTitle("礼物详情")
+        giftinfo_barview.changeTitle(getString(R.string.gift_info))
 
         initRecycleView()
 

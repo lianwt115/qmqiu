@@ -12,9 +12,6 @@ import android.text.*
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
 import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil
 import cn.dreamtobe.kpswitch.util.KeyboardUtil
 import com.google.gson.Gson
@@ -30,12 +27,6 @@ import com.hw.ycshareelement.transition.IShareElements
 import com.hw.ycshareelement.transition.ShareElementInfo
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.*
-import com.lwt.qmqiu.activity.IMActivity.Companion.EXITFORRESULT
-import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_CODE_CHOOSE_SELECT
-import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_CODE_CHOOSE_TAKE
-import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_CONTENT
-import com.lwt.qmqiu.activity.IMActivity.Companion.REQUEST_MAP
 import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.PlusAdapter
 import com.lwt.qmqiu.bean.*
@@ -46,8 +37,6 @@ import com.lwt.qmqiu.mvp.contract.RoomMessageContract
 import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.shareelement.ShareContentInfo
-import com.lwt.qmqiu.utils.SPHelper
-import com.lwt.qmqiu.utils.StaticValues.Companion.mLocalUserName
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.lwt.qmqiu.voice.VoiceManager
@@ -68,7 +57,6 @@ import java.util.concurrent.TimeUnit
 class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickListen, QMWebsocket.QMMessageListen, BarView.BarOnClickListener, RoomMessageContract.View, PlusAdapter.PlusClickListen, View.OnTouchListener,IShareElements {
 
 
-
     private lateinit var mIMChatRoom:IMChatRoom
     private lateinit var mIMListAdapter:IMListAdapter
     private lateinit var mPlusAdapter:PlusAdapter
@@ -78,8 +66,6 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
     private  var mIMMessageList = ArrayList<QMMessage>()
     private  var mPlusList = ArrayList<PlusInfo>()
     private lateinit var present: RoomMessagePresent
-    private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
-
     private  var refuse = false
     private  var voice = true
     private  var giftIndex = -1
@@ -217,10 +203,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         }else{
 
-            val name = SPHelper.getInstance().get("loginName","") as String
-
-            if (!TextUtils.isEmpty(name))
-                present.getRoomMessage(name,mIMChatRoom.roomNumber,bindToLifecycle())
+            if (!TextUtils.isEmpty(mLocalUserName))
+                present.getRoomMessage(mLocalUserName,mIMChatRoom.roomNumber,bindToLifecycle())
         }
 
     }
@@ -277,10 +261,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             }
         })
 
-        mPlusList.add(PlusInfo("相册",R.mipmap.photo))
-        mPlusList.add(PlusInfo("拍摄",R.mipmap.camera))
-        mPlusList.add(PlusInfo("视频通话",R.mipmap.video))
-        mPlusList.add(PlusInfo("位置",R.mipmap.location))
+        mPlusList.add(PlusInfo(getString(R.string.photo),R.mipmap.photo))
+        mPlusList.add(PlusInfo(getString(R.string.camare),R.mipmap.camera))
+        mPlusList.add(PlusInfo(getString(R.string.video_type),R.mipmap.video))
+        mPlusList.add(PlusInfo(getString(R.string.location_type),R.mipmap.location))
 
         if (mIMChatRoom.roomType == 3){
 
@@ -288,10 +272,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             if (gift.size>=4){
 
-                mPlusList.add(PlusInfo("天使", R.mipmap.angel,gift[0]))
-                mPlusList.add(PlusInfo("玫瑰", R.mipmap.rose,gift[1]))
-                mPlusList.add(PlusInfo("跑车", R.mipmap.paoche,gift[2]))
-                mPlusList.add(PlusInfo("王冠", R.mipmap.kingset,gift[3]))
+                mPlusList.add(PlusInfo(getString(R.string.gift_1), R.mipmap.angel,gift[0]))
+                mPlusList.add(PlusInfo(getString(R.string.gift_2), R.mipmap.rose,gift[1]))
+                mPlusList.add(PlusInfo(getString(R.string.gift_3), R.mipmap.paoche,gift[2]))
+                mPlusList.add(PlusInfo(getString(R.string.gift_4), R.mipmap.kingset,gift[3]))
 
                 gift_send.visibility = View.VISIBLE
             }
@@ -301,13 +285,14 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         mPlusAdapter.notifyDataSetChanged()
 
 
-        gift_send.text = "赠送礼物"
+        gift_send.text = getString(R.string.gift_send)
         gift_send.background = getDrawable(R.drawable.bg_20dp_13)
         gift_send.setFinalCornerRadius(20F)
         gift_send.setOnClickListener(this)
 
     }
 
+    //底部功能块点击
     override fun plusClick(position: Int, obj: PlusInfo) {
 
 
@@ -394,6 +379,8 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             }
 
+            //私人聊天赠送礼物
+
             4,5,6,7 -> {
 
                 if(obj.select)
@@ -423,7 +410,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
             gift_send.revertAnimation()
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
 
@@ -485,7 +472,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         if (refuse){
 
-                            UiUtils.showToast("对方拒绝接受,发送失败")
+                            UiUtils.showToast(getString(R.string.video_refuse_send))
 
                             return
                         }
@@ -539,7 +526,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     }else{
 
-                        UiUtils.showToast("请选择礼物")
+                        UiUtils.showToast(getString(R.string.please_select_gift))
                     }
 
 
@@ -596,14 +583,14 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         send_voice_btn.isPressed = true
 
-                        send_voice_btn.text = "松开发送"
+                        send_voice_btn.text = getString(R.string.up_send)
                         //开始录音
 
                         voice_view.startRecord("${mIMChatRoom.roomNumber}_${System.currentTimeMillis()}",object :VoiceManager.VoiceRecordListen{
 
                             override fun start() {
 
-                                Logger.e("开始录制")
+                                Logger.e("start_record_voice")
                             }
 
                             override fun finished(file: File, time: Int) {
@@ -624,7 +611,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         voice_view.stopRecord( event.rawY>=yY-yHeight)
 
-                        send_voice_btn.text = "按住说话"
+                        send_voice_btn.text = getString(R.string.press_speak)
                         send_voice_btn.isPressed = false
 
                     }
@@ -717,7 +704,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     startActivity(intent)
                 }else{
 
-                    UiUtils.showToast("登陆后查看个人信息")
+                    UiUtils.showToast(getString(R.string.login_check_userinfo))
 
                 }
 
@@ -730,7 +717,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     mReporterDialogBuilder =  ReporterDialog.Builder(this,true)
 
-                    mReporterDialog = mReporterDialogBuilder.create("选择",object :ReporterDialog.Builder.BtClickListen{
+                    mReporterDialog = mReporterDialogBuilder.create(getString(R.string.select),object :ReporterDialog.Builder.BtClickListen{
 
                         override fun btClick(index: Int, type: Int): Boolean {
 
@@ -748,10 +735,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                                 // 将文本内容放到系统剪贴板里。
                                                 cm.text = App.instanceApp().getShowMessage(content.message)
 
-                                                UiUtils.showToast("复制成功",false)
+                                                UiUtils.showToast(getString(R.string.copy_success),false)
                                             }else{
 
-                                                UiUtils.showToast("只能复制文本信息",false)
+                                                UiUtils.showToast(getString(R.string.copy_text_only),false)
                                             }
 
 
@@ -760,19 +747,21 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                         1 -> {
 
-                                            mReporterDialogBuilder.initData(1,"举报")
+                                            //更改选填内容
+                                            mReporterDialogBuilder.initData(1,getString(R.string.report))
 
                                         }
                                     }
 
                                 }
 
+                                //举报
                                 1 -> {
 
                                     //不能举报自己
                                     if (mLocalUserName == content.from){
 
-                                        UiUtils.showToast("无法举报自己")
+                                        UiUtils.showToast(getString(R.string.cant_report_myself))
 
                                         return false
                                     }
@@ -781,7 +770,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                     if (index == -1){
 
-                                        UiUtils.showToast("请选择举报内容")
+                                        UiUtils.showToast(getString(R.string.please_select_index))
 
                                         return false
 
@@ -807,12 +796,13 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     //点击
                     when (content.type) {
 
+                        //普通消息点击
                         0 -> {
 
-                            //普通消息点击
 
                         }
 
+                        //语音信息点击,下载播放
                         3 -> {
                             //进行下载和播放  将是否下载的文件用数据库做记录  id  name  path
 
@@ -847,6 +837,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         }
 
+                        //图片消息点击
                         4 -> {
 
                             //转场动画所需
@@ -865,6 +856,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         }
 
+                        //视频消息点击
                         5 -> {
 
                             //转场动画所需
@@ -972,7 +964,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                 }else{
 
-                    UiUtils.showToast("登陆后查看房间信息")
+                    UiUtils.showToast(getString(R.string.login_check_room))
 
                 }
 
@@ -1045,6 +1037,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     when (it.fileType) {
 
+                        //图片
                         1 -> {
 
                             var file = File(it.finalPath)
@@ -1071,7 +1064,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                                             override fun onError(e: Throwable?) {
 
-                                                showProgressDialog("图片压缩异常")
+                                                showProgressDialog(getString(R.string.photo_compressor_err))
                                             }
 
                                             override fun onStart() {
@@ -1084,6 +1077,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                         }
 
+                        //视频
                         2 -> {
 
                             var file = File(it.finalPath)
@@ -1103,7 +1097,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                         compressCachePath.mkdir()
                                     compressFile = File.createTempFile("compress", ".mp4", compressCachePath);
                                 } catch ( e:IOException) {
-                                    showProgressDialog("视频压缩异常")
+                                    showProgressDialog(getString(R.string.video_compressor_err))
                                     return
                                 }
 
@@ -1118,20 +1112,20 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                                         }
 
                                         override fun onTranscodeProgress(progress: Double) {
-                                            showProgressDialog("正在压缩 ${String.format("%.2f",(progress*100))}%")
+                                            showProgressDialog("${String.format("%.2f",(progress*100))}%")
                                         }
 
                                         override fun onTranscodeCanceled() {
-                                            showProgressDialog("视频压缩异常")
+                                            showProgressDialog(getString(R.string.video_compressor_err))
                                         }
 
                                         override fun onTranscodeFailed(exception: Exception?) {
-                                            showProgressDialog("视频压缩异常")
+                                            showProgressDialog(getString(R.string.video_compressor_err))
                                         }
 
                                     })
                                 } catch ( e:IOException) {
-                                    showProgressDialog("视频压缩异常")
+                                    showProgressDialog(getString(R.string.video_compressor_err))
                                     return
                                 }
 
@@ -1183,13 +1177,13 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             4 -> {
 
-                UiUtils.showToast("发送失败")
+                UiUtils.showToast(getString(R.string.send_fail))
 
             }
 
             5 -> {
 
-                UiUtils.showToast(if (code == 206)"用户不在线" else "发送视频聊天失败")
+                UiUtils.showToast(getString(if (code == 206) R.string.user_offline else R.string.video_send_err))
 
             }
 
@@ -1202,11 +1196,10 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                     gift_send.revertAnimation()
 
                 },{
-                    Logger.e("按钮复原异常")
+                    Logger.e(it.localizedMessage)
                 })
 
-                Logger.e("礼物赠送失败")
-                UiUtils.showToast("礼物赠送失败")
+                UiUtils.showToast(getString(R.string.gift_send_err))
 
             }
 
@@ -1216,14 +1209,14 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
     }
 
-    override fun errorWS(type: Int, message: String) {
+    override fun errorWS(qmConnect: QMWebsocket.QMConnect) {
 
         runOnUiThread {
 
-            when (type) {
+            when (qmConnect.type) {
 
                 0,1 -> {
-                    showProgressDialog(message,true)
+                    showProgressDialog(qmConnect.message,true)
                 }
 
                 2 -> {
@@ -1260,7 +1253,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         }else{
 
-            UiUtils.showToast("未登录,无法发送")
+            UiUtils.showToast(getString(R.string.cant_send))
         }
 
     }

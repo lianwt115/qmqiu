@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.util.Log
 import android.view.View
-import cn.dreamtobe.kpswitch.IFSPanelConflictLayout
 import com.bumptech.glide.Glide
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.adapter.VideoListAdapter
 import com.lwt.qmqiu.bean.QMMessage
 import com.orhanobut.logger.Logger
 import io.agora.rtc.Constants
@@ -17,10 +15,8 @@ import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.rtc.video.VideoCanvas
-import com.lwt.qmqiu.bean.VideoSurface
 import com.lwt.qmqiu.mvp.contract.FaceVideoContract
 import com.lwt.qmqiu.mvp.present.FaceVideoPresent
-import com.lwt.qmqiu.mvp.present.RoomMessagePresent
 import com.lwt.qmqiu.network.ApiService
 import com.lwt.qmqiu.utils.applySchedulers
 import io.reactivex.Observable
@@ -98,7 +94,7 @@ class FaceVideoActivity : BaseActivity(), View.OnClickListener, FaceVideoContrac
 
         }else{
 
-            showProgressDialog("视频通话异常")
+            showProgressDialog(getString(R.string.video_err))
 
             exit()
 
@@ -206,7 +202,7 @@ class FaceVideoActivity : BaseActivity(), View.OnClickListener, FaceVideoContrac
 
         video_contain_big.removeAllViews()
 
-        showProgressDialog("用户已离开")
+        showProgressDialog(getString(R.string.video_user_left))
 
         exit()
 

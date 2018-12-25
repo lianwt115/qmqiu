@@ -33,7 +33,7 @@ class RoomSettingActivity : BaseActivity(),BarView.BarOnClickListener, RoomSetti
         present = RoomSettingPresent(this,this)
 
         roomsetting_barview.setBarOnClickListener(this)
-        roomsetting_barview.changeTitle("我创建的")
+        roomsetting_barview.changeTitle(getString(R.string.create_byme))
 
         initRecycleView()
     }
@@ -110,14 +110,11 @@ class RoomSettingActivity : BaseActivity(),BarView.BarOnClickListener, RoomSetti
 
         mAdapter.notifyDataSetChanged()
 
-        if (roomList.isEmpty())
-
-            showProgressDialog("您还没有创建房间")
     }
 
     override fun err(code: Int, errMessage: String?, type: Int) {
 
-        Logger.e(errMessage?:"错误为空")
+        Logger.e(errMessage?:getString(R.string.sys_err))
     }
 
 

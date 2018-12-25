@@ -2,7 +2,6 @@ package com.lwt.qmqiu.activity
 
 
 
-
 import android.os.Bundle
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
@@ -21,10 +20,10 @@ class SettingActivity : BaseActivity(),BarView.BarOnClickListener, ShowListView.
         setContentView(R.layout.activity_setting)
 
         setting_barview.setBarOnClickListener(this)
-        setting_barview.changeTitle("设置")
+        setting_barview.changeTitle(getString(R.string.setting))
 
 
-        exit.changeTitleAndContent("退出")
+        exit.changeTitleAndContent(getString(R.string.setting_exit))
         exit.setBarOnClickListener(this,exit.id)
 
     }
@@ -50,7 +49,7 @@ class SettingActivity : BaseActivity(),BarView.BarOnClickListener, ShowListView.
 
             R.id.exit -> {
 
-               showProgressDialog("确认退出",true,2,object :NoticeDialog.Builder.BtClickListen{
+               showProgressDialog(getString(R.string.setting_exit_sure),true,2,object :NoticeDialog.Builder.BtClickListen{
 
                    override fun btClick(etContent: String): Boolean {
 

@@ -2,15 +2,11 @@ package com.lwt.qmqiu.activity
 
 
 
-
-
 import android.os.Bundle
-import android.view.View
 import com.bumptech.glide.Glide
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.network.ApiService
-import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.widget.BarView
 import kotlinx.android.synthetic.main.activity_cashout.*
 
@@ -25,7 +21,7 @@ class CashoutActivity : BaseActivity(),BarView.BarOnClickListener{
         setContentView(R.layout.activity_cashout)
 
         cashout_barview.setBarOnClickListener(this)
-        cashout_barview.changeTitle("提现")
+        cashout_barview.changeTitle(getString(R.string.cash))
 
         setUser()
 
@@ -43,15 +39,13 @@ class CashoutActivity : BaseActivity(),BarView.BarOnClickListener{
             //修改为showname
             user_name.changeTitleAndContent(baseUser.showName,"")
 
-            user_basecoin.changeTitleAndContent("青木",baseUser.coinbase.toString())
-            user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())
-            user_coinexchange.changeTitleAndContent("可提现青木球",baseUser.coinExchange.toString())
+            user_basecoin.changeTitleAndContent(getString(R.string.coinbase),baseUser.coinbase.toString())
+            user_coin.changeTitleAndContent(getString(R.string.coin),baseUser.coin.toString())
+            user_coinexchange.changeTitleAndContent(getString(R.string.cash_coin),baseUser.coinExchange.toString())
 
         }
 
     }
-
-
 
     override fun barViewClick(left: Boolean) {
 
@@ -66,10 +60,5 @@ class CashoutActivity : BaseActivity(),BarView.BarOnClickListener{
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-
-    }
 
 }

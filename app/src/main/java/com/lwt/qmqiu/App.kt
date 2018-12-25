@@ -16,7 +16,6 @@ import com.tencent.bugly.Bugly
 import com.baidu.location.BDLocation
 import com.bumptech.glide.Glide
 import com.guoxiaoxing.phoenix.picker.Phoenix
-import com.lwt.qmqiu.R.string.gift
 import com.lwt.qmqiu.activity.BaseActivity
 import com.lwt.qmqiu.activity.MainActivity
 import com.lwt.qmqiu.bean.BaseUser
@@ -26,14 +25,17 @@ import com.lwt.qmqiu.greendao.DaoSession
 import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.StaticValues
 import com.tencent.bugly.beta.Beta
 
 
 class App : Application() {
 
-    private lateinit var daoSession: DaoSession
+    private lateinit var mDaoSession: DaoSession
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
     private val NOTIFICATION = "notification"
+    private val DB_NAME = "qmiqu"
+    private val LOG_NAME = "qmiqulog"
     private var mLocalUser:BaseUser?= null
     private var mBDLocation: BDLocation?= null
     private var mBDLocationString: String = "未知地区"
@@ -95,13 +97,11 @@ class App : Application() {
 
     private fun initWebsocket() {
 
-        val localName = SPHelper.getInstance().get("loginName","") as String
-
-        if (!TextUtils.isEmpty(localName)){
+        if (!TextUtils.isEmpty(StaticValues.mLocalUserName)){
 
             mWebSocket = QMWebsocket()
 
-            mWebSocket!!.connect(NOTIFICATION.plus(localName),null)
+            mWebSocket!!.connect(NOTIFICATION.plus(StaticValues.mLocalUserName),null)
         }
 
 
@@ -110,7 +110,7 @@ class App : Application() {
     private fun initDb(){
 
         // regular SQLite database
-        val helper = DaoMaster.DevOpenHelper(instance, "ncsb_bill")
+        val helper = DaoMaster.DevOpenHelper(instance, DB_NAME)
         val db = helper.writableDb
 
         // encrypted SQLCipher database
@@ -118,11 +118,11 @@ class App : Application() {
         // DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "notes-db-encrypted");
         // Database db = helper.getEncryptedWritableDb("encryption-key");
 
-        daoSession = DaoMaster(db).newSession()
+        mDaoSession = DaoMaster(db).newSession()
     }
 
     fun getDaoSession(): DaoSession {
-        return daoSession
+        return mDaoSession
     }
 
     fun closeWs(){
@@ -200,7 +200,7 @@ class App : Application() {
 
     private fun initLog() {
         val formatStrategy = PrettyFormatStrategy.newBuilder()
-                .tag("qmqiulog")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .tag(LOG_NAME)   // (Optional) Global tag for every log. Default PRETTY_LOGGER
                 .build()
         Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
             override fun isLoggable(priority: Int, tag: String?): Boolean {
@@ -252,10 +252,11 @@ class App : Application() {
         return this.mLocalUser
 
     }
+
     fun userExit(){
 
         SPHelper.getInstance().put("loginName","")
-        SPHelper.getInstance().get("loginPassword","")
+        SPHelper.getInstance().put("loginPassword","")
 
         closeWs()
 

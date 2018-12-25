@@ -37,7 +37,6 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     private lateinit var mUserName:String
     //是否兑换
     private  var mExchange:Boolean = false
-    private  var mLocalUserName:String =SPHelper.getInstance().get("loginName","") as String
     private lateinit var present: UserInfoPresent
     private lateinit var mGiftShowAdapter:GiftShowAdapter
     private lateinit var mGiftBuyAdapter:GiftBuyAdapter
@@ -47,6 +46,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
     private  var mLocalRefuseOther = false
     private  var mSendGiftIndex = -1
     private  var mSendGiftCount = 0
+    private  val PRIVATE_CASH = "10"
     private  var mSendGiftList = listOf<String>("天使宝贝","挚爱玫瑰","激情跑车","女王皇冠")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,16 +83,16 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             present.refuseCheck(mLocalUserName,mUserName,bindToLifecycle())
         }
 
-        gift_buy_tv.text = if (mExchange) getString(R.string.gift_exchange) else getString(R.string.gift_buy)
+        gift_buy_tv.text =  getString(if (mExchange) R.string.gift_exchange else R.string.gift_buy)
 
-        gift_buy.text = if (mExchange) "兑换" else "购买礼物"
+        gift_buy.text =  getString(if (mExchange) R.string.exchange else R.string.buy_gift)
 
         gift_buy.background = getDrawable(R.drawable.bg_20dp_13)
         gift_buy.setFinalCornerRadius(20F)
         gift_buy.setOnClickListener(this)
 
 
-        gift_send.text = "赠送礼物"
+        gift_send.text = getString(R.string.gift_give)
         gift_send.background = getDrawable(R.drawable.bg_20dp_13)
         gift_send.setFinalCornerRadius(20F)
         gift_send.setOnClickListener(this)
@@ -131,7 +131,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
                    }else{
 
-                       UiUtils.showToast("请选择礼物数量")
+                       UiUtils.showToast(getString(R.string.selete_gift_count))
 
                    }
 
@@ -145,7 +145,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
                    }else{
 
-                       UiUtils.showToast("请选择礼物数量")
+                       UiUtils.showToast(getString(R.string.selete_gift_count))
 
                    }
                }
@@ -196,12 +196,12 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
                 if (this.mLocalRefuseOther){
 
-                    UiUtils.showToast("请先解除阻止")
+                    UiUtils.showToast(getString(R.string.open_refuse))
 
                     return
                 }
 
-                showProgressDialog("需 10青木 或 免费",true,2,this)
+                showProgressDialog(String.format(getString(R.string.private_cash),PRIVATE_CASH),true,2,this)
 
             }
             //阻止
@@ -229,24 +229,14 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
             message_refuse.revertAnimation {
 
-                when (refuseLog.status) {
+                message_refuse.text = getString(if (refuseLog.status!!)R.string.private_refuse_open else R.string.private_refuse)
 
-                    true -> {
+                message_refuse.background = getDrawable(if (refuseLog.status!!) R.drawable.bg_20dp_21 else R.drawable.bg_20dp_24)
 
-                        message_refuse.text = "解除阻止"
-                        message_refuse.background = getDrawable(R.drawable.bg_20dp_21)
-                    }
-
-                    false -> {
-
-                        message_refuse.text = "阻止"
-                        message_refuse.background = getDrawable(R.drawable.bg_20dp_24)
-                    }
-                }
             }
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
     }
@@ -256,20 +246,9 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         this.mLocalRefuseOther = refuse
 
-        when (refuse) {
+        message_refuse.text = getString(if (refuse)R.string.private_refuse_open else R.string.private_refuse)
 
-            true-> {
-
-                message_refuse.text = "解除阻止"
-                message_refuse.background = getDrawable(R.drawable.bg_20dp_21)
-            }
-            false-> {
-
-                message_refuse.text = "阻止"
-                message_refuse.background = getDrawable(R.drawable.bg_20dp_24)
-            }
-
-        }
+        message_refuse.background = getDrawable(if (refuse) R.drawable.bg_20dp_21 else R.drawable.bg_20dp_24)
 
     }
 
@@ -290,7 +269,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         }else{
 
-            UiUtils.showToast("请先登录")
+            UiUtils.showToast(getString(R.string.please_login))
 
             return false
         }
@@ -312,7 +291,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             startActivity(intent)
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
     }
@@ -485,12 +464,12 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             user_gender.visibility = View.VISIBLE
             user_age.visibility = View.VISIBLE
 
-            user_gender.changeTitleAndContent("性别",if(baseUser.male)"男" else "女")
-            user_age.changeTitleAndContent("年龄",baseUser.age.toString())
+            user_gender.changeTitleAndContent(getString(R.string.user_gender),getString(if(baseUser.male)R.string.men else R.string.women))
+            user_age.changeTitleAndContent(getString(R.string.user_age),baseUser.age.toString())
         }
 
-        user_basecoin.changeTitleAndContent("青木",baseUser.coinbase.toString())
-        user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())
+        user_basecoin.changeTitleAndContent(getString(R.string.coinbase),baseUser.coinbase.toString())
+        user_coin.changeTitleAndContent(getString(R.string.coin),baseUser.coin.toString())
 
         initGift(baseUser.gift)
         if (mIsMySelf)
@@ -509,13 +488,13 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             gift_buy.revertAnimation()
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
         //刷新本地用户信息
         App.instanceApp().updataLocalUser(baseUser,true,true)
         //更新金币和礼物
-        user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())
+        user_coin.changeTitleAndContent(getString(R.string.coin),baseUser.coin.toString())
         //更新礼物
         initGift(baseUser.gift)
         if (mIsMySelf)
@@ -542,7 +521,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
             showSuccessGift(mSendGiftIndex)
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
 
@@ -654,7 +633,7 @@ class UserInfoActivity : BaseActivity(),BarView.BarOnClickListener, UserInfoCont
 
         var showCash = if (mExchange) (cash*0.7).toInt() else cash
 
-        var showNotice = if (mExchange) "可兑换" else "总花费"
+        var showNotice = getString(if (mExchange) R.string.exchange_count else R.string.cash_count)
 
         gift_buy_cash.text = if (cash<=0)"" else "$showNotice : $showCash 青木球"
 

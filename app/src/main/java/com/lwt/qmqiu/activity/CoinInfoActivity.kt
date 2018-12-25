@@ -44,7 +44,7 @@ class CoinInfoActivity : BaseActivity(), BarView.BarOnClickListener, TabLayout.O
         setContentView(R.layout.activity_coininfo)
 
         coininfo_barview.setBarOnClickListener(this)
-        coininfo_barview.changeTitle("货币流通记录")
+        coininfo_barview.changeTitle(getString(R.string.cash_record))
 
         initFragment()
     }

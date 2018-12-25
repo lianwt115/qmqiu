@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.TextureView
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -44,7 +43,7 @@ class EditActivity : BaseActivity(),BarView.BarOnClickListener, ImgSelectListAda
             updataShow(user)
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
     }
 
@@ -57,13 +56,13 @@ class EditActivity : BaseActivity(),BarView.BarOnClickListener, ImgSelectListAda
             updata_user.revertAnimation()
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
-       UiUtils.showToast(errMessage?:"系统错误")
+       UiUtils.showToast(errMessage?:getString(R.string.sys_err))
     }
 
-
+    //服务器图片目录
     private var imgArray = listOf<String>(
             "qmqiuimg/ab.jpg","qmqiuimg/aj.jpg","qmqiuimg/bghqg.jpg","qmqiuimg/bmyw.jpg",
             "qmqiuimg/cjl.jpg","qmqiuimg/ck.jpg","qmqiuimg/clxzlmc.jpg","qmqiuimg/dbf.jpg",
@@ -94,15 +93,13 @@ class EditActivity : BaseActivity(),BarView.BarOnClickListener, ImgSelectListAda
     private lateinit var present: EditPresent
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_edit)
 
         edit_barview.setBarOnClickListener(this)
-        edit_barview.changeTitle("个人信息编辑")
+        edit_barview.changeTitle(getString(R.string.edit_userinfo))
 
         var userLocal = App.instanceApp().getLocalUser()
 
@@ -124,7 +121,7 @@ class EditActivity : BaseActivity(),BarView.BarOnClickListener, ImgSelectListAda
 
         initRecycleView()
 
-        updata_user.text = "修改"
+        updata_user.text = getString(R.string.edit)
         updata_user.background = getDrawable(R.drawable.bg_20dp_13)
         updata_user.setFinalCornerRadius(20F)
         updata_user.setOnClickListener(this)

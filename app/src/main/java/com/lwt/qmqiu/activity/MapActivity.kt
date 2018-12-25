@@ -126,7 +126,7 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
     private fun initView() {
 
-        map_barview.changeTitle("位置")
+        map_barview.changeTitle(getString(R.string.location))
 
         map_barview.setBarOnClickListener(this)
 

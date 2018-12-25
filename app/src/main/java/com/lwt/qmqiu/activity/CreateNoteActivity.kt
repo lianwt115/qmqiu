@@ -54,7 +54,8 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
         setContentView(R.layout.activity_createnote)
         mNoteType=intent.getIntExtra("type",1)
         creatnote_barview.setBarOnClickListener(this)
-        creatnote_barview.changeTitle("发表帖子")
+        creatnote_barview.changeTitle(getString(R.string.publish_note))
+
         creatnote_barview.showMore(true)
         location.setBarOnClickListener(this,R.id.location)
         who_see.setBarOnClickListener(this,R.id.who_see)
@@ -150,7 +151,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
             false -> {
 
                 //检测文字是否为空
-                showProgressDialog("请稍等",false,4)
+                showProgressDialog(getString(R.string.loading),false,4)
 
                 mFileNum = mList.size
 
@@ -170,7 +171,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
                     }else{
 
-                        UiUtils.showToast("未登录,无法发送")
+                        UiUtils.showToast(getString(R.string.cant_send))
                     }
 
                 }else{
@@ -270,7 +271,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
         dismissProgressDialog()
         if (success){
 
-            UiUtils.showToast("发表帖子成功")
+            UiUtils.showToast(getString(R.string.note_send_success))
 
             finish()
         }
@@ -283,7 +284,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
             1 -> {
                 dismissProgressDialog()
-                UiUtils.showToast("发表帖子失败")
+                UiUtils.showToast(errMessage?:getString(R.string.note_send_fail))
             }
 
             2 -> {
@@ -312,7 +313,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
         }else{
 
-            UiUtils.showToast("未登录,无法发送")
+            UiUtils.showToast(getString(R.string.cant_send))
         }
 
     }
@@ -337,7 +338,7 @@ class CreateNoteActivity : BaseActivity(),BarView.BarOnClickListener, NotePhotoA
 
             }else{
 
-                UiUtils.showToast("未登录,无法发送")
+                UiUtils.showToast(getString(R.string.cant_send))
             }
 
 

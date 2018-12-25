@@ -17,7 +17,6 @@ import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
-import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.DeviceUtil
 import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.utils.UiUtils
@@ -73,7 +72,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                 var str = m.replaceAll("").trim()    //删掉不是字母或数字的字符
                 if(content != str){
-                    UiUtils.showToast("请输入字母或数字")
+                    UiUtils.showToast(getString(R.string.a_z_number))
                     et_username.setText(str)  //设置EditText的字符
                     et_username.setSelection(str.length) //因为删除了字符，要重写设置新的光标所在位置
                 }
@@ -134,7 +133,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                 if (et_username.text.toString().length < 6 || et_username.text.toString().length >12) {
 
-                    UiUtils.showToast("请输入6-12位用户名")
+                    UiUtils.showToast(getString(R.string.username_number))
                     return
 
                 }else{
@@ -146,7 +145,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
                     var m = p.matcher(et_username.text.toString().substring(0,1))
 
                     if (!m.matches()) {
-                        UiUtils.showToast("用户名请以字母开头")
+                        UiUtils.showToast(getString(R.string.username_a_start))
                         return
                     }
 
@@ -154,7 +153,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                 if (et_password.text.toString().length <0 ) {
 
-                    UiUtils.showToast("密码不能为空")
+                    UiUtils.showToast(getString(R.string.password_empty))
 
                     return
 
@@ -166,7 +165,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
                     if (DeviceUtil.getPhoneNum(this) != StaticValues.AdminPHONE || DeviceUtil.getDeviceImei(this) != StaticValues.AdminIMEI){
 
 
-                        UiUtils.showToast("非法登录")
+                        UiUtils.showToast(getString(R.string.xxx_login))
 
                         return
                     }
@@ -191,7 +190,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                     if (et_repeatpassword.text.toString().length <0) {
 
-                        UiUtils.showToast("密码不能为空")
+                        UiUtils.showToast(getString(R.string.password_empty))
 
                         return
 
@@ -199,7 +198,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
                     if (et_password.text.toString().length != et_repeatpassword.text.toString().length ) {
 
-                        UiUtils.showToast("两次密码不一致")
+                        UiUtils.showToast(getString(R.string.password_check_err))
 
                         return
 
@@ -223,9 +222,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
         App.instanceApp().setLocalUser(baseUser)
 
-        Logger.e("${if (regist) "注册" else "登录"}成功:$baseUser")
-
-        UiUtils.showToast("${if (regist) "注册" else "登录"}成功")
+        UiUtils.showToast(getString(if (regist) R.string.register_success else R.string.login_success))
 
         autoFinish = Observable.timer(1,TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -254,7 +251,7 @@ class RegisterActivity:BaseActivity(), View.OnClickListener, UserLoginContract.V
 
         }
 
-        UiUtils.showToast(errMessage!!)
+        UiUtils.showToast(errMessage?:getString(R.string.sys_err))
 
     }
 

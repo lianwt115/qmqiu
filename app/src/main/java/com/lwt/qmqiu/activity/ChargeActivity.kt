@@ -40,7 +40,7 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
             coin_num.revertAnimation()
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
     }
@@ -58,10 +58,10 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
             setUser()
 
         },{
-            Logger.e("按钮复原异常")
+            Logger.e(it.localizedMessage)
         })
 
-        UiUtils.showToast("充值成功")
+        UiUtils.showToast(getString(R.string.charge_success))
     }
 
     override fun err(code: Int, errMessage: String?, type: Int) {
@@ -77,12 +77,8 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
                     coin_num.revertAnimation()
 
                 },{
-                    Logger.e("按钮复原异常")
+                    Logger.e(it.localizedMessage)
                 })
-
-                Logger.e("充值码失败")
-
-
 
             }
             //充值
@@ -95,14 +91,13 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
                     coin_charge.revertAnimation()
 
                 },{
-                    Logger.e("按钮复原异常")
+                    Logger.e(it.localizedMessage)
                 })
 
-                Logger.e("充值失败")
             }
         }
 
-        UiUtils.showToast(errMessage?:"操作失败")
+        UiUtils.showToast(errMessage?:getString(R.string.sys_err))
     }
 
 
@@ -116,16 +111,16 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
         present = ChargePresent(this,this)
 
         charge_barview.setBarOnClickListener(this)
-        charge_barview.changeTitle("充值")
+        charge_barview.changeTitle(getString(R.string.charge))
         charge_barview.showMore(true)
         setUser()
 
-        coin_charge.text = "充值"
+        coin_charge.text = getString(R.string.charge)
         coin_charge.background = getDrawable(R.drawable.bg_20dp_13)
         coin_charge.setFinalCornerRadius(20F)
         coin_charge.setOnClickListener(this)
 
-        coin_num.text = "生成充值码"
+        coin_num.text = getString(R.string.create_charge_number)
         coin_num.background = getDrawable(R.drawable.bg_20dp_13)
         coin_num.setFinalCornerRadius(20F)
         coin_num.setOnClickListener(this)
@@ -137,7 +132,7 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
 
             if (TextUtils.isEmpty(cm.text))
 
-                UiUtils.showToast("粘贴内容为空")
+                UiUtils.showToast(getString(R.string.copy_content_is_empty))
 
             else{
                 charge_num.text = cm.text
@@ -157,7 +152,7 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
 
                 cm.text = creatcharge_num.text
 
-                UiUtils.showToast("已经复制到剪切板")
+                UiUtils.showToast(getString(R.string.have_copy))
             }
 
 
@@ -186,12 +181,12 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
 
                     }else{
 
-                        UiUtils.showToast("请登录")
+                        UiUtils.showToast(getString(R.string.please_login))
                     }
 
                 }else{
 
-                    UiUtils.showToast("充值码为空")
+                    UiUtils.showToast(getString(R.string.charge_number_empty))
                 }
 
 
@@ -213,13 +208,13 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
 
                         }else{
 
-                            UiUtils.showToast("请登录")
+                            UiUtils.showToast(getString(R.string.please_login))
                         }
 
 
                     }else{
 
-                        UiUtils.showToast("请输入金额")
+                        UiUtils.showToast(getString(R.string.please_input_cash))
 
                     }
 
@@ -246,8 +241,8 @@ class ChargeActivity : BaseActivity(),BarView.BarOnClickListener, View.OnClickLi
             //修改为showname
             user_name.changeTitleAndContent(baseUser.showName,"")
 
-            user_basecoin.changeTitleAndContent("青木",baseUser.coinbase.toString())
-            user_coin.changeTitleAndContent("青木球",baseUser.coin.toString())
+            user_basecoin.changeTitleAndContent(getString(R.string.coinbase),baseUser.coinbase.toString())
+            user_coin.changeTitleAndContent(getString(R.string.coin),baseUser.coin.toString())
 
         }
 

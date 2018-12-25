@@ -112,10 +112,10 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
 
         present.getActiveUser(if (App.instanceApp().isLogin())App.instanceApp().getLocalUser()?.name!! else SPHelper.getInstance().get("loginName","") as String,mIMChatRoom.roomNumber,bindToLifecycle())
 
-        room_name.changeTitleAndContent("群组名称",mIMChatRoom.roomName)
-        room_number.changeTitleAndContent("群组代码",mIMChatRoom.roomNumber)
-        room_time.changeTitleAndContent("创建时间",formatter.format(mIMChatRoom.creatTime))
-        room_creat.changeTitleAndContent("创建人",mIMChatRoom.creatName)
+        room_name.changeTitleAndContent(getString(R.string.room_name),mIMChatRoom.roomName)
+        room_number.changeTitleAndContent(getString(R.string.room_number),mIMChatRoom.roomNumber)
+        room_time.changeTitleAndContent(getString(R.string.room_create_time),formatter.format(mIMChatRoom.creatTime))
+        room_creat.changeTitleAndContent(getString(R.string.room_create_user),mIMChatRoom.creatName)
 
         room_number.setBarOnClickListener(object :ShowListView.ShowListOnClickListener{
             override fun showListViewClick(long: Boolean, content: String, id: Int) {
@@ -127,12 +127,12 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
                         // 将文本内容放到系统剪贴板里。
                         cm.text = content
 
-                        UiUtils.showToast("群组代码复制成功",false)
+                        UiUtils.showToast(getString(R.string.room_number_copy),false)
                     }
 
+                    //
                     false -> {
 
-                        UiUtils.showToast("点击")
 
                     }
                 }
@@ -142,7 +142,7 @@ class RoomInfoActivity : BaseActivity(),BarView.BarOnClickListener, RoomUserAdap
 
         room_exit.setFinalCornerRadius(20f)
 
-        room_exit.text = "删除并退出"
+        room_exit.text = getString(R.string.room_delete_exit)
         room_exit.background =getDrawable(R.drawable.bg_20dp_16)
         room_exit.setOnClickListener(this)
 

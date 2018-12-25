@@ -6,7 +6,6 @@ package com.lwt.qmqiu.activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import com.hw.ycshareelement.YcShareElement
 import com.hw.ycshareelement.transition.IShareElements
@@ -19,10 +18,8 @@ import com.lwt.qmqiu.bean.PhotoViewData
 import com.lwt.qmqiu.mvp.contract.NoteMineContract
 import com.lwt.qmqiu.mvp.present.NoteMinePresent
 import com.lwt.qmqiu.shareelement.ShareContentInfo
-import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.widget.BarView
 import com.lwt.qmqiu.widget.NoticeDialog
-import com.lwt.qmqiu.widget.ReporterDialog
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_notesetting.*
 
@@ -50,9 +47,6 @@ class NoteSettingActivity : BaseActivity(),BarView.BarOnClickListener, NoteMineC
 
         mAdapter.notifyDataSetChanged()
 
-        if (noteList.isEmpty())
-
-            showProgressDialog("您还没有发表帖子")
     }
     private  var mSeleteView:View? = null
     private  var mSeleteData: PhotoViewData? = null
@@ -67,7 +61,7 @@ class NoteSettingActivity : BaseActivity(),BarView.BarOnClickListener, NoteMineC
         present = NoteMinePresent(this,this)
 
         notesetting_barview.setBarOnClickListener(this)
-        notesetting_barview.changeTitle("我发表的")
+        notesetting_barview.changeTitle(getString(R.string.publish_byme))
 
         initRecycleView()
     }
@@ -162,7 +156,7 @@ class NoteSettingActivity : BaseActivity(),BarView.BarOnClickListener, NoteMineC
             6->{
 
 
-                showProgressDialog("是否删除",true,2,object :NoticeDialog.Builder.BtClickListen{
+                showProgressDialog(getString(R.string.delete_select),true,2,object :NoticeDialog.Builder.BtClickListen{
 
                     override fun btClick(etContent: String): Boolean {
 
@@ -214,7 +208,7 @@ class NoteSettingActivity : BaseActivity(),BarView.BarOnClickListener, NoteMineC
                 showProgressDialogSuccess(false)
             }
         }
-        Logger.e(errMessage?:"错误为空")
+        Logger.e(errMessage?:getString(R.string.sys_err))
     }
 
 

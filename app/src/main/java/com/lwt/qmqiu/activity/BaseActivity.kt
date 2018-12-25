@@ -32,7 +32,8 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
     protected val giftUnitList = StaticValues.giftUnitList
     protected val giftNameList = StaticValues.giftNameList
     protected val giftPathList = StaticValues.giftPathList
-    private  var mLocalUserName:String = StaticValues.mLocalUserName
+    protected val mLocalUserName:String = StaticValues.mLocalUserName
+    protected val mLocalUserPassword:String = StaticValues.mLocalUserPassword
 
 
     override fun qmMessage(qmMessage: QMMessage) {
@@ -43,7 +44,7 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
             Logger.e("通知RX:$qmMessage")
             when (qmMessage.type) {
                 //礼物
-                2 -> {
+                QMWebsocket.QM_TYPE_GIFT -> {
 
                     //这个是全局通知收到的  只有可能是接受者
                     val infoList = qmMessage.message.split("*") //数量-单位-名称-动画名称
@@ -57,13 +58,12 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
                 }
 
                 //视频呼叫
-                6 ->{
+                QMWebsocket.QM_TYPE_VIDEO_CALL ->{
 
                     //TODO 如果当前用户忙
                     if (this@BaseActivity is FaceVideoActivity){
 
-
-                        showProgressDialog("已拒绝${qmMessage.from}的视频通话")
+                        showProgressDialog(String.format(getString(R.string.refuse_video,qmMessage.from)))
 
                         return@runOnUiThread
                     }
@@ -71,7 +71,6 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
 
                     var data = App.instanceApp().getShowMessage(qmMessage.message)
 
-                    Logger.e("收到视频邀请:data")
 
                     val intent = Intent(this, FaceVideoActivity::class.java)
 
@@ -83,11 +82,12 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
 
                 }
                 //视频退出
-                7 ->{
+                QMWebsocket.QM_TYPE_VIDEO_EXIT ->{
 
                    if (this@BaseActivity is FaceVideoActivity){
 
-                       showProgressDialog("用户已离开")
+                       showProgressDialog(getString(R.string.exit_video))
+
                        this@BaseActivity.exit()
 
                    }
@@ -103,14 +103,14 @@ open class BaseActivity : AppCompatActivity(),LifecycleProvider<ActivityEvent>, 
 
     }
 
-    override fun errorWS(type: Int, message: String) {
+    override fun errorWS(qmConnect: QMWebsocket.QMConnect) {
 
                 runOnUiThread {
 
-                    when (type) {
+                    when (qmConnect.type) {
 
                         0,1 -> {
-                            showProgressDialog(message,true)
+                            showProgressDialog(qmConnect.message,true)
                         }
 
                         2 -> {

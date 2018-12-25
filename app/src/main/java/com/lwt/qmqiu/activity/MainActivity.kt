@@ -25,8 +25,6 @@ import com.lwt.qmqiu.fragment.MineFragment
 import com.lwt.qmqiu.map.MapLocationUtils
 import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
-import com.lwt.qmqiu.utils.DeviceUtil
-import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.UiUtils
 import com.tencent.bugly.beta.Beta
 
@@ -58,6 +56,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         //需要初始化
         Beta.init(applicationContext, BuildConfig.DEBUG)
 
+        //多进程
         //startService(Intent(this, LocalService::class.java))
         //startService(Intent(this, RomoteService::class.java))
 
@@ -206,7 +205,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
                         } else {
                             //至少一个没有同意
-                            showProgressDialog("权限被拒绝,稍后将退出")
+                            showProgressDialog(getString(R.string.auto_finish))
 
                             Observable.timer(3, TimeUnit.SECONDS).applySchedulers().subscribe({
 
@@ -219,10 +218,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
                             })
                         }
                     }
-        }else{
-
-            Logger.e("系统版本低于6.0,无需动态申请权限")
-
         }
 
     }
@@ -334,7 +329,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
         //登录
         gotoLogin()
-        Logger.e("自动登录失败:code:$code ** errMessage:$errMessage")
+        Logger.e("loginerr:code:$code ** errMessage:$errMessage")
 
     }
 
@@ -344,10 +339,6 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         if (!checkUserInfo())
             return
 
-        val name = SPHelper.getInstance().get("loginName","") as String
-        val password = SPHelper.getInstance().get("loginPassword","") as String
-
-
         when (login) {
             //登录
             true -> {
@@ -356,7 +347,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
                     if (App.instanceApp().getLocalUser() == null)
 
-                        present.userLogin(name,password,true,"",0.00,0.00,bindToLifecycle())
+                        present.userLogin(mLocalUserName,mLocalUserPassword,true,"",0.00,0.00,bindToLifecycle())
 
 
             }
@@ -367,7 +358,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
                 if (App.instanceApp().getLocalUser() != null)
 
-                    present.userLoginOut(name,password,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
+                    present.userLoginOut(mLocalUserName,mLocalUserPassword,true,location.addrStr,location.latitude,location.longitude,bindToLifecycle())
 
             }
         }
@@ -377,10 +368,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
     private fun checkUserInfo():Boolean {
 
-        val name = SPHelper.getInstance().get("loginName","") as String
-        val password = SPHelper.getInstance().get("loginPassword","") as String
-
-        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)
+        return !TextUtils.isEmpty(mLocalUserName) && !TextUtils.isEmpty(mLocalUserPassword)
 
     }
 
