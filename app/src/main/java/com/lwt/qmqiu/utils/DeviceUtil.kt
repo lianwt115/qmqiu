@@ -10,17 +10,12 @@ import androidx.core.content.FileProvider
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import com.baidu.android.bbalbs.common.a.b
 import com.lwt.qmqiu.App
 import com.orhanobut.logger.Logger
 import java.io.File
-import java.net.NetworkInterface
-import java.net.SocketException
 
 
-/**
- * Created by Administrator on 2018\1\15 0015.
- */
+
 class DeviceUtil {
     companion object {
         @SuppressLint("MissingPermission")

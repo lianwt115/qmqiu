@@ -480,24 +480,28 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
                         if (im_et.text.isEmpty())
                             return
 
-                        val message = QMMessage()
+                        if (!App.instanceApp().isLogin()){
 
-                        message.type = 0
-                        message.message = im_et.text.toString()
+                            UiUtils.showToast(getString(R.string.send_text_err))
 
-                        //优化自己发的text文本显示速度  不加密的添加qmqiu前缀
-                        mIMMessageList.add(message)
+                            return
+                        }
 
-                        mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
+                        var message = sendMessage(0,im_et.text.toString())
 
-                        recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+                        if (message!=null) {
 
-                        //------------------------
+
+                            //优化自己发的text文本显示速度  不加密的添加qmqiu前缀
+                            mIMMessageList.add(message)
+
+                            mIMListAdapter.notifyItemChanged(mIMMessageList.size-1)
+
+                            recycleview_im.smoothScrollToPosition(mIMMessageList.size-1)
+
+                        }
 
                         im_et.setText("")
-
-                        mWebSocket.sendText(message,mIMChatRoom.roomNumber)
-
 
             }
 
@@ -632,7 +636,14 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
         return false
     }
 
-    private fun sendMessage(type: Int,message:String){
+    private fun sendMessage(type: Int,message:String):QMMessage?{
+
+        if (!App.instanceApp().isLogin()){
+
+            UiUtils.showToast(getString(R.string.send_text_err))
+
+            return null
+        }
 
         val qmMessage = QMMessage()
 
@@ -642,7 +653,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
         mWebSocket.sendText(qmMessage,mIMChatRoom.roomNumber)
 
-
+        return qmMessage
     }
 
     //上传成功

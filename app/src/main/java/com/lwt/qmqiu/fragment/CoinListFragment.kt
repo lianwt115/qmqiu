@@ -6,12 +6,9 @@ import android.view.View
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.CoinListAdapter
-import com.lwt.qmqiu.adapter.GiftListAdapter
 import com.lwt.qmqiu.bean.CoinLog
-import com.lwt.qmqiu.bean.GiftLog
 import com.lwt.qmqiu.mvp.contract.CoinLogContract
 import com.lwt.qmqiu.mvp.present.CoinLogPresent
-import com.lwt.qmqiu.mvp.present.GiftLogPresent
 import com.orhanobut.logger.Logger
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.api.RefreshLayout

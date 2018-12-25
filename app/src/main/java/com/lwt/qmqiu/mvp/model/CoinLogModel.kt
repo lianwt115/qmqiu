@@ -1,7 +1,6 @@
 package com.lwt.qmqiu.mvp.model
 
 import android.content.Context
-import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.CoinLog
 import com.lwt.qmqiu.network.HttpResultFunc
 import io.reactivex.Observable

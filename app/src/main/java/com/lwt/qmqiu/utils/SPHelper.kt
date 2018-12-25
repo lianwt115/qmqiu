@@ -1,12 +1,10 @@
 package com.lwt.qmqiu.utils
 
-import android.text.method.TextKeyListener.clear
-import android.R.id.edit
+
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.lwt.qmqiu.App
-import com.lwt.qmqiu.map.MapLocationUtils
+
 
 
 class SPHelper {

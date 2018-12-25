@@ -1,11 +1,8 @@
 package com.lwt.qmqiu.mvp.present
 
 import android.content.Context
-import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.IMChatRoom
-import com.lwt.qmqiu.mvp.contract.RoomInfoContract
 import com.lwt.qmqiu.mvp.contract.RoomSettingContract
-import com.lwt.qmqiu.mvp.model.RoomInfoModel
 import com.lwt.qmqiu.mvp.model.RoomSettingModel
 import com.lwt.qmqiu.network.ApiException
 import com.lwt.qmqiu.utils.applySchedulers

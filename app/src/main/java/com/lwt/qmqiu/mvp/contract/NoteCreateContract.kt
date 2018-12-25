@@ -6,7 +6,6 @@ import com.trello.rxlifecycle2.LifecycleTransformer
 import com.lwt.qmqiu.mvp.base.BasePresent
 import com.lwt.qmqiu.mvp.base.BaseView
 import okhttp3.MultipartBody
-import retrofit2.http.Query
 
 
 interface NoteCreateContract {

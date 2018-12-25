@@ -3,7 +3,6 @@ package com.lwt.qmqiu.fragment
 import android.os.Bundle
 import android.text.TextUtils
 import com.google.android.material.tabs.TabLayout
-import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.ChatAdatpter
 import com.lwt.qmqiu.utils.StaticValues

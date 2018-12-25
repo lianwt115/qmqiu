@@ -1,8 +1,6 @@
 package com.lwt.qmqiu.mvp.model
 
 import android.content.Context
-import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.network.HttpResultFunc
 import io.reactivex.Observable
 

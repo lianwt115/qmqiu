@@ -2,7 +2,6 @@ package com.lwt.qmqiu.adapter
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.media.ThumbnailUtils
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 import com.joooonho.SelectableRoundedImageView
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.NoteLog
 import com.lwt.qmqiu.download.DownloadListen
 import com.lwt.qmqiu.download.DownloadManager

@@ -14,6 +14,7 @@ import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
 import com.lwt.qmqiu.mvp.present.IMChatRoomPresent
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.widget.NoticeDialog
 import com.orhanobut.logger.Logger
@@ -21,7 +22,6 @@ import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import kotlinx.android.synthetic.main.fragment_list.*
 
@@ -115,12 +115,11 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
 
     private fun getData(refreshlayout: RefreshLayout?) {
 
-        val name = SPHelper.getInstance().get("loginName","") as String
         var location = App.instanceApp().getBDLocation()
 
-        if (!TextUtils.isEmpty(name)) {
+        if (!TextUtils.isEmpty(StaticValues.mLocalUserName)) {
 
-            mPresenter.getIMChatRoom(name, location?.latitude ?: 0.000000, location?.longitude
+            mPresenter.getIMChatRoom(StaticValues.mLocalUserName, location?.latitude ?: 0.000000, location?.longitude
                     ?: 0.000000, mStrategy, bindToLifecycle())
 
         } else {
@@ -129,9 +128,10 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
                 smartrefreshlayout.finishRefresh()
             }else{
 
-                refreshlayout?.finishRefresh(1000)
+                refreshlayout.finishRefresh(1000)
             }
 
+            UiUtils.showToast(getString(R.string.please_login))
         }
     }
 
@@ -159,17 +159,17 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
 
         if (mStrategy == 3){
 
-            UiUtils.showToast("我的列表无需搜索")
+            UiUtils.showToast(getString(R.string.mylist_nosearch))
 
             return
         }
 
-        val name = SPHelper.getInstance().get("loginName","") as String
+
         var location = App.instanceApp().getBDLocation()
 
-        if (!TextUtils.isEmpty(name))
+        if (!TextUtils.isEmpty(StaticValues.mLocalUserName))
 
-            mPresenter.getIMChatRoomSearch(name,roomName,location?.latitude ?: 0.000000, location?.longitude
+            mPresenter.getIMChatRoomSearch(StaticValues.mLocalUserName,roomName,location?.latitude ?: 0.000000, location?.longitude
                     ?: 0.000000, mStrategy, bindToLifecycle())
 
     }
@@ -268,7 +268,7 @@ class ListFragment: BaseFragment(), OnRefreshListener,IMChatRoomContract.View, I
 
         }else{
 
-            UiUtils.showToast("请先登录")
+            UiUtils.showToast(getString(R.string.please_login))
 
         }
 

@@ -2,14 +2,13 @@ package com.lwt.qmqiu.mvp.contract
 
 
 import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.QMMessage
 import com.lwt.qmqiu.bean.UploadLog
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.lwt.qmqiu.mvp.base.BasePresent
 import com.lwt.qmqiu.mvp.base.BaseView
 import okhttp3.MultipartBody
-import retrofit2.http.Query
+
 
 
 interface RoomMessageContract {

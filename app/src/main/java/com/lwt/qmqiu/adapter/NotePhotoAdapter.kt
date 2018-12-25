@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.media.ThumbnailUtils
 import android.provider.MediaStore
 import android.text.TextUtils
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.NoteMediaType
-import com.lwt.qmqiu.network.ApiService
+
 
 
 class NotePhotoAdapter(context: Context, list: ArrayList<NoteMediaType>, listen:PhotoClickListen?) : androidx.recyclerview.widget.RecyclerView.Adapter<NotePhotoAdapter.ListViewHolder>() {
@@ -71,14 +70,6 @@ class NotePhotoAdapter(context: Context, list: ArrayList<NoteMediaType>, listen:
         var videoplay_bg: ImageView = itemView.findViewById(R.id.videoplay_bg) as ImageView
 
     }
-
-   /* fun add(list:ArrayList<NoteMediaType>){
-
-        mTotalList.addAll(0,list)
-
-        notifyDataSetChanged()
-
-    }*/
 
     interface PhotoClickListen{
         fun photoClick(position: Int,plus:Boolean)

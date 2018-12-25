@@ -3,7 +3,6 @@ package com.lwt.qmqiu.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide

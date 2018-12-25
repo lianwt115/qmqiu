@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">青木球</string>
     <string name="agora_app_id">2cf18478d1024be48b309eafa2e9e3ba</string>
-    <string name="login_success">login success</string>
     <string name="login">登录</string>
-    <string name="please_login">请先登录</string>
     <string name="login_success">登录成功</string>
     <string name="Username">用户名</string>
     <string name="Password">密码</string>
@@ -48,6 +46,7 @@
     <string name="coin">青木球</string>
     <string name="coinbase">青木</string>
     <string name="cash_coin">青木球</string>
+    <string name="cash_coin_exchange">青木球(可提现)</string>
     <string name="charge_success">充值成功</string>
     <string name="charge">充值</string>
     <string name="sys_err">系统错误</string>
@@ -79,6 +78,7 @@
     <string name="video_refuse_send">对方拒绝接收,发送失败</string>
     <string name="please_select_gift">对方拒绝接收,发送失败</string>
     <string name="up_send">松开发送</string>
+    <string name="send_text_err">发送失败,请登录</string>
     <string name="press_speak">按住说话</string>
     <string name="login_check_userinfo">登陆后查看个人信息</string>
     <string name="select">选择</string>
@@ -130,6 +130,12 @@
     <string name="women">女</string>
     <string name="exchange_count">可兑换</string>
     <string name="cash_count">总花费</string>
+    <string name="please_input_roomname">请输入房间名</string>
+    <string name="mylist_nosearch">我的列表无需搜索</string>
+    <string name="report_success">举报成功</string>
+    <string name="report_done">已经举报过了</string>
+    <string name="good_success">点赞成功</string>
+    <string name="good_done">已经点赞过了</string>
 
 
 

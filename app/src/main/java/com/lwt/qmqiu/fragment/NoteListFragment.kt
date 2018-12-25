@@ -19,6 +19,7 @@ import com.lwt.qmqiu.mvp.contract.NoteContract
 import com.lwt.qmqiu.mvp.present.NotePresent
 import com.lwt.qmqiu.shareelement.ShareContentInfo
 import com.lwt.qmqiu.utils.SPHelper
+import com.lwt.qmqiu.utils.StaticValues
 import com.lwt.qmqiu.utils.StaticValues.Companion.mLocalUserName
 import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.widget.CommentDialog
@@ -50,7 +51,7 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
                 //
                 mReporterDialogBuilder =  ReporterDialog.Builder(activity!!,true)
 
-                mReporterDialog = mReporterDialogBuilder.create("举报",object :ReporterDialog.Builder.BtClickListen{
+                mReporterDialog = mReporterDialogBuilder.create(getString(R.string.report),object :ReporterDialog.Builder.BtClickListen{
 
                     override fun btClick(index: Int, type: Int): Boolean {
 
@@ -87,7 +88,7 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
     override fun setReportComment(success: Boolean) {
 
-        UiUtils.showToast("${if (success) "举报成功" else "已经举报过了"} ")
+        UiUtils.showToast(getString(if (success)R.string.report_success else R.string.report_done))
 
     }
 
@@ -117,7 +118,7 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
     override fun setReportNote(success: Boolean) {
 
-        UiUtils.showToast(if (success )"举报成功" else "已经举报过了")
+        UiUtils.showToast(getString(if (success)R.string.report_success else R.string.report_done))
 
     }
 
@@ -127,10 +128,10 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
             mList[position].goodNum++
 
-            UiUtils.showToast("点赞成功")
+            UiUtils.showToast(getString(R.string.good_success))
         }else{
 
-            UiUtils.showToast("已经点过赞了")
+            UiUtils.showToast(getString(R.string.good_done))
 
         }
 
@@ -221,13 +222,12 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
     private fun getData(refreshlayout: RefreshLayout?) {
 
-        val name = SPHelper.getInstance().get("loginName","") as String
 
         val location = App.instanceApp().getBDLocation()
 
-        if (!TextUtils.isEmpty(name) && location!=null) {
+        if (!TextUtils.isEmpty(StaticValues.mLocalUserName) && location!=null) {
 
-            mPresenter.getNote(name, mStrategy, location.latitude, location.longitude, bindToLifecycle())
+            mPresenter.getNote(StaticValues.mLocalUserName, mStrategy, location.latitude, location.longitude, bindToLifecycle())
 
         } else {
 
@@ -235,7 +235,7 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
                 smartrefreshlayout.finishRefresh()
             }else{
 
-                refreshlayout?.finishRefresh(1000)
+                refreshlayout.finishRefresh(1000)
             }
 
         }
@@ -349,14 +349,14 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
                 if (!noteLog.hasGood)
                     mPresenter.goodNote(mLocalUserName,noteLog._id!!,position,bindToLifecycle())
                 else
-                    UiUtils.showToast("已经点过赞了")
+                    UiUtils.showToast(getString(R.string.good_done))
             }
             //举报
             5-> {
 
                 mReporterDialogBuilder =  ReporterDialog.Builder(activity!!,true)
 
-                mReporterDialog = mReporterDialogBuilder.create("举报",object :ReporterDialog.Builder.BtClickListen{
+                mReporterDialog = mReporterDialogBuilder.create(getString(R.string.report),object :ReporterDialog.Builder.BtClickListen{
 
                     override fun btClick(index: Int, type: Int): Boolean {
 
@@ -413,6 +413,6 @@ class NoteListFragment:BaseFragment(), OnRefreshListener, View.OnClickListener, 
 
             }
         }
-        UiUtils.showToast(errMessage?:"系统错误")
+        UiUtils.showToast(errMessage?:getString(R.string.sys_err))
     }
 }

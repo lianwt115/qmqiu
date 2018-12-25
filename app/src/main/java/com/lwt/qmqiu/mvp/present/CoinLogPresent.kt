@@ -1,11 +1,8 @@
 package com.lwt.qmqiu.mvp.present
 
 import android.content.Context
-import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.CoinLog
-import com.lwt.qmqiu.mvp.contract.ChargeContract
 import com.lwt.qmqiu.mvp.contract.CoinLogContract
-import com.lwt.qmqiu.mvp.model.ChargeModel
 import com.lwt.qmqiu.mvp.model.CoinLogModel
 import com.lwt.qmqiu.network.ApiException
 import com.lwt.qmqiu.utils.applySchedulers

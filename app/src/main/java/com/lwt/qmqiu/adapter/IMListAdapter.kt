@@ -19,7 +19,6 @@ import com.google.gson.Gson
 import com.joooonho.SelectableRoundedImageView
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.photo_view
 import com.lwt.qmqiu.bean.LocationInfo
 import com.lwt.qmqiu.bean.PhotoViewData
 import com.lwt.qmqiu.bean.QMMessage

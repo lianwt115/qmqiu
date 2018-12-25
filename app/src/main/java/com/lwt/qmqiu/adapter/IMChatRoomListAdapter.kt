@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.room_type
 import com.lwt.qmqiu.bean.IMChatRoom
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern

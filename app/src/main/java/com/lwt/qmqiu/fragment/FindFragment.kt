@@ -71,7 +71,7 @@ class FindFragment : BaseFragment(), TabLayout.OnTabSelectedListener{
         //搜索到房间直接进入
         search_tv.setOnClickListener {
             if (TextUtils.isEmpty(search_et.text)){
-                UiUtils.showToast("请输入房间名")
+                UiUtils.showToast(getString(R.string.please_input_roomname))
             }else{
                 (mFragments[selectIndex] as ListFragment).searchRoom(search_et.text.toString())
             }

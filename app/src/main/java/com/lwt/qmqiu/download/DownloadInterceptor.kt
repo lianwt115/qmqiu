@@ -1,7 +1,6 @@
 package com.lwt.qmqiu.download
 
 
-import com.orhanobut.logger.Logger
 import okhttp3.Interceptor
 import okhttp3.Response
 

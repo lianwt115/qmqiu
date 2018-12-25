@@ -2,9 +2,6 @@ package com.lwt.qmqiu.utils
 
 import android.app.Activity
 import android.content.Intent
-import com.google.android.material.tabs.TabLayout
-import android.widget.LinearLayout
-import com.orhanobut.logger.Logger
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

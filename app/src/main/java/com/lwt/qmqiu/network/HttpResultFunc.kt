@@ -2,7 +2,6 @@ package com.lwt.qmqiu.network
 
 
 import com.lwt.qmqiu.bean.HttpResult
-import com.lwt.qmqiu.utils.UiUtils
 import io.reactivex.functions.Function
 
 

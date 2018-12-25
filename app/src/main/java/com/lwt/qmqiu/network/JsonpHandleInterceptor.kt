@@ -1,7 +1,6 @@
 package com.lwt.qmqiu.network
 
-import android.text.format.Time
-import com.orhanobut.logger.Logger
+
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.ResponseBody
@@ -24,8 +23,7 @@ class JsonpHandleInterceptor : Interceptor  {
                     .body(ResponseBody.create(mediaType, content))
                     .build()
         }catch (e:Exception){
-            var t=Time()
-            t.setToNow()
+
             throw e
         }
 

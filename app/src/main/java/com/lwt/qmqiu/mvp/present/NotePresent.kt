@@ -3,9 +3,7 @@ package com.lwt.qmqiu.mvp.present
 import android.content.Context
 import com.lwt.qmqiu.bean.NoteCommentLog
 import com.lwt.qmqiu.bean.NoteLog
-import com.lwt.qmqiu.mvp.contract.FaceVideoContract
 import com.lwt.qmqiu.mvp.contract.NoteContract
-import com.lwt.qmqiu.mvp.model.FaceVideoModel
 import com.lwt.qmqiu.mvp.model.NoteModel
 import com.lwt.qmqiu.network.ApiException
 import com.lwt.qmqiu.utils.applySchedulers

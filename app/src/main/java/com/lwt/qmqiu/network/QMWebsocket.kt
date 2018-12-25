@@ -30,23 +30,6 @@ class QMWebsocket {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private  var webSocket: WebSocket? = null
     private  var client: OkHttpClient = OkHttpClient()
     private  var request: Request?=null
@@ -175,14 +158,6 @@ class QMWebsocket {
 
         if (webSocket == null)
             return
-
-        if (!App.instanceApp().isLogin()){
-
-            UiUtils.showToast("发送失败,请登录")
-
-            return
-        }
-
 
         content.from = App.instanceApp().getLocalUser()?.name?:"xxx"
 

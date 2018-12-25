@@ -5,30 +5,18 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.graphics.Rect
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-import com.bumptech.glide.Glide
 import com.lwt.qmqiu.R
-import com.lwt.qmqiu.R.id.bt_go
-import com.lwt.qmqiu.R.id.recycleview_im
-import com.lwt.qmqiu.R.mipmap.notice
-import com.lwt.qmqiu.R.mipmap.tip
-import com.lwt.qmqiu.adapter.IMListAdapter
 import com.lwt.qmqiu.adapter.ReportAdapter
 import com.lwt.qmqiu.bean.ReportInfo
 import com.lwt.qmqiu.utils.DeviceUtil
-import com.lwt.qmqiu.utils.UiUtils
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_im.*
-import kotlinx.android.synthetic.main.activity_register.*
 import java.util.concurrent.TimeUnit
 
 

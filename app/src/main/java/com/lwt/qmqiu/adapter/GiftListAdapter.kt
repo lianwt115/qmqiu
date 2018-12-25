@@ -1,20 +1,16 @@
 package com.lwt.qmqiu.adapter
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
-import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.bean.GiftLog
-import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.utils.StaticValues
 import java.text.SimpleDateFormat
-import java.util.regex.Pattern
+
 
 
 class GiftListAdapter(context: Context, list: ArrayList<GiftLog>, mStrategy: Int) : androidx.recyclerview.widget.RecyclerView.Adapter<GiftListAdapter.ListViewHolder>() {
@@ -24,7 +20,6 @@ class GiftListAdapter(context: Context, list: ArrayList<GiftLog>, mStrategy: Int
     private var mTotalList: ArrayList<GiftLog> = list
     private var mInflater: LayoutInflater = LayoutInflater.from(mContext)
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    private val today = formatter.format(System.currentTimeMillis())
     private val mType = mStrategy
     protected val giftNameList = StaticValues.giftNameList
 

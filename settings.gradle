@@ -1,1 +1,1 @@
-include ':app', ':qmchat', ':ycshareelement', ':phoenix-ui', ':phoenix-core', ':loading-button-android'
+include ':app', ':qmchat', ':ycshareelement', ':loading-button-android', ':phoenix-ui'

@@ -44,8 +44,8 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
 
             //修改为showName
             user_name.changeTitleAndContent(baseUser.showName,"")
-            user_gender.changeTitleAndContent("性别",if(baseUser.male)"男" else "女")
-            user_age.changeTitleAndContent("年龄",baseUser.age.toString())
+            user_gender.changeTitleAndContent(getString(R.string.user_gender),getString(if(baseUser.male)R.string.men else R.string.women))
+            user_age.changeTitleAndContent(getString(R.string.user_age),baseUser.age.toString())
 
         }
 

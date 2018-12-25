@@ -6,14 +6,12 @@ import android.content.DialogInterface
 import android.graphics.Point
 import android.text.Spanned
 import android.view.*
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.lwt.qmqiu.R
 import com.opensource.svgaplayer.*
 import com.orhanobut.logger.Logger
 import org.jetbrains.annotations.NotNull
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
+
 
 
 

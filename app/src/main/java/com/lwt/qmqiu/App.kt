@@ -205,7 +205,7 @@ class App : Application() {
         Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy) {
             override fun isLoggable(priority: Int, tag: String?): Boolean {
 
-                return BuildConfig.DEBUG
+                return true
             }
         })
     }
@@ -217,6 +217,8 @@ class App : Application() {
 
         SPHelper.getInstance().put("loginName",baseUser.name)
         SPHelper.getInstance().put("loginPassword",baseUser.password)
+
+        StaticValues.updataLocalUserName()
 
         this.mLocalUser = baseUser
 
@@ -258,6 +260,7 @@ class App : Application() {
         SPHelper.getInstance().put("loginName","")
         SPHelper.getInstance().put("loginPassword","")
 
+        StaticValues.updataLocalUserName()
         closeWs()
 
         this.mLocalUser = null

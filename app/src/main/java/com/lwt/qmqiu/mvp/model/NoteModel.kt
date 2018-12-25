@@ -1,8 +1,6 @@
 package com.lwt.qmqiu.mvp.model
 
 import android.content.Context
-import com.lwt.qmqiu.bean.BaseUser
-import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.bean.NoteCommentLog
 import com.lwt.qmqiu.bean.NoteLog
 import com.lwt.qmqiu.network.HttpResultFunc

@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
+#-ignorewarnings
 #######***********声网**********
 -keep class io.agora.**{*;}
 #######***********声网**********
@@ -165,5 +165,19 @@
  -keep class com.youth.banner.** {
      *;
   }
-
+#picasso
   -dontwarn com.squareup.picasso.**
+#greendao
+  -keep class org.greenrobot.greendao.**{*;}
+  -keep public interface org.greenrobot.greendao.**
+  -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+  public static java.lang.String TABLENAME;
+  }
+  -keep class **$Properties
+  -keep class net.sqlcipher.database.**{*;}
+  -keep public interface net.sqlcipher.database.**
+  -dontwarn net.sqlcipher.database.**
+  -dontwarn org.greenrobot.greendao.**
+
+  #phoenix
+  -keep class com.guoxiaoxing.phoenix.picker.** {*;}

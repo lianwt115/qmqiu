@@ -1,12 +1,9 @@
 package com.lwt.qmqiu.mvp.present
 
 import android.content.Context
-import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.mvp.contract.IMChatRoomContract
-import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.model.IMChatRoomModel
-import com.lwt.qmqiu.mvp.model.UserLoginModel
 import com.lwt.qmqiu.network.ApiException
 import com.lwt.qmqiu.utils.applySchedulers
 import com.orhanobut.logger.Logger

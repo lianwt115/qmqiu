@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-/**
- * Created by huangwei on 2018/9/27.
- */
+
 public class ShareContentInfo extends ShareElementInfo<PhotoViewData> {
 
     public ShareContentInfo(@NonNull View view, @Nullable PhotoViewData data) {

@@ -41,7 +41,7 @@ class CashoutActivity : BaseActivity(),BarView.BarOnClickListener{
 
             user_basecoin.changeTitleAndContent(getString(R.string.coinbase),baseUser.coinbase.toString())
             user_coin.changeTitleAndContent(getString(R.string.coin),baseUser.coin.toString())
-            user_coinexchange.changeTitleAndContent(getString(R.string.cash_coin),baseUser.coinExchange.toString())
+            user_coinexchange.changeTitleAndContent(getString(R.string.cash_coin_exchange),baseUser.coinExchange.toString())
 
         }
 

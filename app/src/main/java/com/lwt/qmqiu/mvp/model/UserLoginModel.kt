@@ -3,7 +3,6 @@ package com.lwt.qmqiu.mvp.model
 import android.content.Context
 import com.lwt.qmqiu.bean.BaseUser
 import com.lwt.qmqiu.network.HttpResultFunc
-import com.trello.rxlifecycle2.LifecycleTransformer
 import io.reactivex.Observable
 
 

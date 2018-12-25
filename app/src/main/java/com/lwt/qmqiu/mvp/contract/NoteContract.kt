@@ -5,7 +5,6 @@ import com.lwt.qmqiu.bean.*
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.lwt.qmqiu.mvp.base.BasePresent
 import com.lwt.qmqiu.mvp.base.BaseView
-import retrofit2.http.Query
 
 
 interface NoteContract {

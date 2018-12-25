@@ -6,9 +6,7 @@ import android.view.View
 import com.lwt.qmqiu.App
 import com.lwt.qmqiu.R
 import com.lwt.qmqiu.adapter.GiftListAdapter
-import com.lwt.qmqiu.adapter.IMChatRoomListAdapter
 import com.lwt.qmqiu.bean.GiftLog
-import com.lwt.qmqiu.bean.IMChatRoom
 import com.lwt.qmqiu.mvp.contract.GiftLogContract
 import com.lwt.qmqiu.mvp.present.GiftLogPresent
 import com.orhanobut.logger.Logger
