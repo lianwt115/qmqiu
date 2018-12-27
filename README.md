@@ -4,7 +4,9 @@
 # 下载体验
 
 https://github.com/lianwt115/qmqiu/blob/master/app/release/app-release.apk
+# 配套服务器项目地址
 
+https://github.com/lianwt115/qmqiu_sp
 # 礼物截图
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenrecorder-2018-12-27-10-22-31-433_1_.gif)
 # 项目截图
