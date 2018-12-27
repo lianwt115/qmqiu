@@ -5,9 +5,9 @@
 
 https://github.com/lianwt115/qmqiu/blob/master/app/release/app-release.apk
 
-# 项目截图
-
+# 礼物截图
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenrecorder-2018-12-27-10-22-31-433_1_.gif)
+# 项目截图
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-30-947_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-38-436_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-43-686_com.lwt.qmqiu.png)
@@ -16,6 +16,7 @@ https://github.com/lianwt115/qmqiu/blob/master/app/release/app-release.apk
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-33-50-542_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-33-58-327_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-34-51-338_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-20-240_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-29-829_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-39-494_com.lwt.qmqiu.png)
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-55-733_com.lwt.qmqiu.png)
