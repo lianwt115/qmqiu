@@ -37,11 +37,9 @@ https://github.com/lianwt115/qmqiu_sp
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-36-21-933_com.lwt.qmqiu.png)
 
 
-# 联系方式
+# 联系方式 (lianwt115@163.com)
 
-作者联系方式 : lianwt115@163.com
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/wx.png)
-
 
 # License
   Copyright [2018] [思冬•青木]
