@@ -2,7 +2,7 @@
 基于地理位置(经纬度)的进距离视频文字聊天,到达一个地方即可加入附近聊天室,查看附近帖子,无好友<br>
 
 # 项目说明
-1.项目使用kotlin编写,使用rxjava2,rxandroid2,rxlifecycle2,retrofit2
+1.项目使用kotlin编写,使用rxjava2,rxandroid2,rxlifecycle2,retrofit2<br>
 2.定位地图相关使用的是百度地图<br>
 3.视频聊天使用的是声网<br>
 4.im使用websocket实现<br>
