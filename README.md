@@ -1,9 +1,27 @@
 # 青木球(属于陌生人聊天,随聊随走,无任何个人信息)
 基于地理位置(经纬度)的进距离视频文字聊天,到达一个地方即可加入附近聊天室,查看附近帖子,无好友<br>
 
+# 下载体验
+
+https://github.com/lianwt115/qmqiu/blob/master/app/release/app-release.apk
+
 # 项目截图
 
-![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-30-947_com.lwt.qmqiu%20-%20small.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenrecorder-2018-12-27-10-22-31-433_1_.gif)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-30-947_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-38-436_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-43-686_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-08-50-240_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-33-27-181_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-33-50-542_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-33-58-327_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-34-51-338_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-29-829_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-39-494_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-35-55-733_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-36-04-273_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-36-11-811_com.lwt.qmqiu.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/Screenshot_2018-12-27-09-36-21-933_com.lwt.qmqiu.png)
 
 
 
