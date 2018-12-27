@@ -611,7 +611,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
                     }
 
-                    MotionEvent.ACTION_UP-> {
+                    MotionEvent.ACTION_UP,MotionEvent.ACTION_CANCEL-> {
 
                         voice_view.stopRecord( event.rawY>=yY-yHeight)
 
@@ -1186,6 +1186,7 @@ class IMActivity : BaseActivity(), View.OnClickListener, IMListAdapter.IMClickLi
 
             }
 
+            //上传失败
             4 -> {
 
                 UiUtils.showToast(getString(R.string.send_fail))
