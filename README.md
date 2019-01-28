@@ -43,7 +43,7 @@ https://github.com/lianwt115/qmqiu_sp
 
 # 讨论群
 
-![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/wx.png)
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/qq.png)
 # License
   Copyright [2018] [思冬•青木]
 
