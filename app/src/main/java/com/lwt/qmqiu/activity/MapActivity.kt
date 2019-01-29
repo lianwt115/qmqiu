@@ -108,19 +108,24 @@ class MapActivity : BaseActivity(), BarView.BarOnClickListener, View.OnClickList
 
         locationOnMap(location.latitude,location.longitude)
 
-        val poiList = location.poiList
+        if (location.poiList != null){
 
-        mLocationList.clear()
+            val poiList = location.poiList
+
+            mLocationList.clear()
 
 
-        poiList.forEachIndexed { index, poi ->
+            poiList.forEachIndexed { index, poi ->
 
-            mLocationList.add(LocationInfo(poi.name,"${if (index == 0) "" else location.province}${location.city}${location.district}${location.street}${location.streetNumber}",location.latitude,location.longitude,index == 0))
+                mLocationList.add(LocationInfo(poi.name,"${if (index == 0) "" else location.province}${location.city}${location.district}${location.street}${location.streetNumber}",location.latitude,location.longitude,index == 0))
+
+            }
+            mLocationInfo = mLocationList[0]
+
+            mLocationListAdapter.notifyDataSetChanged()
 
         }
-        mLocationInfo = mLocationList[0]
 
-        mLocationListAdapter.notifyDataSetChanged()
 
     }
 
