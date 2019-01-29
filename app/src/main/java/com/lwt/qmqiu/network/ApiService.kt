@@ -12,6 +12,7 @@ interface ApiService {
 
         val IP = "192.168.2.10:9898"
 
+
         val BASE_URL_Api : String
             get() = "http://$IP/api/"
         val BASE_URL : String
