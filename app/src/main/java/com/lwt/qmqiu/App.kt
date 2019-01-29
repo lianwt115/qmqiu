@@ -26,13 +26,17 @@ import com.lwt.qmqiu.network.QMWebsocket
 import com.lwt.qmqiu.utils.RSAUtils
 import com.lwt.qmqiu.utils.SPHelper
 import com.lwt.qmqiu.utils.StaticValues
+import com.miui.zeus.mimo.sdk.MimoSdk
 import com.tencent.bugly.beta.Beta
 
 
-class App : Application() {
+class App : Application(){
+
 
     private lateinit var mDaoSession: DaoSession
     private val APP_ID = "8bfb98c056" // TODO 替换成bugly上注册的appid
+    private val APP_ID_AD = "2882303761517942997" // TODO 广告
+    private val APP_ID_AD_test = "2882303761517411490 " // TODO 广告
     private val NOTIFICATION = "notification"
     private val DB_NAME = "qmiqu"
     private val LOG_NAME = "qmiqulog"
@@ -40,6 +44,7 @@ class App : Application() {
     private var mBDLocation: BDLocation?= null
     private var mBDLocationString: String = "未知地区"
     private  var mWebSocket: QMWebsocket?=null
+    private  var mADSuccess: Boolean?=null
     private  var mCurrentActivity: BaseActivity?=null
     companion object {
         private var instance: App? = null
@@ -70,6 +75,8 @@ class App : Application() {
 
         initBuglyAndUP()
 
+
+
         if (applicationContext.packageName == (getCurrentProcessName())) {
 
            // Logger.e("initWebsocket")
@@ -80,8 +87,21 @@ class App : Application() {
 
             initPhonex()
 
+            initAd()
 
         }
+
+    }
+
+    private fun initAd() {
+
+        //注释掉
+        MimoSdk.setDebugOn()
+        //注释掉
+        MimoSdk.setStageOn()
+
+        MimoSdk.init(this, APP_ID_AD_test, "fake_app_key", "fake_app_token")
+
 
     }
 
@@ -106,6 +126,8 @@ class App : Application() {
 
 
     }
+
+
 
     private fun initDb(){
 

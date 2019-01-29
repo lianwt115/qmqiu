@@ -111,7 +111,7 @@
     </RadioGroup>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-
+        android:visibility="invisible"
         android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -122,6 +122,10 @@
         android:src="@drawable/login"
         android:transitionName="loginFab"
         />
-
+    <FrameLayout
+        android:id="@+id/splash_ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff" />
 
 </RelativeLayout>

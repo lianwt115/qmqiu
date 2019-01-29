@@ -181,3 +181,6 @@
 
   #phoenix
   -keep class com.guoxiaoxing.phoenix.picker.** {*;}
+  #mimemg
+-keep class com.xiaomi.ad.**{*;}
+-keep class com.miui.zeus.**{*;}

@@ -27,28 +27,92 @@ import com.lwt.qmqiu.mvp.contract.UserLoginContract
 import com.lwt.qmqiu.mvp.present.UserLoginPresent
 import com.lwt.qmqiu.utils.UiUtils
 import com.tencent.bugly.beta.Beta
+import com.miui.zeus.mimo.sdk.ad.IAdWorker
+import com.xiaomi.ad.common.pojo.AdType
+import com.miui.zeus.mimo.sdk.listener.MimoAdListener
+import com.miui.zeus.mimo.sdk.ad.AdWorkerFactory
+
+
+
+
 
 
 
 class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.View {
 
-
+    private val POSITION_ID = "941d4eb31ca8b88a7e5f3d96926f988f"
+    private val POSITION_ID_TEST = "94f4805a2d50ba6e853340f9035fda18"
     private var mExitTime: Long = 0
     private var findFragment: FindFragment? = null
     private var noteFragment: NoteFragment? = null
     private var mineFragment: MineFragment? = null
     private lateinit var present:UserLoginPresent
     private  var loginClick = false
+    private  var finishAD = false
     private  var autoLoginCount = 0
     private  var autoLoginCountMax = 3
-
+    private  var mWorker: IAdWorker?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         YcShareElement.enableContentTransition(application)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        checkAndRequirePermissions()
+        checkAndRequirePermissions(savedInstanceState)
 
+
+    }
+
+    private fun startAD(savedInstanceState: Bundle?) {
+
+       /* if (!App.instanceApp().getAdStatues()){
+            Logger.e("AD初始化失败")
+            finishAD(savedInstanceState)
+            return
+        }*/
+
+        try {
+            mWorker = AdWorkerFactory.getAdWorker(this, splash_ad_container, object : MimoAdListener {
+                override fun onAdPresent() {
+                    // 开屏广告展示
+                    Logger.e("onAdPresent")
+
+                }
+
+                override fun onAdClick() {
+                    //用户点击了开屏广告
+                    Logger.e("onAdClick")
+                }
+
+                override fun onAdDismissed() {
+                    //这个方法被调用时，表示从开屏广告消失。
+                    Logger.e("onAdDismissed")
+                    finishAD(savedInstanceState)
+
+                }
+
+                override fun onAdFailed(s: String) {
+                    Logger.e("ad fail message : $s")
+                    finishAD(savedInstanceState)
+                }
+
+                override fun onAdLoaded(size: Int) {
+                    //do nothing
+                }
+
+                override fun onStimulateSuccess() {}
+            }, AdType.AD_SPLASH)
+
+            mWorker?.loadAndShow(POSITION_ID_TEST)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            finishAD(savedInstanceState)
+        }
+    }
+
+    private fun finishAD(savedInstanceState: Bundle?) {
+
+        splash_ad_container.visibility = View.GONE
+        fab.visibility = View.VISIBLE
         setRadioButton()
 
         initFragment(savedInstanceState)
@@ -60,11 +124,14 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
         //startService(Intent(this, LocalService::class.java))
         //startService(Intent(this, RomoteService::class.java))
 
-        present = UserLoginPresent(this,this)
+        present = UserLoginPresent(this, this)
 
         //登录
         gotoLogin()
 
+        finishAD=true
+
+        initBottom()
     }
 
     private fun gotoLogin() {
@@ -190,7 +257,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
 
 
     //权限检查
-    fun checkAndRequirePermissions(){
+    fun checkAndRequirePermissions(savedInstanceState: Bundle?) {
 
         //判断系统版本是否是6.0以上
 
@@ -202,7 +269,7 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
                         if (it) {
 
                            // Logger.e("权限全部同意")
-
+                            startAD(savedInstanceState)
                         } else {
                             //至少一个没有同意
                             showProgressDialog(getString(R.string.auto_finish))
@@ -218,13 +285,31 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
                             })
                         }
                     }
+        }else{
+
+            startAD(savedInstanceState)
+
         }
 
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode == KeyEvent.KEYCODE_BACK) {
+            // 捕获back键，在展示广告期间按back键，不跳过广告
+            if (splash_ad_container.visibility === View.VISIBLE) {
+                return true
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onDestroy() {
 
-        super.onDestroy()
+        try {
+            super.onDestroy()
+            mWorker?.recycle()
+        } catch (e: Exception) {
+        }
 
     }
 
@@ -256,16 +341,24 @@ class MainActivity : BaseActivity(), View.OnClickListener, UserLoginContract.Vie
     override fun onResume() {
         super.onResume()
 
+        if (finishAD){
+
+            initBottom()
+        }
+
+
+    }
+
+    private fun initBottom() {
         bottomShow()
 
-        if (loginClick){
+        if (loginClick) {
             loginClick = false
             rb_find.isChecked = true
             rb_find.setTextColor(resources.getColor(R.color.colorAccent))
         }
 
         MapLocationUtils.getInstance().findMe()
-
     }
 
     private fun bottomShow() {
