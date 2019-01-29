@@ -95,10 +95,12 @@ class App : Application(){
 
     private fun initAd() {
 
-        //注释掉
-        MimoSdk.setDebugOn()
-        //注释掉
-        MimoSdk.setStageOn()
+        if (BuildConfig.DEBUG){
+            //注释掉
+            MimoSdk.setDebugOn()
+            //注释掉
+            MimoSdk.setStageOn()
+        }
 
         MimoSdk.init(this, APP_ID_AD_test, "fake_app_key", "fake_app_token")
 
