@@ -41,6 +41,9 @@ https://github.com/lianwt115/qmqiu_sp
 
 ![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/wx.png)
 
+# 讨论群
+
+![Image text](https://github.com/lianwt115/qmqiu/blob/master/screen_pic/qq.png)
 # License
   Copyright [2018] [思冬•青木]
 
