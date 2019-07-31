@@ -10,7 +10,7 @@ import retrofit2.http.*
 interface ApiService {
     companion object{
 
-        val IP = "192.168.2.10:9898"
+        val IP = "13.58.32.61:9898"
 
 
 

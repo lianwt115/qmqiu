@@ -13,8 +13,8 @@ android {
         applicationId "com.lwt.qmqiu"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.0.1"
+        versionCode 6
+        versionName "1.0.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -33,6 +33,13 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/libs']
+        }
+    }
+
+    //文件命名
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "lwt_${variant.name}_qmqiu_${defaultConfig.versionCode}.apk"
         }
     }
 

@@ -43,7 +43,7 @@ class MineFragment : BaseFragment(), View.OnClickListener, ItemView.ItemOnClickL
             Glide.with(activity!!).load(ApiService.BASE_URL_Api.plus(baseUser.imgPath)).into(user_img)
 
             //修改为showName
-            user_name.changeTitleAndContent(baseUser.showName,"")
+            user_name.changeTitleAndContent(baseUser.showName?:baseUser.name,"")
             user_gender.changeTitleAndContent(getString(R.string.user_gender),getString(if(baseUser.male)R.string.men else R.string.women))
             user_age.changeTitleAndContent(getString(R.string.user_age),baseUser.age.toString())
 
